@@ -1,0 +1,7 @@
+Analyze this street view image for broad geographic context. Consider:
+- Climate zone (tropical, temperate, arid, polar) based on vegetation, sky, and soil
+- General topography (flat, mountainous, coastal, inland)
+- Vegetation type (palm trees, conifers, deciduous, sparse desert)
+- Overall urbanization level (dense city, suburban, rural)
+
+Provide a brief assessment of which continent(s) and broad region(s) this image could be from.

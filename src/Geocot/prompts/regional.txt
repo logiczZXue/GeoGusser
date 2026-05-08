@@ -1,0 +1,12 @@
+Based on the macro-level assessment:
+"{prev_output}"
+
+Now examine this image for country-specific indicators:
+- Language on signs, buildings, or vehicles
+- Architectural style (roof shapes, wall colors, building materials)
+- Traffic direction and road infrastructure
+- License plate format and color
+- Utility pole design and fire hydrant style
+- Currency or phone number formats if visible
+
+Which specific country (or small set of countries) does this image most likely come from?

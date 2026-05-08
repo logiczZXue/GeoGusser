@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuXun - 图寻</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 20px; }
+        h1 { text-align: center; color: #00d4ff; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .upload-area { border: 2px dashed #444; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: border-color 0.3s; }
+        .upload-area:hover { border-color: #00d4ff; }
+        .upload-area img { max-width: 100%; max-height: 300px; border-radius: 8px; margin-top: 10px; }
+        .stages { margin-top: 30px; }
+        .stage { background: #16213e; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 4px solid; }
+        .stage.macro { border-color: #e74c3c; }
+        .stage.regional { border-color: #f39c12; }
+        .stage.local { border-color: #2ecc71; }
+        .stage h3 { margin-bottom: 10px; }
+        .stage p { line-height: 1.6; white-space: pre-wrap; }
+        .prediction { background: #0f3460; border-radius: 10px; padding: 20px; margin-top: 20px; text-align: center; }
+        .prediction h2 { color: #00d4ff; }
+        .loading { display: none; text-align: center; margin: 20px; color: #00d4ff; }
+        button { background: #00d4ff; color: #1a1a2e; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        button:hover { background: #00b4d8; }
+        button:disabled { background: #444; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TuXun 图寻</h1>
+        <p class="subtitle">Offline Visual Geolocation - GNSS-Denied Positioning</p>
+
+        <div class="upload-area" id="dropZone">
+            <p>Click or drag a street view image here</p>
+            <input type="file" id="fileInput" accept="image/*" style="display:none">
+            <img id="preview" style="display:none">
+        </div>
+
+        <div style="text-align:center">
+            <button id="predictBtn" onclick="predict()" disabled>Analyze Location</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <p>Analyzing image through 3-stage GeoCoT reasoning...</p>
+        </div>
+
+        <div class="stages" id="stages" style="display:none">
+            <div class="stage macro">
+                <h3>Stage 1: Macro Context (Continent)</h3>
+                <p id="macroText">-</p>
+            </div>
+            <div class="stage regional">
+                <h3>Stage 2: Regional Clues (Country)</h3>
+                <p id="regionalText">-</p>
+            </div>
+            <div class="stage local">
+                <h3>Stage 3: Local Details (City)</h3>
+                <p id="localText">-</p>
+            </div>
+        </div>
+
+        <div class="prediction" id="prediction" style="display:none">
+            <h2>Prediction</h2>
+            <p id="predictionText" style="font-size:20px; margin-top:10px;">-</p>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const predictBtn = document.getElementById('predictBtn');
+        let selectedFile = null;
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = '#00d4ff'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#444'; });
+        dropZone.addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+        function handleFile(file) {
+            if (!file) return;
+            selectedFile = file;
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            predictBtn.disabled = false;
+        }
+
+        async function predict() {
+            if (!selectedFile) return;
+            predictBtn.disabled = true;
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('stages').style.display = 'none';
+            document.getElementById('prediction').style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            try {
+                const resp = await fetch('/predict', { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                document.getElementById('macroText').textContent = data.stages.macro || 'N/A';
+                document.getElementById('regionalText').textContent = data.stages.regional || 'N/A';
+                document.getElementById('localText').textContent = data.stages.local || 'N/A';
+                document.getElementById('predictionText').textContent = data.prediction || 'Unknown';
+
+                document.getElementById('stages').style.display = 'block';
+                document.getElementById('prediction').style.display = 'block';
+            } catch (err) {
+                alert('Error: ' + err.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                predictBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

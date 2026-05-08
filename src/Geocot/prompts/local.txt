@@ -1,0 +1,12 @@
+Based on the analysis so far:
+- Macro context: {macro_output}
+- Regional assessment: {regional_output}
+
+Now identify city-level details and provide your final geolocation.
+
+IMPORTANT: End your response with EXACTLY this format on the last line:
+LOCATION: [city], [country], [continent]
+
+Where continent must be one of: Asia, Africa, Europe, North America, South America, Oceania.
+
+For example: LOCATION: Bangkok, Thailand, Asia

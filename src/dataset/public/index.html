@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Street View</title>
+    <style>
+        /* Set the dimensions of the Street View container */
+        #street-view {
+            height: 100vh;
+            width: 100%;
+        }
+        /* Hide Google watermark, copyright information, and fullscreen controls */
+        .gm-style-cc,
+        .gmnoprint,
+        a[href^="http://maps.google.com/maps"],
+        a[href^="https://maps.google.com/maps"],
+        .gm-fullscreen-control {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="street-view" tabindex="0"></div>
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_MAP_API_KEY">
+    </script>
+    <script>
+        function initialize() {
+            // Sample coordinates
+            const fenway = { lat: 0, lng: 0 };
+            const panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('street-view'),
+                {
+                    position: fenway,
+                    pov: {
+                        heading: 34,
+                        pitch: 10
+                    },
+                    // Disable all controls
+                    addressControl: false,        // Hide address control
+                    showRoadLabels: false,        // Hide road labels
+                    panControl: false,            // Hide panning control
+                    enableCloseButton: false,     // Hide close button
+                    fullscreenControl: false,     // Hide fullscreen control
+                    motionTracking: false,        // Disable motion tracking
+                    motionTrackingControl: false, // Hide motion tracking control
+                    linksControl: false,          // Hide navigation arrows
+                    zoomControl: false,           // Hide zoom control
+                    clickToGo: false              // Disable click-to-go
+                }
+            );
+
+            // (Optional) Automatically focus the Street View container after the page loads
+            // document.getElementById('street-view').focus();
+
+            // Add keyboard controls: only handle j/l/i/k keys; other keys (e.g., w/a/s/d) are automatically handled by the Street View component
+            document.addEventListener('keydown', function(e) {
+                switch (e.key) {
+                    case 'j':
+                        panorama.setPov({
+                            heading: panorama.getPov().heading - 10,
+                            pitch: panorama.getPov().pitch
+                        });
+                        break;
+                    case 'l':
+                        panorama.setPov({
+                            heading: panorama.getPov().heading + 10,
+                            pitch: panorama.getPov().pitch
+                        });
+                        break;
+                    case 'i':
+                        panorama.setPov({
+                            heading: panorama.getPov().heading,
+                            pitch: Math.min(panorama.getPov().pitch + 10, 90)
+                        });
+                        break;
+                    case 'k':
+                        panorama.setPov({
+                            heading: panorama.getPov().heading,
+                            pitch: Math.max(panorama.getPov().pitch - 10, -90)
+                        });
+                        break;
+                    default:
+                        // Other keys (e.g., w/a/s/d) are handled automatically by the Street View component
+                        break;
+                }
+            });
+        }
+        
+        window.onload = initialize;
+    </script>
+</body>
+</html>

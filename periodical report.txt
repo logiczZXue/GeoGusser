@@ -1,0 +1,116 @@
+  实施完成总结
+
+  从空文件到完整框架
+
+  ┌────────────────────────────┬──────┬───────┬──────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │            文件            │ 之前 │ 之后  │                                                 说明                                                 │
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/Geocot/Geocot.py       │ 0行  │ 290行 │ 3阶段CoT核心框架：GeoCoTPipeline, GeoCoTPrompt, GeoCoTResult, extract_prediction, create_hf_model_fn │
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/Geocot/Geocot.py       │ 0行  │ 290行 │ 3阶段CoT核心框架：GeoCoTPipeline, GeoCoTPrompt, GeoCoTResult, extract_prediction, create_hf_model_fn │
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/baseline/Geodecoder.py │ 0行  │ 183行 │ 街景数据下载工具 + 元数据索引                                                                        │
+  └────────────────────────────┴──────┴───────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  新创建的文件清单（17个）
+
+  Phase 0 — 基础设施：
+  - config/default.yaml, config/dk2500.yaml — 分层配置
+  Phase 0 — 基础设施：
+  - config/default.yaml, config/dk2500.yaml — 分层配置
+  - src/utils/config.py — 配置加载器
+  - .env.example — API key模板
+  - requirements.txt — 重写（128→27行，去掉冗余，添加openvino/nncf/peft等）
+
+  Phase 1 — GeoCoT框架：
+  - src/Geocot/Geocot.py — 核心，3阶段Pipeline
+  - .env.example — API key模板
+  - requirements.txt — 重写（128→27行，去掉冗余，添加openvino/nncf/peft等）
+
+  Phase 1 — GeoCoT框架：
+  - src/Geocot/Geocot.py — 核心，3阶段Pipeline
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  - src/Geocot/run_geocot.py — CLI入口
+  - src/Geocot/prompts/macro.txt, regional.txt, local.txt — 提示词模板
+  - src/Geocot/prompts/few_shot_examples.json — 从GeoCoT.csv提取的8条示例
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/Geocot/Geocot.py       │ 0行  │ 290行 │ 3阶段CoT核心框架：GeoCoTPipeline, GeoCoTPrompt, GeoCoTResult, extract_prediction, create_hf_model_fn │
+  ├────────────────────────────┼──────┼───────┼──────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ src/baseline/Geodecoder.py │ 0行  │ 183行 │ 街景数据下载工具 + 元数据索引                                                                        │
+  └────────────────────────────┴──────┴───────┴──────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  新创建的文件清单（17个）
+
+  Phase 0 — 基础设施：
+  - config/default.yaml, config/dk2500.yaml — 分层配置
+  Phase 0 — 基础设施：
+  - config/default.yaml, config/dk2500.yaml — 分层配置
+  - src/utils/config.py — 配置加载器
+  - .env.example — API key模板
+  - requirements.txt — 重写（128→27行，去掉冗余，添加openvino/nncf/peft等）
+
+  Phase 1 — GeoCoT框架：
+  - src/Geocot/Geocot.py — 核心，3阶段Pipeline
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  - src/Geocot/run_geocot.py — CLI入口
+  - src/Geocot/prompts/macro.txt, regional.txt, local.txt — 提示词模板
+  - src/Geocot/prompts/few_shot_examples.json — 从GeoCoT.csv提取的8条示例
+  - .env.example — API key模板
+  - requirements.txt — 重写（128→27行，去掉冗余，添加openvino/nncf/peft等）
+
+  Phase 1 — GeoCoT框架：
+  - src/Geocot/Geocot.py — 核心，3阶段Pipeline
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  - src/Geocot/run_geocot.py — CLI入口
+  - src/Geocot/prompts/macro.txt, regional.txt, local.txt — 提示词模板
+  - src/Geocot/prompts/few_shot_examples.json — 从GeoCoT.csv提取的8条示例
+
+  Phase 2 — DK-2500部署：
+  - scripts/download_model.py, export_openvino.py, quantize_model.py, benchmark_inference.py
+  - src/inference/device_manager.py, openvino_engine.py
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  - src/Geocot/run_geocot.py — CLI入口
+  - src/Geocot/prompts/macro.txt, regional.txt, local.txt — 提示词模板
+  - src/Geocot/prompts/few_shot_examples.json — 从GeoCoT.csv提取的8条示例
+
+  Phase 2 — DK-2500部署：
+  - scripts/download_model.py, export_openvino.py, quantize_model.py, benchmark_inference.py
+  - src/inference/device_manager.py, openvino_engine.py
+
+
+
+  Phase 1 — GeoCoT框架：
+  - src/Geocot/Geocot.py — 核心，3阶段Pipeline
+  - src/Geocot/prediction_extractor.py — 离线正则提取
+  - src/Geocot/run_geocot.py — CLI入口
+  - src/Geocot/prompts/macro.txt, regional.txt, local.txt — 提示词模板
+  - src/Geocot/prompts/few_shot_examples.json — 从GeoCoT.csv提取的8条示例
+
+  Phase 2 — DK-2500部署：
+  - scripts/download_model.py, export_openvino.py, quantize_model.py, benchmark_inference.py
+  - src/inference/device_manager.py, openvino_engine.py
+
+  Phase 3-4 — 基线+评估+流水线：
+  - src/baseline/run_baseline.py — 零样本基线
+  - src/Geoeval/OfflineInferenceScorer.py — 替代GPT-4o评分
+  - src/Geoeval/OfflineLatLngPredictor.py — 替代GPT-4o坐标转换
+  - src/pipeline.py — 端到端编排
+  - scripts/run_evaluation.py
+
+  Phase 5 — Demo：
+  - src/demo/app.py + templates/index.html — Flask交互界面
+
+  下一步
+
+  1. 下载模型权重：python scripts/download_model.py qwen2-vl-7b
+  2. 本地验证GeoCoT：python src/Geocot/run_geocot.py --image test.jpg
+  3. 拿到DK-2500后：python scripts/export_openvino.py qwen2-vl-7b --output-dir models/qwen2-vl-7b-ov
+  4. 量化部署：python scripts/quantize_model.py --model-dir models/qwen2-vl-7b-ov --output-dir models/qwen2-vl-7b-ov-int4
+
+✻ Cogitated for 16m 14s
+
+※ recap: We're building "图寻", an offline visual geolocation system for the Intel Cup Embedded AI competition on DK-2500. All 5 phases of the roadmap
+  have been implemented — 17 new files created including the core GeoCoT framework (Geocot.py went from 0→290 lines). Next step: download the VLM model
+  weights and test GeoCoT inference locally. (disable recaps in /config)

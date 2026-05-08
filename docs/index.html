@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Geolocation with Real Human Gameplay Data: A Large-Scale Dataset and Human-Like Reasoning Framework">
+  <meta name="keywords" content="multimodal chatbot">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geocomp</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="imgs/tittle_fig.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+  <script type="module" src="https://gradio.s3-us-west-2.amazonaws.com/3.27.0/gradio.js"></script>
+  <script src="./index.js"></script>
+</head>
+
+
+<style>
+    .section {
+    margin-bottom: -30px; /* Adjust this value as needed to reduce the space */
+  }
+  .expandable-card .card-text-container {
+    max-height: 200px;
+    overflow-y: hidden;
+    position: relative;
+  }
+
+  .expandable-card.expanded .card-text-container {
+    max-height: none;
+  }
+
+  .expand-btn {
+    position: relative;
+    display: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    /* margin-top: -20px; */
+    /* justify-content: center; */
+    color: #510c75;
+    border-color: transparent;
+  }
+
+  .expand-btn:hover {
+    background-color: rgba(200, 200, 200, 0.8);
+    text-decoration: none;
+    border-color: transparent;
+    color: #510c75;
+  }
+
+  .expand-btn:focus {
+    outline: none;
+    text-decoration: none;
+  }
+
+  .expandable-card:not(.expanded) .card-text-container:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 1));
+  }
+
+  .expandable-card:not(.expanded) .expand-btn {
+    margin-top: -40px;
+  }
+
+  .card-body {
+    padding-bottom: 5px;
+  }
+
+  .vertical-flex-layout {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .figure-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .adjustable-font-size {
+    font-size: calc(0.5rem + 2vw);
+  }
+
+  .chat-history {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* overflow-x: hidden; */
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  #gradio pre {
+    background-color: transparent;
+  }
+</style>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <!-- <img src="imgs/tittle_fig.png" alt="BenchLMM_face" width="100"> -->
+            <h1 class="title is-1 publication-title">Geolocation: <span class="is-size-2"><span class="is-size-1">A</span> Large-Scale Dataset and <span class="is-size-1">H</span>uman-Like <span class="is-size-1">R</span>easoning <span class="is-size-1">F</span>ramework</span></h1>
+            <div class="is-size-5 publication-authors">
+              <!-- First Group of 3 Authors -->
+              <div class="author-group">
+                  <span class="author-block">
+                      <a href="https://ziruisongbest.github.io/" style="color:#f68946;font-weight:normal;">Zirui Song<sup>*1</sup></a>,
+                  </span>
+                  <span class="author-block">
+                      <a href="" style="color:#f68946;font-weight:normal;">Jingpu Yang<sup>*2</sup></a>,
+                  </span>
+                  <span class="author-block">
+                    <a href="" style="color:#f68946;font-weight:normal;">Yuan Huang<sup>*2</sup></a>,
+                </span>
+              </div>
+
+              <!-- Second Group of 3 Authors -->
+              <div class="author-group">
+                  <span class="author-block">
+                      <a href="https://jtonglet.github.io/" style="color:#f68946;font-weight:normal;">Jonathan Tonglet<sup>3,4</sup></a>,
+                  </span>
+                  <span class="author-block">
+                      <a href="https://steve-zeyu-zhang.github.io/" style="color:#f68946;font-weight:normal;">Zeyu Zhang<sup>5</sup></a>,
+                  </span>
+                  <span class="author-block">
+                    <a href="https://scholar.google.com/citations?hl=en&user=OA2E5JsAAAAJ&view_op=list_works&sortby=pubdate" style="color:#f68946;font-weight:normal;">Tao Cheng<sup>6</sup></a>,
+                </span>
+                  <span class="author-block">
+                      <a href="" style="color:#f68946;font-weight:normal;">Meng Fang<sup>7</sup></a>,
+                  </span>
+                  <span class="author-block">
+                    <a href="" style="color:#f68946;font-weight:normal;">Iryna Gurevych<sup>1</sup></a>,
+                </span>
+              </div>
+
+              <!-- Third Group of 4 Authors -->
+              <div class="author-group">
+                  <span class="author-block">
+                      <a href="https://iriscxy.github.io/" style="color:#008AD7;font-weight:normal;">Xiuying Chen<sup>1</sup></a>,
+                  </span>
+
+              </div>
+          </div>
+            <div class="is-size-5 publication-authors">
+            Mohamed bin Zayed University of Artificial Intelligence<sup>1</sup><br>
+            </div>
+            <div class="is-size-5 publication-authors">
+            Northeastern University<sup>2</sup><br>
+            </div>
+            <div class="is-size-5 publication-authors">
+            TU Darmstadt<sup>3</sup>  KU Leuven<sup>4</sup><br>
+            </div>                
+            <div class="is-size-5 publication-authors">
+            Australian National University<sup>5</sup> University College London<sup>6</sup><br>
+            </div>
+            <div class="is-size-5 publication-authors">
+              University of Liverpool<sup>7</sup>
+              </div>
+            <div class="is-size-6 publication-authors">
+              <span class="author-block"><sup>*</sup>Equally contributing first authors</span>
+            </div>
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/pdf/2502.13759" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/ZiruiSongBest/Geocomp" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- <span class="link-block">
+                  <a href="https://huggingface.co/datasets/ShirohAO/tuxun" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="far fa-images"></i>
+                    </span>
+                    <span>Demo</span>
+                  </a>
+                </span> -->
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/ShirohAO/tuxun" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-database"></i>
+                    </span>
+                    <span>Dataset</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths">
+        <h2 class="title is-3">Abstract</h2>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <h4 class="subtitle has-text-justified">
+          Geolocation, the task of identifying an image's location, requires
+          complex reasoning and is crucial for navigation, monitoring, and
+          cultural preservation. However, current methods often produce
+          coarse, imprecise, and non-interpretable localization. A major challenge lies in the quality and scale of existing geolocation datasets.
+          These datasets are typically small-scale and automatically constructed, leading to noisy data and inconsistent task difficulty, with
+          images that either reveal answers too easily or lack sufficient clues
+          for reliable inference. To address these challenges, we introduce
+          a comprehensive geolocation framework with three key components: GeoComp, a large-scale dataset; GeoCoT, a novel reasoning
+          method; and GeoEval, an evaluation metric, collectively designed to
+          address critical challenges and drive advancements in geolocation
+          research. At the core of this framework is GeoComp (Geolocation
+          Competition Dataset), a large-scale dataset collected from a geolocation game platform involving 740K users over two years. It
+          comprises 25 million entries of metadata and 3 million geo-tagged
+          locations spanning much of the globe, with each location annotated thousands to tens of thousands of times by human users. The
+          dataset offers diverse difficulty levels for detailed analysis and highlights key gaps in current models. Building on this dataset, we propose Geographical Chain-of-Thought (GeoCoT), a novel multi-step
+          reasoning framework designed to enhance the reasoning capabilities of Large Vision Models (LVMs) in geolocation tasks. GeoCoT
+          improves performance by integrating contextual and spatial cues
+          through a multi-step process that mimics human geolocation reasoning. Finally, using the GeoEval metric, we demonstrate that
+          GeoCoT significantly boosts geolocation accuracy by up to 25%
+          while enhancing interpretability      </div>
+    </div>
+  </section>
+
+
+<!-- <div style="text-align:center;">
+  <iframe width="1024" height="720" src="https://www.youtube.com/embed/0dZ4dlNIGTY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div> -->
+
+
+
+  <!-- <section class="section"  style="background-color:#efeff081">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths">
+        <h2 class="title is-3">🔥Highlights</h2>
+        <div class="content has-text-justified">
+          <ol type="1">
+            <li><b>GLaMM Introduction</b>. We present the <span style="color: #997300;">Grounding Large Multimodal Model (GLaMM)</span>, the first-of-its-kind model capable of generating natural language responses that are seamlessly integrated with object segmentation masks. Unlike existing models, GLaMM accommodates both textual and optional visual prompts, facilitating enhanced multimodal user interaction. </li>
+              <br>
+            <li><b>Novel Task & Evaluation</b>. Recognizing the lack of standardized benchmarks for visually grounded conversations, we propose a new task of <span style="color: #997300;">Grounded Conversation Generation</span> (GCG). Alongside, we introduce a comprehensive evaluation protocol to measure the efficacy of models in this novel setting, filling a significant gap in the literature.</li>
+              <br>
+            <li><b>GranD Dataset Creation</b>. To facilitate model training and evaluation, we create <span style="color: #997300;">GranD - Grounding-anything Dataset</span>, a large-scale densely annotated dataset. Developed using an automatic annotation pipeline and verification criteria, it encompasses 7.5M unique concepts grounded in 810M regions. Additionally, we produce <span style="color: #997300;">GranD-f</span>, a high-quality dataset explicitly designed for the GCG task, by re-purposing existing open-source datasets.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+<!--Model Arch-->
+<section class="section"style="background-color:#efeff081">
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-six-fifths">
+      <h2 class="title is-3">Motivation and Dataset Statistics</h2>
+    </div>
+  </div>
+
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">
+          <p>
+            Inspired by geoguessr.com, we developed a free geolocation game platform that tracks participants' competition histories. Unlike most geolocation websites, including Geoguessr, which rely solely on samples from Google Street View, our platform integrates Baidu Maps and Gaode Maps to address coverage gaps in regions like mainland China, ensuring broader global accessibility. The platform offers various engaging competition modes to enhance user experience, such as team contests and solo matches. Each competition consists of multiple questions, and teams are assigned a "vitality score". Users mark their predicted location on the map, and the evaluation is based on the ground truth's surface distance from the predicted location. Larger errors result in greater deductions from the team's vitality score. At the end of the match, the team with the higher vitality score wins. We also provide diverse game modes, including street views, natural landscapes, and iconic landmarks. Users can choose specific opponents or engage in random matches. To prevent cheating, external search engines are banned, and each round is time-limited. To ensure predictions are human-generated rather than machine-generated, users must register with a phone number, enabling tracking of individual activities. Using this platform, we collected GeoComp, a comprehensive dataset covering 1,000 days of user competition.          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths" style="display: flex; align-items: flex-start; justify-content: center;">
+        <figure style="text-align: center;">
+          <img id="teaser" width="100%" src="assets/static.png">
+          <figcaption>
+            This figure shows the spatial distribution of 3,238,919 geo-tagged locations in GeoComp: (a) The global map shows spatial heterogeneity,
+            with dense clusters in more urbanized regions like Europe and Asia, and sparse coverage in areas like Africa and Siberia. (b)
+            The pie chart highlights the proportional geo-tagged locations distribution, led by North America and Asia. (c) Unlike previous
+            datasets like OSV-5M, where a single country (e.g., America) dominates 25% of the data, our dataset is balanced at country level.          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Model Arch -->
+<!--Dataset-->
+<section id="Benchmark" class="section">
+  <div class="columns is-centered has-text-centered">
+    <div class="column is-six-fifths">
+      <h2 class="title is-3">Human-like Reasoning Framework</h2>
+    </div>
+  </div>
+  <!--Dataset Pipeline-->
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">
+          <p>
+            In this section, we introduce GeoCoT, a novel chain-of-thought
+prompting framework for graph-based and geolocation tasks. GeoCoT aims to improve LVMs' performance on geographic reasoning tasks without relying on any additional prior information.
+         </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths" style="display: flex; align-items: flex-start; justify-content: center;">
+        <figure style="text-align: center;">
+          <img id="teaser" width="100%" src="assets/rethinking.png">
+          <figcaption>
+            The figure shows the comparison of previous geolocation tasks and our proposed paradigm: while previous works focused on coarse-grained
+            predictions limited by dataset quality, our generation and reasoning-based method enables fine-grained city-level predictions. 
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+    <br>
+  <!-- Dataset Samples
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">
+          <p>
+            Below we present more evaluation results.
+          </p>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-six-fifths" style="display: flex; align-items: flex-start; justify-content: center;">
+        <figure style="text-align: center;">
+          <img id="teaser" width="100%" src="assets/case.png">
+         <figcaption>
+          Qualitative comparison of LLaVA, GPT4o, and GeoReasoner. Clues are shown in blue, correct predictions in green,
+          incorrect in <a style="color: red;">red</a>, and vague/uncertain guesses in <a style="color: #f68946;">orange</a>.
+        </figcaption>
+        </figure>
+      </div>
+    </div>
+
+      </div>
+    <br>
+    <br>
+    <!--Subsection-->
+
+    <section id="Examples" class="section">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-six-fifths">
+            <h2 class="title is-3">Experiment Results</h2>
+          </div>
+        </div>
+        <!--Dataset Pipeline-->
+        <!-- <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column is-full-width">
+              <div class="content has-text-justified">
+                <p>
+                  In most existing works, LMMs are predominantly evaluated using images in the 'Photo' style, leading to a gap in understanding their performance across diverse artistic styles. We extend the evaluation scope by examining LMMs' performance with various artistic styles beyond the common 'Photo' style. Results, as detailed in Table, reveal a notable decline in LMMs' effectiveness when processing these artistic styles. This trend suggests a potential overfitting of LMMs to the 'Photo' style, highlighting their limited adaptability to varied artistic styles, a capability that humans typically possess. Interestingly, GPT-4V, despite being a robust commercial model, exhibits similar limitations in handling diverse styles.
+                </p>
+              </div>
+            </div>
+          </div> -->
+      
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths" style="display: flex; align-items: flex-start; justify-content: center;">
+              <figure style="text-align: center;">
+                <img id="teaser" width="100%" src="assets/table1.png">
+                <!-- <figcaption>
+                </figcaption> -->
+              </figure>
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths">
+              <div class="content has-text-justified">
+                <h3 class="title is-4">Interactive Street View Demo</h3>
+                <p>
+                  For better visualization of our dataset, this demo allows you to load a specific street view location by entering the dataset index id.
+                </p>
+                <div class="field has-addons" style="margin-bottom: 20px;">
+                  <div class="control is-expanded">
+                    <input id="api-key-input" class="input" type="text" placeholder="Enter your Google Maps API Key">
+                  </div>
+                  <div class="control">
+                    <button id="load-map-btn" class="button is-primary">Load Map</button>
+                  </div>
+                </div>
+                
+                <div class="field">
+                  <div class="control">
+                    <button id="test-api-btn" class="button is-info">Test API Key</button>
+                  </div>
+                  <p class="help">Test if the API key is valid</p>
+                </div>
+                
+                <div class="field has-addons">
+                  <div class="control is-expanded">
+                    <input id="pano-id-input" class="input" type="text" placeholder="Enter Dataset Index ID">
+                  </div>
+                  <div class="control">
+                    <button id="load-pano-btn" class="button is-success">Load Street View</button>
+                  </div>
+                </div>
+                <p class="help">Enter a Street View Pano ID to load specific location</p>
+                
+                <!-- <div class="field">
+                  <div class="control">
+                    <button id="load-default-map-btn" class="button is-warning">Load Default Map</button>
+                  </div>
+                  <p class="help">使用默认API密钥加载地图（可能有使用限制）</p>
+                </div> -->
+                
+                <div id="map-container" style="display: none;">
+                  <div id="map" style="height: 500px; width: 100%; margin: 20px 0;"></div>
+                </div>
+                
+                <div id="map-error" class="notification is-danger" style="display: none;">
+                  <button class="delete"></button>
+                  <p>Error loading map. Please check your API key and try again.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          
+
+        <!-- Dataset Samples
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column is-full-width">
+              <div class="content has-text-justified">
+                <p>
+                  Below we present more evaluation results.
+                </p>
+              </div>
+            </div>
+          </div> -->
+      
+          <!-- <div class="columns is-centered has-text-centered">
+            <div class="column is-six-fifths" style="display: flex; align-items: flex-start; justify-content: center;">
+              <figure style="text-align: center;">
+                <img id="teaser" width="100%" src="imgs/P2-new_1.png">
+               <!-- <figcaption>
+                  Evaluations of public LMMs on cross-sensor BenchLMM.
+              </figcaption> -->
+              </figure>
+            </div>
+          </div>
+            <div class="columns is-centered has-text-centered">
+
+            </div>
+          </div>
+        </div>
+          <br>
+          <br>
+          <!--Subsection-->
+<!--Downstream-->
+<!--Conv -->
+<style>
+  #BibTeX {
+    margin-bottom: -80px; /* Adjust the negative margin as needed */
+  }
+  #Acknowledgement {
+    margin-top: -80px; /* Adjust the negative margin as needed */
+  }
+</style>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+        @article{song2025geolocation,
+          title={Geolocation with Real Human Gameplay Data: A Large-Scale Dataset and Human-Like Reasoning Framework},
+          author={Song, Zirui and Yang, Jingpu and Huang, Yuan and Tonglet, Jonathan and Zhang, Zeyu and Cheng, Tao and Fang, Meng and Gurevych, Iryna and Chen, Xiuying},
+          journal={arXiv preprint arXiv:2502.13759},
+          year={2025}
+        }
+  </code></pre>
+    </div>
+  </section>
+  <section class="section" id="Acknowledgement">
+    <div class="container is-max-desktop content">
+      <h2 class="title">Acknowledgement</h2>
+      <p>
+   <a
+        href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+        Commons Attribution-ShareAlike 4.0 International License</a>. 
+      </p>
+    </div>
+  </section>
+
+</body>
+
+</html>
+
+<div style="text-align: center;">
+  <a href="https://www.mbzuai.ac.ae" target="_blank">
+    <img src="assets/mbzuai_logo.png" width="360" height="85" alt="MBZUAI Logo">
+  </a>
+  <a href="https://www.neu.edu.cn/" target="_blank">
+    <img src="assets/neu.png" width="130" height="100" alt="neu Logo">
+  </a>
+  <a href="https://www.tu-darmstadt.de/" target="_blank">
+    <img src="assets/tu.png" width="170" height="100" alt="UTS Logo">
+  </a>
+  <a href="https://www.ku.dk/" target="_blank">
+    <img src="assets/ku.png" width="180" height="100" alt="ku Logo">
+  </a>
+  <a href="https://www.anu.edu.au/" target="_blank">
+    <img src="assets/anu.png" width="200" height="100" alt="MBZUAI Logo">
+  </a>
+  <a href="https://www.ucl.ac.uk/" target="_blank">
+    <img src="assets/ucl.png" width="180" height="100" alt="NEU Logo">
+  </a>
+  <a href="https://www.liverpool.ac.uk/" target="_blank">
+    <img src="assets/liverpool.png" width="200" height="100" alt="liverpool Logo">
+  </a>
+</div>
