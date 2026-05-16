@@ -11,6 +11,7 @@ Tested with Qwen2-VL-2B-Instruct on RTX 4060 Laptop (8GB VRAM).
 """
 
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from enum import Enum
@@ -19,6 +20,15 @@ from typing import Optional
 
 import torch
 from PIL import Image
+
+# Load .env for HF_ENDPOINT (mirror for China), HF_HOME, etc.
+try:
+    from dotenv import load_dotenv
+    _env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+    if _env_path.exists():
+        load_dotenv(_env_path)
+except Exception:
+    pass
 
 
 # ---------------------------------------------------------------------------
@@ -36,8 +46,12 @@ class GeoPrediction:
     city: str = "Unknown"
     country: str = "Unknown"
     continent: str = "Unknown"
+    latitude: float = None
+    longitude: float = None
 
     def __str__(self) -> str:
+        if self.latitude is not None and self.longitude is not None:
+            return f"{self.latitude:.4f}, {self.longitude:.4f} ({self.city}, {self.country}, {self.continent})"
         return f"{self.city}, {self.country}, {self.continent}"
 
 
@@ -46,6 +60,8 @@ class GeoCoTResult:
     stage_outputs: dict = field(default_factory=dict)
     final_prediction: GeoPrediction = field(default_factory=GeoPrediction)
     reasoning_chain: str = ""
+    explanation: object = None  # GeoExplanation from MoE pipeline
+    scene_type: object = None   # inferred SceneType int or None
 
     @property
     def full_reasoning(self) -> str:
@@ -64,36 +80,43 @@ _PROMPTS_DIR = Path(__file__).parent / "prompts"
 
 _DEFAULT_PROMPTS = {
     GeoCoTStage.MACRO: (
-        "Analyze this street view image for broad geographic context. Consider:\n"
-        "- Climate zone (tropical, temperate, arid, polar) based on vegetation, sky, and soil\n"
-        "- General topography (flat, mountainous, coastal, inland)\n"
-        "- Vegetation type (palm trees, conifers, deciduous, sparse desert)\n"
-        "- Overall urbanization level (dense city, suburban, rural)\n\n"
-        "Provide a brief assessment of which continent(s) and broad region(s) this image could be from."
+        "You are an expert geolocation analyst. Examine this street view image for broad geographic context.\n\n"
+        "Analyze ONLY what you can actually see. Do NOT fabricate clues that are not visible.\n\n"
+        "Observe and report on:\n"
+        "- Climate zone: vegetation type, sky/clouds, soil/ground color\n"
+        "- Topography: flat, hilly, mountainous, coastal, inland\n"
+        "- Vegetation: density, type, any distinctive species\n"
+        "- Urbanization: rural, suburban, urban, megacity\n"
+        "- Road surface: paved asphalt, concrete, dirt, cobblestone\n"
+        "- Apparent season: bare trees, snow, dry/brown vs lush grass\n\n"
+        "Based on ALL observations, narrow to the most likely continent(s) or large region(s). "
+        "Rank from most to least likely. Do NOT give a vague 'could be anywhere' answer."
     ),
     GeoCoTStage.REGIONAL: (
         "Based on the macro-level assessment:\n\"{prev_output}\"\n\n"
-        "Now examine this image for country-specific indicators:\n"
-        "- Language on signs, buildings, or vehicles\n"
-        "- Architectural style (roof shapes, wall colors, building materials)\n"
-        "- Traffic direction and road infrastructure\n"
-        "- License plate format and color\n"
-        "- Utility pole design and fire hydrant style\n\n"
-        "Which specific country (or small set of countries) does this image most likely come from?"
+        "Now examine this image for country-level indicators. For EACH category, report what you ACTUALLY see:\n\n"
+        "1. LANGUAGE & TEXT: Script/alphabet on signs, buildings, vehicles\n"
+        "2. ARCHITECTURE: Roof style, wall materials/colors, building patterns, distinctive features\n"
+        "3. ROADS & VEHICLES: Driving side, road markings, vehicle makes, license plates\n"
+        "4. INFRASTRUCTURE: Utility pole design, street lights, fire hydrant style\n"
+        "5. PEOPLE & CLOTHING (if visible)\n\n"
+        "Identify the most likely COUNTRY (max 2 candidates). List specific clues for each.\n"
+        "CRITICAL: Do NOT hallucinate. If uncertain, narrow to a specific sub-region instead."
     ),
     GeoCoTStage.LOCAL: (
         "Based on the analysis so far:\n"
         "- Macro context: {macro_output}\n"
         "- Regional assessment: {regional_output}\n\n"
-        "Now identify city-level details:\n"
-        "- Sidewalk tile patterns (color, shape, arrangement)\n"
-        "- Specific landmarks or recognizable buildings\n"
-        "- Vehicle makes and models common to the region\n"
-        "- Street naming conventions and signage style\n"
-        "- Local business names or advertisements\n\n"
-        "Provide your final geolocation as a coherent paragraph following this format:\n"
-        '"The presence of [clue1] indicates [inference1]. [clue2] suggests [inference2]. ... '
-        'This image was most likely taken in [city], [country], [continent]."'
+        "Now synthesize ALL evidence into a precise geolocation. Consider city-level details:\n"
+        "- Street furniture, sidewalk material and patterns\n"
+        "- Signage style (European vs American vs Asian traffic sign standards)\n"
+        "- Commercial signs, chain stores, local business types\n"
+        "- Any visible landmarks or distinctive buildings\n\n"
+        "Write a reasoning paragraph connecting observations to inferences.\n"
+        "Then end with EXACTLY this line (nothing after it):\n"
+        "LOCATION: [city], [country], [continent]\n\n"
+        "Continent must be one of: Asia, Africa, Europe, North America, South America, Oceania.\n"
+        "If uncertain about the city, give your best estimate. Do NOT write 'Unknown'."
     ),
 }
 
@@ -101,12 +124,30 @@ _DEFAULT_PROMPTS = {
 class GeoCoTPrompt:
     """Manages stage-specific prompts and few-shot examples."""
 
-    def __init__(self, prompts_dir: Optional[str] = None, few_shot_path: Optional[str] = None):
+    def __init__(self, prompts_dir: Optional[str] = None, few_shot_path: Optional[str] = None,
+                 enable_knowledge_injection: bool = True):
         self._prompts = {}
         self._load_prompts(prompts_dir)
         self._few_shots = self._load_few_shots(few_shot_path)
+        self._enable_knowledge = enable_knowledge_injection
+        # Lazy-import knowledge retriever to avoid circular imports
+        self._retriever = None
+
+    def _get_retriever(self):
+        if self._retriever is None and self._enable_knowledge:
+            try:
+                from .knowledge_retriever import retrieve_and_inject, retrieve_by_keywords
+                self._retriever = (retrieve_and_inject, retrieve_by_keywords)
+            except ImportError:
+                self._enable_knowledge = False
+        return self._retriever
 
     def _load_prompts(self, prompts_dir: Optional[str]):
+        # Auto-detect enhanced prompts if not explicitly configured
+        if prompts_dir is None:
+            default_dir = Path(__file__).parent / "prompts"
+            if (default_dir / "macro.txt").exists():
+                prompts_dir = str(default_dir)
         for stage in GeoCoTStage:
             path = Path(prompts_dir) / f"{stage.value}.txt" if prompts_dir else None
             if path and path.exists():
@@ -131,15 +172,54 @@ class GeoCoTPrompt:
         if "{regional_output}" in template:
             fmt["regional_output"] = prev_outputs.get("regional", "")
         try:
-            return template.format(**fmt)
+            prompt_text = template.format(**fmt)
         except KeyError:
-            return template
+            prompt_text = template
 
-    def build_few_shot_prefix(self, continent_hint: str = "") -> str:
+        # Inject geographic knowledge at Regional and Local stages
+        if self._enable_knowledge and stage in (GeoCoTStage.REGIONAL, GeoCoTStage.LOCAL):
+            r = self._get_retriever()
+            if r:
+                retrieve_and_inject_fn, _ = r
+                # Use previous outputs for keyword-based retrieval
+                all_text = " ".join(prev_outputs.values()) if prev_outputs else ""
+                prompt_text = retrieve_and_inject_fn(prompt_text, prev_outputs)
+
+        return prompt_text
+
+    def build_few_shot_prefix(self, continent_hint: str = "", prev_outputs: dict = None) -> str:
+        """Build few-shot prefix with examples relevant to the current context."""
         if not self._few_shots:
             return ""
-        examples = self._few_shots[:3]
-        parts = ["Here are some examples of geographic reasoning:\n"]
+
+        # If we have previous outputs, try to find relevant few-shot examples
+        if prev_outputs:
+            all_text = " ".join(prev_outputs.values()).lower()
+            # Score each few-shot example by relevance to current context
+            scored = []
+            for ex in self._few_shots:
+                score = 0
+                ex_output = ex.get("output", "").lower()
+                ex_region = ex.get("region", "").lower()
+                ex_scene = ex.get("scene_type", "").lower()
+                # Match scene type keywords in previous outputs
+                for keyword in ["urban", "karst", "granite", "alpine", "gorge", "snow",
+                                "city", "mountain", "peak", "river", "village"]:
+                    if keyword in all_text and keyword in ex_scene:
+                        score += 5
+                    if keyword in all_text and keyword in ex_output[:500]:
+                        score += 3
+                # Region name match
+                if ex_region and ex_region in all_text:
+                    score += 8
+                scored.append((score, ex))
+            scored.sort(key=lambda x: x[0], reverse=True)
+            # Take top 3, but ensure at least one urban and one wilderness if possible
+            examples = [ex for _, ex in scored[:3]]
+        else:
+            examples = self._few_shots[:3]
+
+        parts = ["Here are some examples of geographic reasoning for Chinese locations:\n"]
         for i, ex in enumerate(examples, 1):
             parts.append(f"Example {i}:\n{ex.get('output', '')}\n")
         return "\n".join(parts)
@@ -166,6 +246,7 @@ _COUNTRY_TO_CONTINENT = {
 }
 
 _LANDMARK_TO_LOCATION = {
+    # World
     "brooklyn bridge": ("New York City", "United States"),
     "statue of liberty": ("New York City", "United States"),
     "eiffel tower": ("Paris", "France"),
@@ -178,6 +259,55 @@ _LANDMARK_TO_LOCATION = {
     "golden gate bridge": ("San Francisco", "United States"),
     "notre dame": ("Paris", "France"),
     "brandenburg gate": ("Berlin", "Germany"),
+    # China: urban landmarks
+    "great wall": ("Beijing", "China"),
+    "forbidden city": ("Beijing", "China"),
+    "temple of heaven": ("Beijing", "China"),
+    "summer palace": ("Beijing", "China"),
+    "oriental pearl tower": ("Shanghai", "China"),
+    "the bund": ("Shanghai", "China"),
+    "canton tower": ("Guangzhou", "China"),
+    "west lake": ("Hangzhou", "China"),
+    "potala palace": ("Lhasa", "China"),
+    "terracotta warriors": ("Xi'an", "China"),
+    "city wall": ("Xi'an", "China"),
+    # China: mountain scenic areas
+    "huangshan": ("Huangshan", "China"),
+    "yellow mountain": ("Huangshan", "China"),
+    "zhangjiajie": ("Zhangjiajie", "China"),
+    "wulingyuan": ("Zhangjiajie", "China"),
+    "tianmen mountain": ("Zhangjiajie", "China"),
+    "guilin karst": ("Guilin", "China"),
+    "li river": ("Guilin", "China"),
+    "tiger leaping gorge": ("Tiger Leaping Gorge", "China"),
+    "jade dragon snow mountain": ("Lijiang", "China"),
+    "yulong snow mountain": ("Lijiang", "China"),
+    "emei mountain": ("Emeishan City", "China"),
+    "emeishan": ("Emeishan City", "China"),
+    "mount tai": ("Tai'an", "China"),
+    "taishan": ("Tai'an", "China"),
+    "mount hua": ("Huayin", "China"),
+    "huashan": ("Huayin", "China"),
+    "lushan": ("Lushan", "China"),
+    "wuyishan": ("Wuyishan City", "China"),
+    "wuyi mountain": ("Wuyishan City", "China"),
+    "four girls mountain": ("Siguniangshan", "China"),
+    "siguniang mountain": ("Siguniangshan", "China"),
+    "siguniangshan": ("Siguniangshan", "China"),
+    "jiuzhaigou": ("Jiuzhaigou", "China"),
+    "meili snow mountain": ("Deqin", "China"),
+    "kawagebo": ("Deqin", "China"),
+    "daocheng yading": ("Daocheng", "China"),
+    "yading nature reserve": ("Daocheng", "China"),
+    "yubeng": ("Deqin", "China"),
+    "sanqingshan": ("Shangrao", "China"),
+    "leshan giant buddha": ("Leshan", "China"),
+    "hailuogou glacier": ("Moxi", "China"),
+    "gongga mountain": ("Garze", "China"),
+    "wudang mountain": ("Shiyan", "China"),
+    "wudangshan": ("Shiyan", "China"),
+    "huanglong": ("Songpan", "China"),
+    "shennongjia": ("Shennongjia", "China"),
 }
 
 _CITY_TO_COUNTRY = {
@@ -193,6 +323,36 @@ _CITY_TO_COUNTRY = {
     "sydney": "Australia", "melbourne": "Australia",
     "toronto": "Canada", "vancouver": "Canada",
     "moscow": "Russia", "istanbul": "Turkey", "cairo": "Egypt", "dubai": "UAE",
+    # Chinese provincial capitals
+    "chengdu": "China", "chongqing": "China", "hangzhou": "China",
+    "nanjing": "China", "wuhan": "China", "xi'an": "China",
+    "kunming": "China", "changsha": "China", "hefei": "China",
+    "nanchang": "China", "guiyang": "China", "lanzhou": "China",
+    "nanning": "China", "harbin": "China", "changchun": "China",
+    "shenyang": "China", "jinan": "China", "zhengzhou": "China",
+    "shijiazhuang": "China", "taiyuan": "China", "hohhot": "China",
+    "urumqi": "China", "lhasa": "China", "xining": "China",
+    "yinchuan": "China", "haikou": "China", "tianjin": "China",
+    "macau": "China", "taipei": "China",
+    # Chinese major cities
+    "suzhou": "China", "wuxi": "China", "ningbo": "China",
+    "wenzhou": "China", "xiamen": "China", "qingdao": "China",
+    "dalian": "China", "zhuhai": "China", "foshan": "China",
+    "dongguan": "China", "luoyang": "China", "kaifeng": "China",
+    "dali": "China", "lijiang": "China", "guilin": "China",
+    "sanya": "China", "beihai": "China", "yan'an": "China",
+    "jingdezhen": "China", "zigong": "China",
+    # Chinese scenic/trail towns
+    "tangkou": "China", "wulingyuan": "China", "zhangjiajie city": "China",
+    "shangri-la": "China", "zhongdian": "China",
+    "qiaotou": "China", "daju": "China", "hutiaoxia": "China",
+    "riwa": "China", "xinduqiao": "China", "moxi": "China",
+    "feilaixi": "China", "bingzhongluo": "China",
+    "daocheng": "China", "litang": "China", "kangding": "China",
+    "deqin": "China", "aba": "China", "garze": "China",
+    "jiuzhaigou": "China", "jinghong": "China", "tengchong": "China",
+    "huangshan city": "China", "wuyishan city": "China",
+    "emeishan city": "China",
 }
 
 
@@ -201,84 +361,531 @@ def _infer_continent(country: str) -> str:
 
 
 def extract_prediction(text: str) -> GeoPrediction:
-    """Extract city, country, continent from reasoning text.
+    """Extract coordinates and location from reasoning text.
 
-    Strategy: look for LOCATION: marker first, then fall back to other patterns.
-    Only scan the conclusion (last sentence) for landmarks/cities to avoid
-    matching locations mentioned during reasoning.
+    Strategy (coordinates-first):
+      1. COORDINATES: line → lat, lng (primary target)
+      2. LOCATION: line → city, country, continent
+      3. Coord→city/trail reverse lookup if only coords available
+      4. City/trail→coord forward lookup if only location available
     """
-    # 0. Check for explicit LOCATION: marker
-    location_pattern = re.compile(
-        r"LOCATION:\s*([^,]+?),\s*([^,]+?),\s*(Asia|Africa|Europe|North America|South America|Oceania)",
+    lat, lng = _extract_coordinates(text)
+    city, country, continent = _extract_location_strict(text)
+
+    # If we have coords but no proper location, reverse-lookup nearest city or trail
+    if lat is not None and lng is not None and (not city or city == "Unknown"):
+        city, country = _coords_to_nearest_city(lat, lng)
+        if city:
+            continent = _infer_continent(country)
+
+    # If we have a trail/scenic name, forward-lookup coordinates with higher precision
+    if city:
+        trail_info = lookup_trail(city)
+        if trail_info:
+            lat, lng = trail_info[0], trail_info[1]
+            if not country or country == "Unknown":
+                country = "China"
+                continent = "Asia"
+
+    # If we have location but no coords, forward-lookup city or trail
+    if (lat is None or lng is None) and (city or country):
+        trail_info = lookup_trail(city) if city else None
+        if trail_info:
+            lat, lng = trail_info[0], trail_info[1]
+        else:
+            lat, lng = _city_to_coords(city or "Unknown", country or "Unknown")
+
+    return GeoPrediction(
+        city=city or "Unknown",
+        country=country or "Unknown",
+        continent=continent or "Unknown",
+        latitude=lat,
+        longitude=lng,
+    )
+
+
+def _extract_coordinates(text: str) -> tuple:
+    """Extract latitude/longitude from COORDINATES: line. Returns (lat, lng) or (None, None).
+
+    Takes only the FIRST COORDINATES: match if multiple exist.
+    """
+    # Pattern: COORDINATES: <lat>, <lng>
+    coord_pattern = re.compile(
+        r"COORDINATES:\s*([+-]?\d+\.?\d*)\s*[\s,;]+\s*([+-]?\d+\.?\d*)",
         re.IGNORECASE,
     )
-    m = location_pattern.search(text)
+    m = coord_pattern.search(text)
     if m:
-        return GeoPrediction(city=m.group(1).strip(), country=m.group(2).strip(), continent=m.group(3).strip())
-    patterns = [
-        # "taken in / located in city, country, continent"
-        re.compile(
-            r"(?:taken in|located in|most likely (?:taken|located|found) in)\s+"
-            r"([^,]+?),\s*([^,]+?),\s*(?:the\s+)?(Asia|Africa|Europe|North America|South America|Oceania)",
-            re.IGNORECASE,
-        ),
-        # "city, country, continent" standalone
-        re.compile(
-            r"([A-Z][a-zA-Z\s]+?),\s*([A-Z][a-zA-Z\s]+?),\s*"
-            r"(Asia|Africa|Europe|North America|South America|Oceania)",
-            re.IGNORECASE,
-        ),
-        # "from the Country, specifically City"
-        re.compile(
-            r"from\s+(?:the\s+)?([A-Z][a-zA-Z\s]+?),\s*specifically\s+([A-Z][a-zA-Z\s]+?)(?:\.|$)",
-            re.IGNORECASE,
-        ),
-        # "in City, Country" (no continent)
-        re.compile(
-            r"(?:taken in|located in|found in|in)\s+([^,]+?),\s*([A-Z][a-zA-Z\s]+?)(?:\.|$)",
-            re.IGNORECASE,
-        ),
-    ]
-    # Get the last sentence as conclusion
-    sentences = re.split(r'[.!?]\s*', text.strip())
-    conclusion = sentences[-1] if sentences else text
-    if len(conclusion) < 30 and len(sentences) > 1:
-        conclusion = sentences[-2] + ". " + conclusion
-    conclusion_lower = conclusion.lower()
+        lat = max(-90.0, min(90.0, float(m.group(1))))
+        lng = max(-180.0, min(180.0, float(m.group(2))))
+        return lat, lng
 
-    for pattern in patterns:
-        m = pattern.search(conclusion)
-        if m:
-            groups = [g.strip() if g else "" for g in m.groups()]
-            if len(groups) == 3 and groups[2].lower() in {"asia", "africa", "europe", "north america", "south america", "oceania"}:
-                return GeoPrediction(city=groups[0], country=groups[1], continent=groups[2])
-            elif len(groups) == 2:
-                country = groups[1] if len(groups[1]) > len(groups[0]) else groups[0]
-                city = groups[0] if len(groups[0]) <= len(groups[1]) else groups[1]
-                return GeoPrediction(city=city, country=country, continent=_infer_continent(country))
+    # Pattern: "40.7128° N, 74.0060° W"
+    nswe_pattern = re.compile(
+        r"(\d+\.?\d*)\s*°?\s*([NS])\s*[,;]\s*(\d+\.?\d*)\s*°?\s*([EW])",
+        re.IGNORECASE,
+    )
+    m = nswe_pattern.search(text)
+    if m:
+        lat = float(m.group(1)) * (1 if m.group(2).upper() == "N" else -1)
+        lng = float(m.group(3)) * (1 if m.group(4).upper() == "E" else -1)
+        return max(-90.0, min(90.0, lat)), max(-180.0, min(180.0, lng))
 
-    # 2. Scan for landmarks in the conclusion
-    for landmark, (city, country) in _LANDMARK_TO_LOCATION.items():
-        if landmark in conclusion_lower:
-            return GeoPrediction(city=city, country=country, continent=_infer_continent(country))
+    return None, None
 
-    # 3. Scan for city names in the conclusion (longest match first)
-    for city, country in sorted(_CITY_TO_COUNTRY.items(), key=lambda x: -len(x[0])):
-        if city in conclusion_lower:
-            return GeoPrediction(city=city.title(), country=country, continent=_infer_continent(country))
 
-    # 4. Scan for country names in the conclusion
-    for country, continent in _COUNTRY_TO_CONTINENT.items():
-        if country in conclusion_lower:
-            return GeoPrediction(city="Unknown", country=country.title(), continent=continent)
+def _is_template_placeholder(s: str) -> bool:
+    """Check if a string looks like a template placeholder rather than actual content."""
+    s = s.strip()
+    if not s:
+        return True
+    # [placeholder], [city name], City Name, etc.
+    if re.match(r"^\[.*\]$", s):
+        return True
+    if s.lower() in {"city name", "country name", "continent name", "major city", "unknown", "city"}:
+        return True
+    return False
 
-    # 5. Last resort: scan full text for landmarks only
+
+def _extract_location_strict(text: str) -> tuple:
+    """Extract city, country, continent from LOCATION: line only.
+
+    Rejects template placeholders like '[city name]'.
+    Returns (city, country, continent) or (None, None, None).
+    """
+    # Strict LOCATION: City, Country, Continent format
+    loc_pattern = re.compile(
+        r"LOCATION:\s*([^,\[\]\n]+?),\s*([^,\[\]\n]+?),\s*"
+        r"(Asia|Africa|Europe|North America|South America|Oceania)",
+        re.IGNORECASE,
+    )
+    for m in loc_pattern.finditer(text):
+        c1, c2, c3 = m.group(1).strip(), m.group(2).strip(), m.group(3).strip()
+        # Reject template placeholders
+        if _is_template_placeholder(c1) or _is_template_placeholder(c2):
+            continue
+        # city should not be extremely long
+        if len(c1) > 40 or len(c2) > 40:
+            continue
+        return c1, c2, c3
+
+    return None, None, None
+
+
+def _coords_to_nearest_city(lat: float, lng: float) -> tuple:
+    """Find the closest city or trail in our database to the given coordinates.
+
+    Returns (city, country) or (None, None).
+    """
+    _init_city_db()
+    best_name, best_country, best_dist = None, None, float("inf")
+
+    # Check city database
+    for (city_key, country_key), (clat, clng) in _CITY_COORD_DB.items():
+        dist = ((lat - clat) ** 2 + (lng - clng) ** 2) ** 0.5
+        if dist < best_dist:
+            best_dist = dist
+            best_name = city_key.title()
+            best_country = country_key.title()
+
+    # Check trail database (with bonus weighting for trails → prefer them nearby)
+    for trail_name, (tlat, tlng, province) in _TRAIL_COORD_DB.items():
+        dist = ((lat - tlat) ** 2 + (lng - tlng) ** 2) ** 0.5
+        if dist < best_dist:
+            best_dist = dist
+            best_name = trail_name.title()
+            best_country = "china"
+
+    # Only return if within reasonable distance (~30 degrees ≈ ~3300km)
+    if best_dist < 30:
+        return best_name, best_country
+    return None, None
+
+
+def _city_to_coords(city: str, country: str) -> tuple:
+    """Rough coordinate lookup for common cities. Returns (lat, lng) or (None, None)."""
+    _init_city_db()
+    key = (city.strip().lower(), country.strip().lower())
+    return _CITY_COORD_DB.get(key, (None, None))
+
+
+# Shared city↔coordinate database
+_CITY_COORD_DB = {}
+_TRAIL_COORD_DB = {}  # hiking trail / scenic area → (lat, lng, province)
+_DB_INITIALIZED = False
+
+# Chinese province abbreviations → full name and capital
+_PROVINCE_MAP = {
+    "京": ("beijing", "beijing", 39.9042, 116.4074),
+    "沪": ("shanghai", "shanghai", 31.2304, 121.4737),
+    "津": ("tianjin", "tianjin", 39.0842, 117.2009),
+    "渝": ("chongqing", "chongqing", 29.4316, 106.9123),
+    "粤": ("guangdong", "guangzhou", 23.1291, 113.2644),
+    "苏": ("jiangsu", "nanjing", 32.0603, 118.7969),
+    "浙": ("zhejiang", "hangzhou", 30.2741, 120.1551),
+    "鲁": ("shandong", "jinan", 36.6510, 117.1201),
+    "豫": ("henan", "zhengzhou", 34.7466, 113.6253),
+    "冀": ("hebei", "shijiazhuang", 38.0423, 114.5149),
+    "川": ("sichuan", "chengdu", 30.5728, 104.0668),
+    "云": ("yunnan", "kunming", 25.0389, 102.7183),
+    "贵": ("guizhou", "guiyang", 26.6477, 106.6302),
+    "桂": ("guangxi", "nanning", 22.8170, 108.3665),
+    "鄂": ("hubei", "wuhan", 30.5928, 114.3055),
+    "湘": ("hunan", "changsha", 28.2278, 112.9389),
+    "赣": ("jiangxi", "nanchang", 28.6820, 115.8582),
+    "闽": ("fujian", "fuzhou", 26.0745, 119.2965),
+    "皖": ("anhui", "hefei", 31.8206, 117.2272),
+    "陕": ("shaanxi", "xi'an", 34.3416, 108.9398),
+    "晋": ("shanxi", "taiyuan", 37.8706, 112.5489),
+    "黑": ("heilongjiang", "harbin", 45.8038, 126.5350),
+    "吉": ("jilin", "changchun", 43.8990, 125.2249),
+    "辽": ("liaoning", "shenyang", 41.8057, 123.4315),
+    "蒙": ("inner mongolia", "hohhot", 40.8424, 111.7490),
+    "甘": ("gansu", "lanzhou", 36.0611, 103.8343),
+    "青": ("qinghai", "xining", 36.6171, 101.7785),
+    "新": ("xinjiang", "urumqi", 43.8256, 87.6168),
+    "藏": ("tibet", "lhasa", 29.6500, 91.1000),
+    "宁": ("ningxia", "yinchuan", 38.4872, 106.2309),
+    "琼": ("hainan", "haikou", 20.0174, 110.3492),
+}
+
+
+def _infer_scene_type_from_geocot(text: str):
+    """Infer SceneType int from GeoCoT output text (for MoE reconciliation).
+
+    Returns int (0-3) or None if unclear.
+    """
+    if not text:
+        return None
     text_lower = text.lower()
-    for landmark, (city, country) in _LANDMARK_TO_LOCATION.items():
-        if landmark in text_lower:
-            return GeoPrediction(city=city, country=country, continent=_infer_continent(country))
 
-    return GeoPrediction()
+    urban_kw = ["城市", "建筑", "街道", "沥青", "路面", "urban", "city",
+                "road", "building", "traffic", "shanghai", "beijing"]
+    karst_kw = ["峰林", "花岗岩", "喀斯特", "石灰岩", "石英砂岩",
+                "karst", "granite", "peak", "guilin", "huangshan",
+                "zhangjiajie", "sandstone"]
+    alpine_kw = ["雪山", "冰川", "高山", "海拔", "alpine", "snow",
+                 "mountain", "glacier", "plateau", "tibet",
+                 "siguniang", "gongga", "meili"]
+    other_kw = ["峡谷", "古镇", "草原", "沙漠", "湖泊", "gorge",
+                "old town", "grassland", "desert", "lake", "canyon",
+                "lijiang", "tiger leaping", "dali"]
+
+    scores = {
+        0: sum(1 for kw in urban_kw if kw in text_lower),
+        1: sum(1 for kw in karst_kw if kw in text_lower),
+        2: sum(1 for kw in alpine_kw if kw in text_lower),
+        3: sum(1 for kw in other_kw if kw in text_lower),
+    }
+    best = max(scores, key=scores.get)
+    return int(best) if scores[best] > 0 else None
+
+
+def _init_city_db():
+    """Lazy-init the coordinate databases (cities + trails)."""
+    global _CITY_COORD_DB, _TRAIL_COORD_DB, _DB_INITIALIZED
+    if _DB_INITIALIZED:
+        return
+
+    # ── World major cities ──────────────────────────────────────────
+    _CITY_COORD_DB = {
+        # East Asia
+        ("beijing", "china"): (39.9042, 116.4074),
+        ("shanghai", "china"): (31.2304, 121.4737),
+        ("shenzhen", "china"): (22.5431, 114.0579),
+        ("guangzhou", "china"): (23.1291, 113.2644),
+        ("hong kong", "china"): (22.3193, 114.1694),
+        ("tokyo", "japan"): (35.6762, 139.6503),
+        ("osaka", "japan"): (34.6937, 135.5023),
+        ("seoul", "south korea"): (37.5665, 126.9780),
+        ("singapore", "singapore"): (1.3521, 103.8198),
+        ("bangkok", "thailand"): (13.7563, 100.5018),
+        ("hanoi", "vietnam"): (21.0278, 105.8342),
+        ("ho chi minh city", "vietnam"): (10.8231, 106.6297),
+
+        # Europe
+        ("london", "united kingdom"): (51.5074, -0.1278),
+        ("paris", "france"): (48.8566, 2.3522),
+        ("berlin", "germany"): (52.5200, 13.4050),
+        ("rome", "italy"): (41.9028, 12.4964),
+        ("madrid", "spain"): (40.4168, -3.7038),
+        ("barcelona", "spain"): (41.3874, 2.1686),
+        ("moscow", "russia"): (55.7558, 37.6173),
+        ("istanbul", "turkey"): (41.0082, 28.9784),
+
+        # Americas
+        ("new york city", "united states"): (40.7128, -74.0060),
+        ("new york", "united states"): (40.7128, -74.0060),
+        ("los angeles", "united states"): (34.0522, -118.2437),
+        ("chicago", "united states"): (41.8781, -87.6298),
+        ("san francisco", "united states"): (37.7749, -122.4194),
+        ("toronto", "canada"): (43.6532, -79.3832),
+        ("vancouver", "canada"): (49.2827, -123.1207),
+        ("mexico city", "mexico"): (19.4326, -99.1332),
+        ("sao paulo", "brazil"): (-23.5505, -46.6333),
+        ("rio de janeiro", "brazil"): (-22.9068, -43.1729),
+        ("buenos aires", "argentina"): (-34.6037, -58.3816),
+        ("lima", "peru"): (-12.0464, -77.0428),
+
+        # South Asia / Oceania / Africa / Middle East
+        ("mumbai", "india"): (19.0760, 72.8777),
+        ("delhi", "india"): (28.6139, 77.2090),
+        ("sydney", "australia"): (-33.8688, 151.2093),
+        ("melbourne", "australia"): (-37.8136, 144.9631),
+        ("dubai", "uae"): (25.2048, 55.2708),
+        ("cairo", "egypt"): (30.0444, 31.2357),
+        ("nairobi", "kenya"): (-1.2921, 36.8219),
+        ("cape town", "south africa"): (-33.9249, 18.4241),
+        ("lagos", "nigeria"): (6.5244, 3.3792),
+        ("jakarta", "indonesia"): (-6.2088, 106.8456),
+        ("manila", "philippines"): (14.5995, 120.9842),
+        ("kuala lumpur", "malaysia"): (3.1390, 101.6869),
+    }
+
+    # ── China: provincial capitals ───────────────────────────────────
+    _CITY_COORD_DB.update({
+        ("chengdu", "china"): (30.5728, 104.0668),
+        ("chongqing", "china"): (29.4316, 106.9123),
+        ("hangzhou", "china"): (30.2741, 120.1551),
+        ("nanjing", "china"): (32.0603, 118.7969),
+        ("wuhan", "china"): (30.5928, 114.3055),
+        ("xi'an", "china"): (34.3416, 108.9398),
+        ("kunming", "china"): (25.0389, 102.7183),
+        ("changsha", "china"): (28.2278, 112.9389),
+        ("fuzhou", "china"): (26.0745, 119.2965),
+        ("hefei", "china"): (31.8206, 117.2272),
+        ("nanchang", "china"): (28.6820, 115.8582),
+        ("guiyang", "china"): (26.6477, 106.6302),
+        ("lanzhou", "china"): (36.0611, 103.8343),
+        ("nanning", "china"): (22.8170, 108.3665),
+        ("harbin", "china"): (45.8038, 126.5350),
+        ("changchun", "china"): (43.8990, 125.2249),
+        ("shenyang", "china"): (41.8057, 123.4315),
+        ("jinan", "china"): (36.6510, 117.1201),
+        ("zhengzhou", "china"): (34.7466, 113.6253),
+        ("shijiazhuang", "china"): (38.0423, 114.5149),
+        ("taiyuan", "china"): (37.8706, 112.5489),
+        ("hohhot", "china"): (40.8424, 111.7490),
+        ("urumqi", "china"): (43.8256, 87.6168),
+        ("lhasa", "china"): (29.6500, 91.1000),
+        ("xining", "china"): (36.6171, 101.7785),
+        ("yinchuan", "china"): (38.4872, 106.2309),
+        ("haikou", "china"): (20.0174, 110.3492),
+        ("tianjin", "china"): (39.0842, 117.2009),
+        ("macau", "china"): (22.1987, 113.5439),
+        ("taipei", "china"): (25.0330, 121.5654),
+    })
+
+    # ── China: major prefecture cities ────────────────────────────────
+    _CITY_COORD_DB.update({
+        ("suzhou", "china"): (31.2990, 120.5853),
+        ("wuxi", "china"): (31.4912, 120.3119),
+        ("ningbo", "china"): (29.8683, 121.5440),
+        ("wenzhou", "china"): (28.0015, 120.6989),
+        ("xiamen", "china"): (24.4798, 118.0894),
+        ("qingdao", "china"): (36.0671, 120.3826),
+        ("dalian", "china"): (38.9140, 121.6147),
+        ("zhuhai", "china"): (22.2707, 113.5767),
+        ("foshan", "china"): (23.0218, 113.1214),
+        ("dongguan", "china"): (23.0208, 113.7518),
+        ("luoyang", "china"): (34.6181, 112.4536),
+        ("kaifeng", "china"): (34.7975, 114.3076),
+        ("dali", "china"): (25.6065, 100.2676),
+        ("lijiang", "china"): (26.8721, 100.2299),
+        ("guilin", "china"): (25.2736, 110.2900),
+        ("sanya", "china"): (18.2528, 109.5120),
+        ("beihai", "china"): (21.4733, 109.1192),
+        ("yan'an", "china"): (36.5855, 109.4897),
+        ("jingdezhen", "china"): (29.2708, 117.1784),
+        ("zigong", "china"): (29.3392, 104.7784),
+        ("aba", "china"): (31.8995, 102.2245),  # Ngawa, near Siguniang
+        ("garze", "china"): (30.0490, 101.9625),  # Ganzi, near Gongga/Yading
+        ("deqin", "china"): (28.4860, 98.9180),  # near Meili Snow Mountain
+        ("kangding", "china"): (30.0530, 101.9630),
+        ("litang", "china"): (30.0310, 100.2720),
+        ("daocheng", "china"): (29.0529, 100.2944),
+        ("jiuzhaigou", "china"): (33.2630, 103.9190),
+        ("jinghong", "china"): (22.0091, 100.7970),  # Xishuangbanna
+        ("tengchong", "china"): (25.0205, 98.4973),
+        ("xichang", "china"): (27.8949, 102.2644),
+        ("shannan", "china"): (29.2370, 91.7720),
+        ("nyingchi", "china"): (29.6483, 94.3619),
+        ("yanbian", "china"): (42.9094, 129.5133),
+        ("hulunbuir", "china"): (49.2116, 119.7658),
+        ("altay", "china"): (47.8449, 88.1370),
+        ("kashgar", "china"): (39.4677, 75.9897),
+        ("turpan", "china"): (42.9513, 89.1841),
+        ("dunhuang", "china"): (40.1421, 94.6620),
+        ("zhangye", "china"): (38.9258, 100.4498),
+        ("huangshan city", "china"): (29.7153, 118.3377),  # Huangshan city (Tunxi)
+        ("wuyishan city", "china"): (27.7563, 118.0353),
+        ("emeishan city", "china"): (29.6012, 103.4825),
+        ("qufu", "china"): (35.5807, 116.9865),
+        ("datong", "china"): (40.0768, 113.3001),
+        ("pingyao", "china"): (37.2020, 112.1775),
+        ("yangshuo", "china"): (24.7785, 110.4965),
+        ("fenghuang", "china"): (27.9482, 109.5992),
+        ("wuzhen", "china"): (30.7460, 120.4866),
+        ("zhouzhuang", "china"): (31.1150, 120.8455),
+        ("tongli", "china"): (31.1583, 120.7188),
+    })
+
+    # ── China: county-level towns near hiking areas ──────────────────
+    _CITY_COORD_DB.update({
+        ("tangkou", "china"): (30.0900, 118.1800),  # 汤口镇, Huangshan south gate
+        ("wulingyuan", "china"): (29.3465, 110.5500),  # 武陵源, Zhangjiajie
+        ("zhangjiajie city", "china"): (29.1170, 110.4780),
+        ("shangri-la", "china"): (27.8298, 99.7040),  # 香格里拉 (Zhongdian)
+        ("zhongdian", "china"): (27.8298, 99.7040),
+        ("qiaotou", "china"): (27.0080, 100.0900),  # 桥头镇, Tiger Leaping Gorge start
+        ("daju", "china"): (27.3020, 100.2650),  # 大具, Tiger Leaping Gorge end
+        ("hutiaoxia", "china"): (27.1400, 100.2000),  # 虎跳峡镇
+        ("riwa", "china"): (28.4100, 100.3500),  # 日瓦镇, Yading gateway
+        ("xinduqiao", "china"): (30.0430, 101.5030),  # 新都桥, Kangding area
+        ("moxi", "china"): (29.6500, 102.1200),  # 磨西镇, Hailuogou / Gongga
+        ("feilaixi", "china"): (28.4450, 98.8780),  # 飞来寺, Meili Snow Mountain view
+        ("bingzhongluo", "china"): (28.0150, 98.6230),  # 丙中洛
+        ("lugu lake", "china"): (27.7030, 100.7910),  # 泸沽湖
+        ("yading", "china"): (28.4300, 100.3500),  # 亚丁村
+    })
+
+    # ── Hiking trails & scenic areas ─────────────────────────────────
+    _TRAIL_COORD_DB = {
+        # Anhui 安徽
+        "huangshan": (30.1296, 118.1690, "anhui"),
+        "yellow mountain": (30.1296, 118.1690, "anhui"),
+        "tunxi old street": (29.7153, 118.3377, "anhui"),
+
+        # Hunan 湖南
+        "zhangjiajie": (29.3355, 110.4807, "hunan"),
+        "wulingyuan": (29.3465, 110.5500, "hunan"),
+        "tianmen mountain": (29.0516, 110.4830, "hunan"),
+        "fenghuang ancient town": (27.9482, 109.5992, "hunan"),
+
+        # Yunnan 云南
+        "tiger leaping gorge": (27.1980, 100.1183, "yunnan"),
+        "yubeng": (28.4100, 98.7800, "yunnan"),
+        "meili snow mountain": (28.4380, 98.6850, "yunnan"),
+        "kawagebo": (28.4380, 98.6850, "yunnan"),
+        "jade dragon snow mountain": (27.0980, 100.1750, "yunnan"),
+        "yulong snow mountain": (27.0980, 100.1750, "yunnan"),
+        "lijiang old town": (26.8721, 100.2299, "yunnan"),
+        "shangri-la old town": (27.8298, 99.7040, "yunnan"),
+        "hutiaoxia": (27.1400, 100.2000, "yunnan"),
+        "lugu lake": (27.7030, 100.7910, "yunnan"),
+        "shaxi ancient town": (26.3180, 99.8530, "yunnan"),
+        "weishan old town": (25.2320, 100.3100, "yunnan"),
+
+        # Sichuan 四川
+        "siguniang mountain": (31.1000, 102.9000, "sichuan"),
+        "siguniangshan": (31.1000, 102.9000, "sichuan"),
+        "four girls mountain": (31.1000, 102.9000, "sichuan"),
+        "changping valley": (31.1200, 102.8800, "sichuan"),
+        "haizi valley": (31.0300, 102.9000, "sichuan"),
+        "daocheng yading": (28.4200, 100.3500, "sichuan"),
+        "yading nature reserve": (28.4200, 100.3500, "sichuan"),
+        "gongga mountain": (29.5950, 101.8790, "sichuan"),
+        "minya konka": (29.5950, 101.8790, "sichuan"),
+        "hailuogou glacier": (29.6100, 102.0700, "sichuan"),
+        "jiuzhaigou": (33.2630, 103.9190, "sichuan"),
+        "jiuzhaigou valley": (33.2630, 103.9190, "sichuan"),
+        "huanglong": (32.7500, 103.8300, "sichuan"),
+        "emeishan": (29.6012, 103.4825, "sichuan"),
+        "emei mountain": (29.6012, 103.4825, "sichuan"),
+        "leshan giant buddha": (29.5470, 103.7690, "sichuan"),
+        "mount qingcheng": (30.9800, 103.5250, "sichuan"),
+        "langzhong ancient city": (31.5600, 105.9800, "sichuan"),
+
+        # Fujian 福建
+        "wuyishan": (27.7180, 117.6820, "fujian"),
+        "wuyi mountain": (27.7180, 117.6820, "fujian"),
+        "tulou": (24.5900, 117.0600, "fujian"),
+
+        # Jiangxi 江西
+        "lushan": (29.5730, 115.9740, "jiangxi"),
+        "sanqingshan": (28.9150, 118.0820, "jiangxi"),
+        "jinggangshan": (26.5600, 114.1700, "jiangxi"),
+        "wuyuan": (29.2570, 117.8620, "jiangxi"),
+
+        # Shaanxi 陕西
+        "huashan": (34.4830, 110.0890, "shaanxi"),
+        "hua mountain": (34.4830, 110.0890, "shaanxi"),
+        "mount hua": (34.4830, 110.0890, "shaanxi"),
+        "zhongnan mountain": (33.9300, 108.9700, "shaanxi"),
+
+        # Shandong 山东
+        "taishan": (36.2610, 117.1110, "shandong"),
+        "tai mountain": (36.2610, 117.1110, "shandong"),
+        "laoshan": (36.1470, 120.6620, "shandong"),
+
+        # Zhejiang 浙江
+        "west lake": (30.2380, 120.1440, "zhejiang"),
+        "putuoshan": (30.0100, 122.3880, "zhejiang"),
+        "yandangshan": (28.3730, 121.0620, "zhejiang"),
+        "mogan mountain": (30.6250, 119.8800, "zhejiang"),
+
+        # Guangxi 广西
+        "guilin karst": (25.2736, 110.2900, "guangxi"),
+        "li river": (25.0300, 110.4200, "guangxi"),
+        "yangshuo karst": (24.7785, 110.4965, "guangxi"),
+        "longji rice terraces": (25.7600, 110.1400, "guangxi"),
+
+        # Tibet 西藏
+        "mount kailash": (31.0670, 81.3120, "tibet"),
+        "lake manasarovar": (30.6700, 81.4700, "tibet"),
+        "everest base camp": (28.1417, 86.8550, "tibet"),
+        "potala palace": (29.6576, 91.1169, "tibet"),
+        "yarlung tsangpo grand canyon": (29.6100, 94.9100, "tibet"),
+
+        # Hubei 湖北
+        "wudangshan": (32.4200, 111.0200, "hubei"),
+        "wudang mountain": (32.4200, 111.0200, "hubei"),
+        "three gorges": (30.8300, 111.0000, "hubei"),
+        "shennongjia": (31.7400, 110.6800, "hubei"),
+
+        # Hebei 河北
+        "great wall badaling": (40.3550, 116.0160, "hebei"),
+        "great wall mutianyu": (40.4310, 116.5650, "beijing"),
+        "great wall jinshanling": (40.6850, 117.2330, "hebei"),
+        "chengde mountain resort": (40.9880, 117.9380, "hebei"),
+        "bashang grassland": (41.5500, 115.9000, "hebei"),
+
+        # Xinjiang 新疆
+        "kanas lake": (48.8200, 87.0400, "xinjiang"),
+        "heavenly lake": (43.8830, 88.1330, "xinjiang"),
+        "tianchi xinjiang": (43.8830, 88.1330, "xinjiang"),
+
+        # Other famous destinations
+        "mount heng shanxi": (39.6700, 113.7300, "shanxi"),
+        "mount heng hunan": (27.2560, 112.7100, "hunan"),
+        "mount song": (34.5020, 112.9350, "henan"),
+        "shaolin temple": (34.5070, 112.9360, "henan"),
+        "hanging temple": (39.6730, 113.7120, "shanxi"),
+        "yungang grottoes": (40.1100, 113.1280, "shanxi"),
+        "mogao caves": (40.0370, 94.8040, "gansu"),
+        "rainbow mountains": (38.9258, 100.4498, "gansu"),
+        "terracotta warriors": (34.3850, 109.2730, "shaanxi"),
+        "mount lu": (29.5730, 115.9740, "jiangxi"),
+        "dali old town": (25.6065, 100.2676, "yunnan"),
+        "erce lake": (25.7590, 100.1820, "yunnan"),
+        "shuhe ancient town": (26.9200, 100.2090, "yunnan"),
+    }
+
+    _DB_INITIALIZED = True
+
+
+def lookup_trail(name: str):
+    """Look up a hiking trail or scenic area by name. Returns (lat, lng, province) or None."""
+    _init_city_db()
+    key = name.strip().lower()
+    if key in _TRAIL_COORD_DB:
+        return _TRAIL_COORD_DB[key]
+    return None
+
+
+def lookup_province(abbr: str):
+    """Look up province info by Chinese abbreviation. Returns (province, capital, lat, lng) or None."""
+    return _PROVINCE_MAP.get(abbr)
 
 
 # ---------------------------------------------------------------------------
@@ -309,6 +916,7 @@ class GeoCoTPipeline:
         self._prompt = GeoCoTPrompt(
             prompts_dir=prompt_config.get("prompts_dir") if prompt_config else None,
             few_shot_path=prompt_config.get("few_shot_path") if prompt_config else None,
+            enable_knowledge_injection=prompt_config.get("enable_knowledge", True) if prompt_config else True,
         )
 
     def run(self, image: Image.Image) -> GeoCoTResult:
@@ -320,7 +928,9 @@ class GeoCoTPipeline:
             prompt_text = self._prompt.get_prompt(stage, result.stage_outputs)
 
             if stage == GeoCoTStage.LOCAL:
-                few_shot_prefix = self._prompt.build_few_shot_prefix()
+                few_shot_prefix = self._prompt.build_few_shot_prefix(
+                    prev_outputs=result.stage_outputs
+                )
                 if few_shot_prefix:
                     prompt_text = few_shot_prefix + "\n\n" + prompt_text
 
@@ -329,6 +939,10 @@ class GeoCoTPipeline:
 
         result.reasoning_chain = result.full_reasoning
         result.final_prediction = extract_prediction(result.stage_outputs.get("local", ""))
+
+        # Infer scene type from GeoCoT output for MoE reconciliation
+        geocot_text = " ".join(result.stage_outputs.values())
+        result.scene_type = _infer_scene_type_from_geocot(geocot_text)
 
         return result
 
@@ -341,8 +955,8 @@ def create_qwen2vl_model_fn(
     model,
     processor,
     max_new_tokens: int = 2048,
-    temperature: float = 0.7,
-    top_p: float = 0.9,
+    temperature: float = 0.3,
+    top_p: float = 0.85,
 ):
     """Create a model_fn for GeoCoTPipeline using Qwen2-VL.
 
@@ -388,20 +1002,64 @@ def create_qwen2vl_model_fn(
 def load_qwen2vl(
     model_name: str = "Qwen/Qwen2-VL-2B-Instruct",
     max_pixels: int = MAX_IMAGE_PIXELS,
+    load_in_4bit: bool = False,
+    offload_folder: str = None,
+    gpu_memory: str = None,
+    cpu_memory: str = "16GB",
 ):
-    """Load Qwen2-VL model and processor, return (model, processor, model_fn)."""
-    from transformers import Qwen2VLForConditionalGeneration, AutoProcessor
+    """Load Qwen2-VL model and processor, return (model, processor, model_fn).
+
+    Args:
+        model_name: HuggingFace model ID
+        max_pixels: Max image pixels for processor
+        load_in_4bit: Use 4-bit quantization (fits 7B in ~4.5GB VRAM)
+        offload_folder: Directory for CPU offloading (slower fallback)
+        gpu_memory: Max GPU memory to use, e.g. "6GB"
+        cpu_memory: Max CPU memory for offloaded layers
+    """
+    from transformers import Qwen2VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
 
     processor = AutoProcessor.from_pretrained(
         model_name,
         min_pixels=256 * 28 * 28,
         max_pixels=max_pixels,
+        local_files_only=True,
     )
-    model = Qwen2VLForConditionalGeneration.from_pretrained(
-        model_name,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
+
+    load_kwargs = {
+        "device_map": "auto",
+        "local_files_only": True,
+    }
+
+    if load_in_4bit:
+        quant_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+        )
+        load_kwargs["quantization_config"] = quant_config
+        print(f"  4-bit quantization: enabled (nf4, double-quant)")
+    else:
+        load_kwargs["torch_dtype"] = torch.bfloat16
+
+    # For CPU offloading: limit GPU usage
+    if gpu_memory or offload_folder:
+        max_memory = {}
+        if gpu_memory:
+            max_memory[0] = gpu_memory
+        if cpu_memory:
+            max_memory["cpu"] = cpu_memory
+        load_kwargs["max_memory"] = max_memory
+
+    if offload_folder:
+        os.makedirs(offload_folder, exist_ok=True)
+        load_kwargs["offload_folder"] = offload_folder
+
+    print(f"  Mode: {'4-bit' if load_in_4bit else 'bfloat16'}, GPU limit: {gpu_memory or 'auto'}")
+    model = Qwen2VLForConditionalGeneration.from_pretrained(model_name, **load_kwargs)
+    model.eval()
+
     model_fn = create_qwen2vl_model_fn(model, processor)
     return model, processor, model_fn
 

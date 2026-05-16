@@ -1,10 +1,91 @@
 [MACRO]
-The image depicts a modern cityscape with a mix of high-rise buildings and green spaces, suggesting a developed urban environment. The presence of tall skyscrapers and the overall layout of the city indicate a densely populated area, likely in a developed region. The vegetation, including green lawns and trees, suggests a temperate climate zone with moderate rainfall. The sky is clear and blue, indicating a temperate climate.
+Based on the visual geolocation analysis of the image, here are the observations and deductions:
 
-Based on these observations, the image could be from a region in Asia, possibly China, given the architectural style and the presence of Chinese characters on the buildings. The urbanization level appears to be high, with a mix of residential and commercial areas, typical of a major city in a developed region.
+1. **Sun & Shadow Analysis (Latitude Estimation):**
+   - The shadows are relatively short, indicating that the sun is nearly overhead. This suggests that the location is close to the equator, likely within the range of 0-30° latitude.
+
+2. **Vegetation as Climate Proxy:**
+   - The presence of green, lush vegetation and the absence of palm trees or tropical broadleaf plants suggest that the location is not in a tropical zone. Instead, it appears to be in a temperate or subtropical region, likely within the range of 30-50° latitude.
+
+3. **Soil & Ground Color:**
+   - The soil appears to be dark, which could indicate volcanic origin or high organic content. This suggests a temperate or subarctic region, which aligns with the latitude range from 45-65°.
+
+4. **Topography & Hydrology:**
+   - The landscape includes a mix of greenery and urban development, with no visible ocean or sea. This suggests a temperate region with a temperate climate, likely within the range of 30-50° latitude.
+
+5. **Urbanization & Development Level:**
+   - The presence of modern buildings, including skyscrapers, indicates a major city center. This suggests a developed urban area, likely within the range of 30-50° latitude.
+
+**Most Likely Latitude Range:**
+- 30-45° N
+
+**Most Likely Continent(s) or Large Region(s):**
+- Europe
+- North America
+- East Asia (China, Japan, Korea)
+
+**Ranking:**
+1. Europe
+2. North America
+3. East Asia (China, Japan, Korea)
+
+**Why these regions are likely:**
+- Europe and North America have temperate climates with urban centers and developed infrastructure, fitting the latitude range and urban characteristics.
+- East Asia, particularly China, Japan, and Korea, have major cities with high-rise buildings and developed infrastructure, also fitting the latitude range and urban characteristics.
 
 [REGIONAL]
-The image most likely comes from China. This is based on the architectural style, the presence of Chinese characters on the buildings, and the overall urban environment. The modern cityscape with tall skyscrapers and green spaces is characteristic of many major cities in China, particularly in regions like Guangzhou, Shanghai, or Beijing.
+Based on the visual geolocation analysis of the image, here are the observations and deductions:
+
+1. **Language & Script Analysis:**
+   - No text is visible on signs, billboards, storefronts, or any other objects in the image. Therefore, we cannot determine the language or script used.
+
+2. **Driving Side:**
+   - The image does not show any vehicles or road signs that would indicate the driving side. Therefore, we cannot determine the driving side.
+
+3. **Architectural Style:**
+   - The building in the foreground has a modern architectural style with a glass facade and a unique design. The surrounding buildings also have a mix of modern and traditional styles, with some buildings having balconies and others having flat roofs. The materials used include glass, concrete, and some with a more traditional look.
+
+4. **Road & Vehicle Features:**
+   - No specific road markings, guardrails, or vehicle features are visible in the image. Therefore, we cannot determine any road or vehicle features.
+
+5. **Street Furniture:**
+   - No specific street furniture such as fire hydrants, mailboxes, or bus stops are visible in the image. Therefore, we cannot determine any street furniture.
+
+Based on the visible evidence in the image, we cannot identify the most likely country or sub-region. The image does not provide any text, road, or vehicle features that would allow us to determine the location.
 
 [LOCAL]
-LOCATION: Guangzhou, China, Asia
+Based on the visual geolocation analysis of the image, the most likely latitude range is 30-45° N. This suggests that the location is in a temperate or subtropical region, likely within the range of 30-50° latitude. The presence of modern buildings, including skyscrapers, indicates a major city center, which aligns with the latitude range and urban characteristics of Europe, North America, and East Asia (China, Japan, Korea).
+
+Considering the architectural style, the building in the foreground has a modern architectural style with a glass facade and a unique design. The surrounding buildings also have a mix of modern and traditional styles, with some buildings having balconies and others having flat roofs. The materials used include glass, concrete, and some with a more traditional look.
+
+The image does not provide any text, road, or vehicle features that would allow us to determine the location. Therefore, we cannot identify the most likely country or sub-region.
+
+Based on the visible evidence in the image, we cannot determine the most likely country or sub-region. The image does not provide any text, road, or vehicle features that would allow us to determine the location.
+
+Now, synthesizing all the evidence into a precise geolocation with estimated coordinates:
+
+1. Street furniture: bench design, trash bin style, bus stop shelter design
+2. Sidewalk/pavement: material, tile pattern, color, curb height
+3. Signage: street name format, traffic sign design (European vs American vs Asian standards)
+4. Commercial signs: any recognizable chain stores, local business types
+5. Any visible landmarks, monuments, or distinctive buildings
+6. Urban density and layout: grid pattern, organic medieval streets, modern planned district
+
+Based on the available evidence, we cannot determine the exact location. However, considering the latitude range and urban characteristics, the most likely regions are Europe, North America, and East Asia (China, Japan, Korea).
+
+COORDINATES: [latitude], [longitude]
+LOCATION: [city name], [country name], [continent name]
+
+Where continent must be exactly one of: Asia, Africa, Europe, North America, South America, Oceania.
+
+Examples of correct format:
+COORDINATES: 40.7128, -74.0060
+LOCATION: New York City, United States, North America
+
+COORDINATES: 35.6762, 139.6503
+LOCATION: Tokyo, Japan, Asia
+
+COORDINATES: 48.8566, 2.3522
+LOCATION: Paris, France, Europe
+
+CRITICAL: Always provide BOTH the COORDINATES line and the LOCATION line. Coordinates must be your best estimate based on the geographic reasoning from all stages. If uncertain, still give your best coordinate estimate — do NOT write "Unknown".

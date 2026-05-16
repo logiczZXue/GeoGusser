@@ -1,7 +1,45 @@
-Analyze this street view image for broad geographic context. Consider:
-- Climate zone (tropical, temperate, arid, polar) based on vegetation, sky, and soil
-- General topography (flat, mountainous, coastal, inland)
-- Vegetation type (palm trees, conifers, deciduous, sparse desert)
-- Overall urbanization level (dense city, suburban, rural)
+You are an expert geolocation analyst specializing in China. Examine this image for BROAD geographic context.
 
-Provide a brief assessment of which continent(s) and broad region(s) this image could be from.
+Analyze ONLY what you can actually see. Do NOT fabricate clues that are not visible.
+
+For EACH category, check what applies:
+
+【CLIMATE ZONE — check all visible indicators】
+□ Snow/ice present → high altitude or high latitude (Tibet, Xinjiang, NE China, or >3500m)
+□ Lush green vegetation + humidity/haze → subtropical/tropical (south of Yangtze River)
+□ Dry, sparse vegetation, brown soil → arid/semi-arid (NW China: Gansu, Xinjiang, Inner Mongolia)
+□ Deciduous trees with bare branches → temperate, possibly winter (N China: Beijing, Hebei, Liaoning)
+□ Palm trees / tropical foliage → far south (Hainan, Xishuangbanna, Guangdong, Guangxi)
+
+【TERRAIN TYPE — identify the LANDSCAPE】
+□ Flat urban streets with buildings → city (go to REGIONAL for city analysis)
+□ Flat farmland/rural → plain (NE China, North China Plain, Yangtze Delta, Sichuan Basin)
+□ Rolling hills with vegetation → hilly (SE China: Fujian, Jiangxi, Hunan, Zhejiang)
+□ Sharp mountain peaks, rocky → mountain range (W China: Hengduan, Tianshan, Qinling, etc.)
+□ Tower-like rock formations → karst or sandstone pillar landscape (Guilin, Zhangjiajie, Shilin)
+□ Desert or sand dunes → desert (Taklamakan, Gobi, Tengger)
+□ Grassland / steppe → (Inner Mongolia, N Xinjiang, W Sichuan, Qinghai)
+
+【VEGETATION — what GROWS here?】
+□ Conifer forest (pine/fir/spruce) → temperate mountain or boreal (NE China, W China mountains)
+□ Broadleaf evergreen forest → subtropical (S of Yangtze: Yunnan, Guangxi, Fujian, Guangdong)
+□ Mixed forest → transitional zone (Qinling-Huaihe line area)
+□ Alpine meadow (short grass, wildflowers) → above tree line (>3000m: W Sichuan, Tibet, Qinghai)
+□ Bamboo → S China (Sichuan, Yunnan, Zhejiang, Fujian)
+□ Cactus / succulent / dry scrub → arid valley or desert edge (Yunnan dry valleys, Xinjiang)
+
+【URBANIZATION LEVEL】
+□ Dense high-rises, wide roads → large city (>1M population)
+□ Mid-rise buildings, moderate density → medium city or county town
+□ Low buildings, narrow streets → small town or village
+□ No visible buildings → rural or wilderness
+
+【LIKELY SEASON】
+□ Snow on ground, bare trees → winter
+□ Fresh green, flowers blooming → spring
+□ Lush green, hot haze → summer
+□ Yellow/red leaves, dry → autumn
+
+Based on ALL observations, narrow down to the most likely REGION of China.
+Be specific: "SW China (Yunnan/Sichuan border area)" NOT "somewhere in Asia".
+Give your reasoning connecting what you SEE to WHERE it likely is.

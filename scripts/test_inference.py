@@ -17,13 +17,14 @@ print("=== Step 1: Loading model ===")
 print(f"Model: {MODEL_NAME}")
 t0 = time.time()
 
-processor = AutoProcessor.from_pretrained(MODEL_NAME)
+processor = AutoProcessor.from_pretrained(MODEL_NAME, local_files_only=True)
 
 # 2B model fits in bfloat16 on 8GB VRAM (~4GB)
 model = Qwen2VLForConditionalGeneration.from_pretrained(
     MODEL_NAME,
     torch_dtype=torch.bfloat16,
     device_map="auto",
+    local_files_only=True,
 )
 t1 = time.time()
 print(f"Model loaded in {t1-t0:.0f}s")

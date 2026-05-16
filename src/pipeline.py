@@ -109,8 +109,9 @@ def main():
         model_name,
         torch_dtype=getattr(torch, cfg["model"].get("torch_dtype", "bfloat16")),
         device_map=device,
+        local_files_only=True,
     )
-    processor = AutoProcessor.from_pretrained(model_name)
+    processor = AutoProcessor.from_pretrained(model_name, local_files_only=True)
 
     model_fn = create_hf_model_fn(
         model, processor, device,

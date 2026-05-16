@@ -86,9 +86,10 @@ def main():
 
     print(f"Loading model: {model_name}")
     model = AutoModelForVision2Seq.from_pretrained(
-        model_name, torch_dtype=torch.bfloat16, device_map=device
+        model_name, torch_dtype=torch.bfloat16, device_map=device,
+        local_files_only=True,
     )
-    processor = AutoProcessor.from_pretrained(model_name)
+    processor = AutoProcessor.from_pretrained(model_name, local_files_only=True)
 
     model_fn = create_hf_model_fn(model, processor, device)
     run_baseline(model_fn, args.image_dir, args.output_dir)

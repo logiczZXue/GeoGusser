@@ -1,12 +1,58 @@
 Based on the macro-level assessment:
 "{prev_output}"
 
-Now examine this image for country-specific indicators:
-- Language on signs, buildings, or vehicles
-- Architectural style (roof shapes, wall colors, building materials)
-- Traffic direction and road infrastructure
-- License plate format and color
-- Utility pole design and fire hydrant style
-- Currency or phone number formats if visible
+Now examine this image for COUNTRY and PROVINCE-level indicators. For EACH category, report what you ACTUALLY see:
 
-Which specific country (or small set of countries) does this image most likely come from?
+【LANGUAGE & TEXT — critical for country identification】
+□ Chinese characters (汉字) visible → China (or Taiwan, Hong Kong, Macau)
+  - Simplified Chinese (简体字) → mainland China or Singapore
+  - Traditional Chinese (繁體字) → Taiwan, Hong Kong, Macau
+□ Tibetan script (藏文) → Tibet, W Sichuan, Qinghai, Gansu, NW Yunnan
+□ Uyghur/Arabic script (维吾尔文) → Xinjiang
+□ Mongolian script (蒙古文) → Inner Mongolia
+□ No text visible → cannot use language cue
+
+【ARCHITECTURE — most reliable regional indicator】
+□ White walls + black/grey tile roofs + horse-head gables (白墙黛瓦马头墙) → Hui-style, S Anhui / N Jiangxi / W Zhejiang
+□ Red columns + yellow glazed tiles + curved eaves → traditional Chinese official/temple style (common nationwide)
+□ Wooden stilt houses on river (吊脚楼) → W Hunan (Fenghuang), Guizhou, Chongqing, W Hubei
+□ Tibetan stone houses (碉房) + white pagodas (白塔) + prayer flags (经幡) → Tibet, W Sichuan, NW Yunnan, S Gansu, Qinghai
+□ Earthen tulou buildings (土楼, circular/rectangular fortress) → SW Fujian
+□ Arcade streets (骑楼, covered sidewalk under building) → Guangzhou, S Fujian, Guangxi, Hainan, Taiwan
+□ Brick courtyard houses (四合院) → Beijing, N China
+□ Shanghai lane houses (石库门, stone-framed door) → Shanghai
+□ Modern glass skyscrapers → any major city (need other cues)
+
+【VEGETATION SPECIES — region-specific】
+□ French plane tree (法国梧桐/悬铃木, mottled bark, broad canopy) → Shanghai, Nanjing, Hangzhou, Wuhan
+□ Banyan tree (榕树, aerial roots hanging down) → S of 25N: Guangzhou, Fuzhou, Nanning, Xishuangbanna
+□ Camphor tree (香樟, evergreen broadleaf) → S of Yangtze: Hangzhou, Changsha, Chengdu, Nanchang
+□ Gingko tree (银杏, fan-shaped leaves) → common N China, but found nationwide in cities
+□ Poplar/willow (杨树/柳树) → N China plains, NE China
+□ Coconut palm / king palm → Hainan, S Guangdong, S Guangxi, S Yunnan
+□ Chinese red pine (马尾松, conical crown) → widespread S China
+□ Bamboo groves → S China, especially Sichuan, Zhejiang, Fujian, Jiangxi
+
+【MOUNTAIN SPECIFICS — if mountain scene】
+□ Granite with spheroidal weathering (rounded peaks, blue-grey rock) → Huangshan, Sanqingshan, Huashan
+□ Quartz sandstone pillars (red-brown, dense thin columns) → Zhangjiajie/Wulingyuan
+□ Limestone tower karst (grey-white, isolated towers) → Guilin, Yangshuo
+□ Red sandstone danxia (red cliffs, horizontal layers) → Wuyishan, Zhangye, Longhushan
+□ Snow peaks with glaciers → W Sichuan (Gongga/Siguniang), Yunnan (Meili), Tibet
+□ Alpine lakes (turquoise water) → Jiuzhaigou, Daocheng Yading
+
+【VEHICLES & INFRASTRUCTURE】
+□ Green taxis → many Chinese cities; check local taxi color
+□ Electric scooters (high density) → S China cities (warmer climate)
+□ Tibetan-style road signs (bilingual Chinese+Tibetan) → Tibet, W Sichuan, Qinghai, Gansu
+□ Cable cars visible on mountain → tourist mountain area (Huangshan, Zhangjiajie, Emei, etc.)
+
+【SKY & AIR QUALITY】
+□ Clear blue sky → W China high altitude (Tibet, Qinghai, W Sichuan, Yunnan plateau)
+□ Grey/hazy sky → N China plain (Beijing, Hebei, Henan) or humid S city
+□ Thick fog/clouds → mountain areas (Huangshan fog, Chongqing fog)
+□ Dusty/yellow sky → NW China sandstorm area (Gansu, Inner Mongolia, Xinjiang in spring)
+
+Identify the most likely PROVINCE (max 2 candidates). List specific visible evidence for each.
+IMPORTANT: DO NOT say "could be anywhere". Use the checklist to narrow down.
+If you truly cannot determine, narrow to a specific REGION of China (e.g., "SW China mountain area").

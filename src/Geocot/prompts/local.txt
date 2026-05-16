@@ -1,12 +1,37 @@
-Based on the analysis so far:
+Based on all previous analysis:
 - Macro context: {macro_output}
 - Regional assessment: {regional_output}
 
-Now identify city-level details and provide your final geolocation.
+Now synthesize ALL evidence into a precise geolocation. Think like this:
 
-IMPORTANT: End your response with EXACTLY this format on the last line:
-LOCATION: [city], [country], [continent]
+1. WHAT specific landscape/scene type is this?
+   □ City street → which city? What architectural style? What street trees?
+   □ Mountain trail → which mountain range? What rock type? What elevation?
+   □ Rural village → which province? What building style? What crops?
+   □ Tourist scenic area → which attraction? What distinctive features?
 
-Where continent must be one of: Asia, Africa, Europe, North America, South America, Oceania.
+2. WHAT makes this place DIFFERENT from visually similar locations?
+   - If this is granite peaks → Huangshan (rounded, pines) vs Sanqingshan (sharp, broken) vs Huashan (bare, steep)?
+   - If this is karst → Guilin (scattered towers, city in background) vs Yangshuo (dense towers, rural)?
+   - If this is an old town → Lijiang (Naxi style, stone streets, snow mountain backdrop) vs Fenghuang (stilt houses, Tuo River) vs Dali (Bai style, Erhai Lake)?
+   - If this is a city street → which city? Use tree species + architecture + signage + sky quality.
 
-For example: LOCATION: Bangkok, Thailand, Asia
+3. WHAT landmarks or distinctive features are visible?
+   □ Specific mountain shape (e.g., pyramidal peak = Gongga? 4 peaks side by side = Siguniang?)
+   □ Specific building (e.g., Potala Palace = Lhasa, Oriental Pearl Tower = Shanghai)
+   □ Specific infrastructure (e.g., Bailong Elevator = Zhangjiajie, cable cars = tourist mountain)
+   □ Any visible text/signs that give away the location?
+
+4. WHAT is your confidence level?
+   - HIGH: multiple distinctive features uniquely point to one location
+   - MEDIUM: can narrow to province/region but unsure of exact spot
+   - LOW: image lacks distinctive features, best guess based on general characteristics
+
+Write a concise reasoning paragraph connecting observations to inferences.
+Then end with BOTH of these lines:
+
+LOCATION: [city or specific place name], [province], [country], [continent]
+
+If you know a specific scenic area or mountain, name it (e.g., "Huangshan Scenic Area" not just "Huangshan City").
+Continent must be: Asia.
+Country must be: China (unless there is strong evidence otherwise).

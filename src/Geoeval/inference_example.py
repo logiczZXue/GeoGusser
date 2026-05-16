@@ -90,9 +90,11 @@ def load_model_and_processor(model_name: str, finetuning_path: str = None):
         use_safetensors=True,
         device_map=device,
         token=hf_token,
+        local_files_only=True,
     )
     processor = MllamaProcessor.from_pretrained(
-        model_name, token=hf_token, use_safetensors=True
+        model_name, token=hf_token, use_safetensors=True,
+        local_files_only=True,
     )
 
     if finetuning_path and os.path.exists(finetuning_path):

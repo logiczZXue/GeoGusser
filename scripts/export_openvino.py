@@ -26,6 +26,7 @@ def export_model(model_name: str, output_dir: str, token: str = None):
         export=True,
         compile=False,
         token=token,
+        local_files_only=True,
     )
     model.save_pretrained(output_dir)
     print(f"Export complete. Files saved to {output_dir}")

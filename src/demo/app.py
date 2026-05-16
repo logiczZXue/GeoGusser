@@ -26,9 +26,10 @@ def init_pipeline(model_name: str = "Qwen/Qwen2-VL-7B-Instruct"):
 
     print(f"Loading model: {model_name}")
     model = AutoModelForVision2Seq.from_pretrained(
-        model_name, torch_dtype=torch.bfloat16, device_map="auto"
+        model_name, torch_dtype=torch.bfloat16, device_map="auto",
+        local_files_only=True,
     )
-    processor = AutoProcessor.from_pretrained(model_name)
+    processor = AutoProcessor.from_pretrained(model_name, local_files_only=True)
     model_fn = create_hf_model_fn(model, processor, "cuda" if torch.cuda.is_available() else "cpu")
 
     prompts_dir = os.path.join(os.path.dirname(__file__), "..", "Geocot", "prompts")
