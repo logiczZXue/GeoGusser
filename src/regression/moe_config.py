@@ -114,9 +114,9 @@ ROUTER_TEMPERATURE = 1.0       # initial softmax temperature
 ROUTER_DROPOUT = 0.1
 
 # Router loss weights
-ROUTER_ENTROPY_WEIGHT = 0.05     # alpha: prevents collapse to single expert
-ROUTER_LOAD_BALANCE_WEIGHT = 0.01  # beta: encourages even expert usage
-SCENE_CLASS_WEIGHT = 0.5          # gamma: scene classification auxiliary loss
+ROUTER_ENTROPY_WEIGHT = 0.3       # alpha: prevents collapse to single expert (was 0.05)
+ROUTER_LOAD_BALANCE_WEIGHT = 0.05  # beta: encourages even expert usage (was 0.01)
+SCENE_CLASS_WEIGHT = 0.3           # gamma: scene classification auxiliary loss (was 0.5)
 
 # ── Training hyperparams ─────────────────────────────────────────────
 DEFAULT_EPOCHS = 50

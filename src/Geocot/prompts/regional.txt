@@ -1,58 +1,80 @@
-Based on the macro-level assessment:
+基于宏观分析：
 "{prev_output}"
 
-Now examine this image for COUNTRY and PROVINCE-level indicators. For EACH category, report what you ACTUALLY see:
+现在仔细观察图片中的**省级尺度细节**。只报告实际看到的内容：
 
-【LANGUAGE & TEXT — critical for country identification】
-□ Chinese characters (汉字) visible → China (or Taiwan, Hong Kong, Macau)
-  - Simplified Chinese (简体字) → mainland China or Singapore
-  - Traditional Chinese (繁體字) → Taiwan, Hong Kong, Macau
-□ Tibetan script (藏文) → Tibet, W Sichuan, Qinghai, Gansu, NW Yunnan
-□ Uyghur/Arabic script (维吾尔文) → Xinjiang
-□ Mongolian script (蒙古文) → Inner Mongolia
-□ No text visible → cannot use language cue
+1. 文字/标识（能看到任何文字吗？）：
+   - simplified_chinese: 简体汉字(路牌、店招、广告)
+   - traditional_chinese: 繁体汉字(台湾/香港/澳门风格)
+   - tibetan: 藏文(横向排列，像梵文)
+   - uyghur_arabic: 维吾尔文(阿拉伯字母风格，从右向左)
+   - mongolian: 蒙古文(竖写)
+   - bilingual_cn_en: 中英双语标识
+   - none_visible: 看不到任何文字
 
-【ARCHITECTURE — most reliable regional indicator】
-□ White walls + black/grey tile roofs + horse-head gables (白墙黛瓦马头墙) → Hui-style, S Anhui / N Jiangxi / W Zhejiang
-□ Red columns + yellow glazed tiles + curved eaves → traditional Chinese official/temple style (common nationwide)
-□ Wooden stilt houses on river (吊脚楼) → W Hunan (Fenghuang), Guizhou, Chongqing, W Hubei
-□ Tibetan stone houses (碉房) + white pagodas (白塔) + prayer flags (经幡) → Tibet, W Sichuan, NW Yunnan, S Gansu, Qinghai
-□ Earthen tulou buildings (土楼, circular/rectangular fortress) → SW Fujian
-□ Arcade streets (骑楼, covered sidewalk under building) → Guangzhou, S Fujian, Guangxi, Hainan, Taiwan
-□ Brick courtyard houses (四合院) → Beijing, N China
-□ Shanghai lane houses (石库门, stone-framed door) → Shanghai
-□ Modern glass skyscrapers → any major city (need other cues)
+2. 建筑风格（看到建筑的话，什么样式？）：
+   - none_visible: 看不到建筑
+   - modern_glass: 现代蓝色/绿色玻璃幕墙高楼
+   - modern_residential: 现代住宅小区(高层塔楼，整齐排列)
+   - old_residential: 老旧居民楼(5-7层，灰色/黄色外墙)
+   - hui_style: 徽派——白墙、黑瓦、马头墙(台阶式山墙)
+   - tibetan_stone: 藏式——石砌厚墙、梯形窗、可能有经幡
+   - courtyard: 四合院/胡同——灰色砖墙围合的院子
+   - arcade: 骑楼——沿街有柱廊的商住楼(广东/广西/福建)
+   - stilt_house: 吊脚楼——木结构半边悬空(湘西/贵州/云南)
+   - tulou: 土楼——圆形或方形夯土大建筑(福建)
+   - shikumen: 石库门——上海老式里弄，石门框
+   - traditional_official: 传统官式——红墙黄瓦/灰瓦，传统中式官方建筑
+   - soviet_industrial: 苏联式/工厂——方正粗犷的工业建筑
 
-【VEGETATION SPECIES — region-specific】
-□ French plane tree (法国梧桐/悬铃木, mottled bark, broad canopy) → Shanghai, Nanjing, Hangzhou, Wuhan
-□ Banyan tree (榕树, aerial roots hanging down) → S of 25N: Guangzhou, Fuzhou, Nanning, Xishuangbanna
-□ Camphor tree (香樟, evergreen broadleaf) → S of Yangtze: Hangzhou, Changsha, Chengdu, Nanchang
-□ Gingko tree (银杏, fan-shaped leaves) → common N China, but found nationwide in cities
-□ Poplar/willow (杨树/柳树) → N China plains, NE China
-□ Coconut palm / king palm → Hainan, S Guangdong, S Guangxi, S Yunnan
-□ Chinese red pine (马尾松, conical crown) → widespread S China
-□ Bamboo groves → S China, especially Sichuan, Zhejiang, Fujian, Jiangxi
+3. 能看到什么树？（选能辨认的树种，不确定就不选）：
+   - banyan: 榕树——气生根从树枝垂下，树冠巨大
+   - camphor: 香樟——常绿阔叶，树形圆整
+   - plane_tree: 法国梧桐——斑驳脱落的树皮(灰绿/白/棕迷彩纹)
+   - gingko: 银杏——扇形叶片，秋天金黄
+   - poplar: 杨树——笔直高耸，树皮白/灰绿
+   - willow: 柳树——垂枝，常在水边
+   - coconut_palm: 椰子/棕榈——热带标志，羽状大叶
+   - chinese_red_pine: 马尾松——针叶两针一束，树皮红褐裂片
+   - huangshan_pine: 黄山松——扁平冠层，长在花岗岩上
+   - bamboo: 竹子——绿色竹竿，丛生
+   - none_visible: 看不到/认不出树种
 
-【MOUNTAIN SPECIFICS — if mountain scene】
-□ Granite with spheroidal weathering (rounded peaks, blue-grey rock) → Huangshan, Sanqingshan, Huashan
-□ Quartz sandstone pillars (red-brown, dense thin columns) → Zhangjiajie/Wulingyuan
-□ Limestone tower karst (grey-white, isolated towers) → Guilin, Yangshuo
-□ Red sandstone danxia (red cliffs, horizontal layers) → Wuyishan, Zhangye, Longhushan
-□ Snow peaks with glaciers → W Sichuan (Gongga/Siguniang), Yunnan (Meili), Tibet
-□ Alpine lakes (turquoise water) → Jiuzhaigou, Daocheng Yading
+4. 山体地质（仅当看到山时回答，否则填 null）：
+   - granite_spheroidal: 花岗岩球状风化——圆润的浅色(灰白/浅黄)巨石，像大圆球
+   - quartz_sandstone_pillars: 石英砂岩柱林——红棕色细高石柱，常绿植被在柱顶
+   - limestone_karst: 石灰岩喀斯特——灰白色塔状孤峰，表面崎岖
+   - red_sandstone_danxia: 丹霞——红色/橙色层状岩壁，水平条纹
+   - snow_peaks_glaciers: 雪峰冰川——白色雪盖山峰+冰川痕迹
+   - alpine_lakes: 高山湖泊——高海拔地区的蓝/绿色湖泊
+   - null: 非山景/看不到山
 
-【VEHICLES & INFRASTRUCTURE】
-□ Green taxis → many Chinese cities; check local taxi color
-□ Electric scooters (high density) → S China cities (warmer climate)
-□ Tibetan-style road signs (bilingual Chinese+Tibetan) → Tibet, W Sichuan, Qinghai, Gansu
-□ Cable cars visible on mountain → tourist mountain area (Huangshan, Zhangjiajie, Emei, etc.)
+5. 基础设施（能看到什么特殊设施？）：
+   - electric_scooters: 密集的电动自行车/摩托车
+   - tibetan_signs: 藏汉双语路牌/标识
+   - cable_cars: 景区缆车/索道
+   - none_visible: 没有明显的特殊设施
 
-【SKY & AIR QUALITY】
-□ Clear blue sky → W China high altitude (Tibet, Qinghai, W Sichuan, Yunnan plateau)
-□ Grey/hazy sky → N China plain (Beijing, Hebei, Henan) or humid S city
-□ Thick fog/clouds → mountain areas (Huangshan fog, Chongqing fog)
-□ Dusty/yellow sky → NW China sandstorm area (Gansu, Inner Mongolia, Xinjiang in spring)
+6. 天空状态：
+   - clear_blue: 晴朗蓝天，能见度极高
+   - cloudy: 多云，白云朵朵
+   - overcast_grey: 阴天，灰白色天空
+   - grey_hazy: 灰霾，天空灰蒙蒙
+   - dusty_yellow: 沙尘黄——天空发黄
+   - thick_fog: 浓雾，能见度很低
 
-Identify the most likely PROVINCE (max 2 candidates). List specific visible evidence for each.
-IMPORTANT: DO NOT say "could be anywhere". Use the checklist to narrow down.
-If you truly cannot determine, narrow to a specific REGION of China (e.g., "SW China mountain area").
+7. 根据以上所有线索，你觉得这最像中国的哪个/哪些省份？（1-3个省份的英文名）
+
+**输出格式：必须使用上面列出的英文值，禁止使用中文描述。省份名用英文（如 Guangdong, Sichuan）。**
+输出 JSON：
+```json
+{
+  "language_script": "...",
+  "architecture_style": "...",
+  "tree_species": [...],
+  "mountain_rock_type": "...",
+  "infrastructure_tags": [...],
+  "sky_quality": "...",
+  "likely_provinces": ["..."]
+}
+```

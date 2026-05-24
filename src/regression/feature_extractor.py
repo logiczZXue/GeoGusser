@@ -1,10 +1,9 @@
-"""Extract visual features from Qwen2-VL vision encoder for regression head.
+"""Extract visual features from Qwen2-VL / Qwen3-VL vision encoder for regression head.
 
-The vision encoder (32-layer ViT) outputs raw features (num_patches, 1280).
-These pass through the PatchMerger (LayerNorm + MLP) producing well-normalized
-features of shape (num_patches/4, 1536) with mean≈0, std≈1.2.
+Qwen2-VL-2B: ViT → merger → (num_patches/4, 1536)
+Qwen3-VL-2B: ViT + DeepStack → merger → (num_patches/4, 2048)
 
-We mean-pool over patches to get a fixed 1536-dim vector per image.
+We mean-pool over patches to get a fixed-dim vector per image.
 """
 
 import torch
@@ -84,4 +83,4 @@ class VisualFeatureExtractor:
 
     @property
     def feature_dim(self) -> int:
-        return 1536
+        return self.model.config.text_config.hidden_size

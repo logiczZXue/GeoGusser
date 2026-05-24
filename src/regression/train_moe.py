@@ -168,6 +168,7 @@ def train_expert_pretrain(
     config: dict,
     output_dir: str,
     device: str = "cuda",
+    input_dim: int = 1536,
 ) -> CoordRegressor:
     """Phase 1: pretrain a single expert on its scene data.
 
@@ -181,7 +182,7 @@ def train_expert_pretrain(
 
     if n_samples == 0:
         print(f"  No samples — skipping (will use pretrained or random init)")
-        model = create_expert(config=config, pretrained_path=pretrained_path, device=device)
+        model = create_expert(input_dim=input_dim, config=config, pretrained_path=pretrained_path, device=device)
         torch.save(model.state_dict(), os.path.join(output_dir, f"expert_{expert_idx}.pt"))
         return model
 
@@ -192,7 +193,7 @@ def train_expert_pretrain(
     train_coords, val_coords = scene_coords[perm[n_val:]], scene_coords[perm[:n_val]]
     print(f"  Train: {train_feat.shape[0]}, Val: {val_feat.shape[0]}")
 
-    model = create_expert(config=config, pretrained_path=pretrained_path, device=device)
+    model = create_expert(input_dim=input_dim, config=config, pretrained_path=pretrained_path, device=device)
     trainer = ExpertTrainer(model, lr=config["lr"], device=device)
 
     best_loss = float("inf")
@@ -248,13 +249,53 @@ class RouterTrainer:
                     batch_size: int = BATCH_SIZE) -> tuple[float, dict]:
         self.moe.train()
         n = features.shape[0]
-        indices = torch.randperm(n)
         total_loss = 0.0
         n_batches = 0
         final_components = {}
 
-        for i in range(0, n, batch_size):
-            batch_idx = indices[i:i + batch_size]
+        # Class-balanced batch sampling (prevents router collapse to majority class)
+        if scene_labels_tensor is not None:
+            class_indices = {}
+            for c in range(NUM_EXPERTS):
+                mask = scene_labels_tensor == c
+                class_indices[c] = torch.where(mask)[0]
+
+            per_class = max(1, batch_size // NUM_EXPERTS)
+            n_batches_total = n // batch_size + 1
+
+            for _ in range(n_batches_total):
+                batch_idx = []
+                for c in range(NUM_EXPERTS):
+                    idx_pool = class_indices.get(c, torch.tensor([], dtype=torch.long))
+                    if len(idx_pool) > 0:
+                        sampled = idx_pool[torch.randint(0, len(idx_pool), (per_class,))]
+                        batch_idx.append(sampled)
+                batch_idx = torch.cat(batch_idx)
+                if len(batch_idx) > batch_size:
+                    batch_idx = batch_idx[:batch_size]
+        else:
+            indices = torch.randperm(n)
+
+        batch_iter = 0
+        while batch_iter * batch_size < n:
+            if scene_labels_tensor is not None:
+                # Re-sample class-balanced batch each iteration
+                batch_idx = []
+                for c in range(NUM_EXPERTS):
+                    idx_pool = class_indices.get(c, torch.tensor([], dtype=torch.long))
+                    if len(idx_pool) > 0:
+                        sampled = idx_pool[torch.randint(0, len(idx_pool), (per_class,))]
+                        batch_idx.append(sampled)
+                batch_idx = torch.cat(batch_idx)
+                if len(batch_idx) > batch_size:
+                    batch_idx = batch_idx[:batch_size]
+                # Stop after n // batch_size balanced batches
+                if batch_iter >= n // batch_size:
+                    break
+            else:
+                i = batch_iter * batch_size
+                batch_idx = indices[i:i + batch_size]
+
             feat = features[batch_idx].to(self.device).float()
             target = coords[batch_idx].to(self.device).float()
 
@@ -286,6 +327,7 @@ class RouterTrainer:
 
             total_loss += loss.item()
             n_batches += 1
+            batch_iter += 1
             final_components = components
 
         self.scheduler.step()
@@ -605,7 +647,8 @@ def train_moe(
     print("Loading data...")
     data = torch.load(features_file, map_location="cpu", weights_only=True)
     features, coords = data["features"], data["coords"]
-    print(f"  Features: {features.shape}, Coords: {coords.shape}")
+    input_dim = features.shape[1]
+    print(f"  Features: {features.shape}, Coords: {coords.shape}, input_dim={input_dim}")
 
     # Load scene labels
     scene_labels = load_scene_labels_json(labels_file, data_file)
@@ -641,6 +684,7 @@ def train_moe(
                 config=expert_configs[i],
                 output_dir=output_dir,
                 device=device,
+                input_dim=input_dim,
             )
             experts_trained.append(expert)
 
@@ -651,16 +695,16 @@ def train_moe(
         for i in range(NUM_EXPERTS):
             path = os.path.join(output_dir, f"expert_{i}.pt")
             if os.path.exists(path):
-                expert = create_expert(config=expert_configs[i], pretrained_path=path, device=device)
+                expert = create_expert(input_dim=input_dim, config=expert_configs[i], pretrained_path=path, device=device)
             elif pretrained_path and os.path.exists(pretrained_path):
-                expert = create_expert(config=expert_configs[i], pretrained_path=pretrained_path, device=device)
+                expert = create_expert(input_dim=input_dim, config=expert_configs[i], pretrained_path=pretrained_path, device=device)
             else:
-                expert = create_expert(config=expert_configs[i], device=device)
+                expert = create_expert(input_dim=input_dim, config=expert_configs[i], device=device)
             experts_trained.append(expert)
 
     # Create MoE with trained experts
     moe = MoERegressor(
-        input_dim=1536,
+        input_dim=input_dim,
         expert_configs=expert_configs,
     )
     moe.to(device)

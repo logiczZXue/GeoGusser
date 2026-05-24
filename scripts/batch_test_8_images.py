@@ -33,7 +33,7 @@ def main():
     parser = argparse.ArgumentParser(description="Batch test GeoCoT on 8 images")
     parser.add_argument("--image-dir", type=str, default="primary test")
     parser.add_argument("--output-dir", type=str, default="output/geocot")
-    parser.add_argument("--model", type=str, default="Qwen/Qwen2-VL-2B-Instruct")
+    parser.add_argument("--model", type=str, default="Qwen/Qwen3-VL-2B-Instruct")
     parser.add_argument("--4bit", action="store_true", help="Use 4-bit quantization (for 7B on 8GB VRAM)")
     parser.add_argument("--offload", action="store_true", help="Enable CPU offloading (slower fallback)")
     parser.add_argument("--gpu-memory", type=str, default=None, help="Max GPU memory, e.g. 6GB")

@@ -42,7 +42,7 @@ def main():
 
     # Load VLM
     print("Loading VLM...")
-    model, processor, model_fn = load_qwen2vl("Qwen/Qwen2-VL-2B-Instruct")
+    model, processor, model_fn = load_qwen2vl()  # default: Qwen3-VL-2B
     image = Image.open(img_path).convert("RGB")
 
     # Test enhanced prompts

@@ -1,0 +1,368 @@
+{
+  "_description": "中国主要城镇网格采样坐标 — 用于百度全景静态图API采集",
+  "_note": "lat_range/lng_range 定义采样范围，grid_spacing 定义格点间距(度)，0.01° ≈ 1.1km",
+  "_total_estimated": "~50城镇，每个100-300采样点，总计约8000+点位",
+
+  "深圳": {
+    "province": "广东",
+    "lat_range": [22.45, 22.85],
+    "lng_range": [113.75, 114.65],
+    "grid_spacing": 0.015,
+    "estimated_points": 600,
+    "key_areas": [
+      [22.54, 114.06], [22.55, 114.10], [22.52, 114.23],
+      [22.60, 114.05], [22.57, 114.21]
+    ]
+  },
+
+  "广州": {
+    "province": "广东",
+    "lat_range": [23.05, 23.25],
+    "lng_range": [113.20, 113.55],
+    "grid_spacing": 0.015,
+    "estimated_points": 350,
+    "key_areas": []
+  },
+
+  "东莞": {
+    "province": "广东",
+    "lat_range": [22.90, 23.10],
+    "lng_range": [113.55, 113.90],
+    "grid_spacing": 0.015,
+    "estimated_points": 250,
+    "key_areas": []
+  },
+
+  "佛山": {
+    "province": "广东",
+    "lat_range": [22.95, 23.15],
+    "lng_range": [113.00, 113.25],
+    "grid_spacing": 0.015,
+    "estimated_points": 220,
+    "key_areas": []
+  },
+
+  "珠海": {
+    "province": "广东",
+    "lat_range": [22.15, 22.50],
+    "lng_range": [113.25, 113.65],
+    "grid_spacing": 0.015,
+    "estimated_points": 300,
+    "key_areas": []
+  },
+
+  "中山": {
+    "province": "广东",
+    "lat_range": [22.45, 22.65],
+    "lng_range": [113.25, 113.55],
+    "grid_spacing": 0.015,
+    "estimated_points": 200,
+    "key_areas": []
+  },
+
+  "惠州": {
+    "province": "广东",
+    "lat_range": [23.00, 23.25],
+    "lng_range": [114.25, 114.55],
+    "grid_spacing": 0.015,
+    "estimated_points": 250,
+    "key_areas": []
+  },
+
+  "江门": {
+    "province": "广东",
+    "lat_range": [22.50, 22.70],
+    "lng_range": [112.95, 113.25],
+    "grid_spacing": 0.02,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "肇庆": {
+    "province": "广东",
+    "lat_range": [23.00, 23.15],
+    "lng_range": [112.35, 112.55],
+    "grid_spacing": 0.02,
+    "estimated_points": 100,
+    "key_areas": []
+  },
+
+  "湛江": {
+    "province": "广东",
+    "lat_range": [21.15, 21.35],
+    "lng_range": [110.25, 110.55],
+    "grid_spacing": 0.02,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "汕头": {
+    "province": "广东",
+    "lat_range": [23.30, 23.45],
+    "lng_range": [116.60, 116.80],
+    "grid_spacing": 0.015,
+    "estimated_points": 140,
+    "key_areas": []
+  },
+
+  "北京": {
+    "province": "北京",
+    "lat_range": [39.80, 40.10],
+    "lng_range": [116.20, 116.60],
+    "grid_spacing": 0.02,
+    "estimated_points": 280,
+    "key_areas": []
+  },
+
+  "上海": {
+    "province": "上海",
+    "lat_range": [31.10, 31.40],
+    "lng_range": [121.30, 121.65],
+    "grid_spacing": 0.02,
+    "estimated_points": 250,
+    "key_areas": []
+  },
+
+  "成都": {
+    "province": "四川",
+    "lat_range": [30.55, 30.75],
+    "lng_range": [103.95, 104.20],
+    "grid_spacing": 0.015,
+    "estimated_points": 200,
+    "key_areas": []
+  },
+
+  "重庆": {
+    "province": "重庆",
+    "lat_range": [29.45, 29.65],
+    "lng_range": [106.40, 106.65],
+    "grid_spacing": 0.015,
+    "estimated_points": 220,
+    "key_areas": []
+  },
+
+  "西安": {
+    "province": "陕西",
+    "lat_range": [34.15, 34.35],
+    "lng_range": [108.85, 109.05],
+    "grid_spacing": 0.015,
+    "estimated_points": 180,
+    "key_areas": []
+  },
+
+  "武汉": {
+    "province": "湖北",
+    "lat_range": [30.45, 30.70],
+    "lng_range": [114.15, 114.45],
+    "grid_spacing": 0.015,
+    "estimated_points": 200,
+    "key_areas": []
+  },
+
+  "南京": {
+    "province": "江苏",
+    "lat_range": [31.95, 32.15],
+    "lng_range": [118.65, 118.95],
+    "grid_spacing": 0.015,
+    "estimated_points": 200,
+    "key_areas": []
+  },
+
+  "杭州": {
+    "province": "浙江",
+    "lat_range": [30.15, 30.35],
+    "lng_range": [120.05, 120.30],
+    "grid_spacing": 0.015,
+    "estimated_points": 200,
+    "key_areas": []
+  },
+
+  "昆明": {
+    "province": "云南",
+    "lat_range": [24.95, 25.15],
+    "lng_range": [102.55, 102.80],
+    "grid_spacing": 0.015,
+    "estimated_points": 180,
+    "key_areas": []
+  },
+
+  "拉萨": {
+    "province": "西藏",
+    "lat_range": [29.55, 29.75],
+    "lng_range": [91.00, 91.25],
+    "grid_spacing": 0.02,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "西宁": {
+    "province": "青海",
+    "lat_range": [36.55, 36.70],
+    "lng_range": [101.65, 101.90],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "兰州": {
+    "province": "甘肃",
+    "lat_range": [35.95, 36.15],
+    "lng_range": [103.65, 103.95],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "银川": {
+    "province": "宁夏",
+    "lat_range": [38.35, 38.55],
+    "lng_range": [106.10, 106.35],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "呼和浩特": {
+    "province": "内蒙古",
+    "lat_range": [40.70, 40.90],
+    "lng_range": [111.55, 111.85],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "乌鲁木齐": {
+    "province": "新疆",
+    "lat_range": [43.70, 43.95],
+    "lng_range": [87.45, 87.75],
+    "grid_spacing": 0.02,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "贵阳": {
+    "province": "贵州",
+    "lat_range": [26.50, 26.70],
+    "lng_range": [106.55, 106.80],
+    "grid_spacing": 0.015,
+    "estimated_points": 180,
+    "key_areas": []
+  },
+
+  "南宁": {
+    "province": "广西",
+    "lat_range": [22.70, 22.90],
+    "lng_range": [108.20, 108.50],
+    "grid_spacing": 0.015,
+    "estimated_points": 180,
+    "key_areas": []
+  },
+
+  "海口": {
+    "province": "海南",
+    "lat_range": [19.95, 20.10],
+    "lng_range": [110.20, 110.45],
+    "grid_spacing": 0.015,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "哈尔滨": {
+    "province": "黑龙江",
+    "lat_range": [45.65, 45.85],
+    "lng_range": [126.50, 126.80],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "长春": {
+    "province": "吉林",
+    "lat_range": [43.80, 44.00],
+    "lng_range": [125.20, 125.50],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "沈阳": {
+    "province": "辽宁",
+    "lat_range": [41.70, 41.90],
+    "lng_range": [123.30, 123.60],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "济南": {
+    "province": "山东",
+    "lat_range": [36.55, 36.75],
+    "lng_range": [116.90, 117.15],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "太原": {
+    "province": "山西",
+    "lat_range": [37.75, 37.95],
+    "lng_range": [112.40, 112.65],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "郑州": {
+    "province": "河南",
+    "lat_range": [34.65, 34.85],
+    "lng_range": [113.55, 113.80],
+    "grid_spacing": 0.015,
+    "estimated_points": 150,
+    "key_areas": []
+  },
+
+  "石家庄": {
+    "province": "河北",
+    "lat_range": [37.95, 38.15],
+    "lng_range": [114.35, 114.65],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "长沙": {
+    "province": "湖南",
+    "lat_range": [28.10, 28.30],
+    "lng_range": [112.85, 113.10],
+    "grid_spacing": 0.015,
+    "estimated_points": 180,
+    "key_areas": []
+  },
+
+  "南昌": {
+    "province": "江西",
+    "lat_range": [28.55, 28.75],
+    "lng_range": [115.75, 116.00],
+    "grid_spacing": 0.02,
+    "estimated_points": 130,
+    "key_areas": []
+  },
+
+  "合肥": {
+    "province": "安徽",
+    "lat_range": [31.75, 31.95],
+    "lng_range": [117.15, 117.40],
+    "grid_spacing": 0.02,
+    "estimated_points": 120,
+    "key_areas": []
+  },
+
+  "福州": {
+    "province": "福建",
+    "lat_range": [26.00, 26.15],
+    "lng_range": [119.20, 119.40],
+    "grid_spacing": 0.015,
+    "estimated_points": 130,
+    "key_areas": []
+  }
+}

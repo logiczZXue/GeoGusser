@@ -125,7 +125,7 @@ class GeoCoTPrompt:
     """Manages stage-specific prompts and few-shot examples."""
 
     def __init__(self, prompts_dir: Optional[str] = None, few_shot_path: Optional[str] = None,
-                 enable_knowledge_injection: bool = True):
+                 enable_knowledge_injection: bool = False):
         self._prompts = {}
         self._load_prompts(prompts_dir)
         self._few_shots = self._load_few_shots(few_shot_path)
@@ -159,9 +159,15 @@ class GeoCoTPrompt:
         if path and Path(path).exists():
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
+        # Auto-detect fewshot_china.json in prompts directory
+        auto_path = Path(__file__).parent / "prompts" / "fewshot_china.json"
+        if auto_path.exists():
+            with open(auto_path, "r", encoding="utf-8") as f:
+                return json.load(f)
         return []
 
-    def get_prompt(self, stage: GeoCoTStage, prev_outputs: dict) -> str:
+    def get_prompt(self, stage: GeoCoTStage, prev_outputs: dict,
+                   sensor_data: str = "") -> str:
         template = self._prompts[stage]
         fmt = {}
         if "{prev_output}" in template and prev_outputs:
@@ -171,6 +177,8 @@ class GeoCoTPrompt:
             fmt["macro_output"] = prev_outputs.get("macro", "")
         if "{regional_output}" in template:
             fmt["regional_output"] = prev_outputs.get("regional", "")
+        if "{sensor_data}" in template:
+            fmt["sensor_data"] = sensor_data
         try:
             prompt_text = template.format(**fmt)
         except KeyError:
@@ -188,39 +196,26 @@ class GeoCoTPrompt:
         return prompt_text
 
     def build_few_shot_prefix(self, continent_hint: str = "", prev_outputs: dict = None) -> str:
-        """Build few-shot prefix with examples relevant to the current context."""
+        """Build few-shot prefix with diverse examples (avoids feedback loop)."""
         if not self._few_shots:
             return ""
 
-        # If we have previous outputs, try to find relevant few-shot examples
-        if prev_outputs:
-            all_text = " ".join(prev_outputs.values()).lower()
-            # Score each few-shot example by relevance to current context
-            scored = []
-            for ex in self._few_shots:
-                score = 0
-                ex_output = ex.get("output", "").lower()
-                ex_region = ex.get("region", "").lower()
-                ex_scene = ex.get("scene_type", "").lower()
-                # Match scene type keywords in previous outputs
-                for keyword in ["urban", "karst", "granite", "alpine", "gorge", "snow",
-                                "city", "mountain", "peak", "river", "village"]:
-                    if keyword in all_text and keyword in ex_scene:
-                        score += 5
-                    if keyword in all_text and keyword in ex_output[:500]:
-                        score += 3
-                # Region name match
-                if ex_region and ex_region in all_text:
-                    score += 8
-                scored.append((score, ex))
-            scored.sort(key=lambda x: x[0], reverse=True)
-            # Take top 3, but ensure at least one urban and one wilderness if possible
-            examples = [ex for _, ex in scored[:3]]
-        else:
-            examples = self._few_shots[:3]
+        # Pick 2 diverse examples: one urban, one nature (mountain/karst/etc)
+        urban_examples = [e for e in self._few_shots
+                          if e.get("scene_type") in ("urban", "city")]
+        nature_examples = [e for e in self._few_shots
+                           if e.get("scene_type") not in ("urban", "city")]
 
-        parts = ["Here are some examples of geographic reasoning for Chinese locations:\n"]
-        for i, ex in enumerate(examples, 1):
+        selected = []
+        if urban_examples:
+            selected.append(urban_examples[0])
+        if nature_examples:
+            selected.append(nature_examples[0])
+        if not selected:
+            selected = self._few_shots[:2]
+
+        parts = ["以下是中国地理位置推理的参考示例：\n"]
+        for i, ex in enumerate(selected, 1):
             parts.append(f"Example {i}:\n{ex.get('output', '')}\n")
         return "\n".join(parts)
 
@@ -431,6 +426,37 @@ def _extract_coordinates(text: str) -> tuple:
         lng = float(m.group(3)) * (1 if m.group(4).upper() == "E" else -1)
         return max(-90.0, min(90.0, lat)), max(-180.0, min(180.0, lng))
 
+    # Pattern: Chinese coordinate format "北纬30.10度，东经118.18度"
+    cn_pattern = re.compile(
+        r"北纬\s*(\d+\.?\d*)\s*度?\s*[,，\s]+\s*东经\s*(\d+\.?\d*)\s*度?",
+        re.IGNORECASE,
+    )
+    m = cn_pattern.search(text)
+    if m:
+        return float(m.group(1)), float(m.group(2))
+
+    # Pattern: Chinese label "坐标：30.10, 118.18"
+    cn_label_pattern = re.compile(
+        r"(?:坐标|经纬度)[：:]\s*([+-]?\d+\.?\d*)\s*[,，\s;；]+\s*([+-]?\d+\.?\d*)",
+        re.IGNORECASE,
+    )
+    m = cn_label_pattern.search(text)
+    if m:
+        lat = max(-90.0, min(90.0, float(m.group(1))))
+        lng = max(-180.0, min(180.0, float(m.group(2))))
+        return lat, lng
+
+    # Fallback: JSON with "latitude" and "longitude" fields
+    json_pattern = re.compile(
+        r'"latitude"\s*:\s*([+-]?\d+\.?\d*)\s*[,}\s].*?"longitude"\s*:\s*([+-]?\d+\.?\d*)',
+        re.DOTALL,
+    )
+    m = json_pattern.search(text)
+    if m:
+        lat = max(-90.0, min(90.0, float(m.group(1))))
+        lng = max(-180.0, min(180.0, float(m.group(2))))
+        return lat, lng
+
     return None, None
 
 
@@ -442,7 +468,8 @@ def _is_template_placeholder(s: str) -> bool:
     # [placeholder], [city name], City Name, etc.
     if re.match(r"^\[.*\]$", s):
         return True
-    if s.lower() in {"city name", "country name", "continent name", "major city", "unknown", "city"}:
+    if s.lower() in {"city name", "country name", "continent name", "major city", "unknown", "city",
+                       "n/a", "na", "none", "null", "placeholder", "province name"}:
         return True
     return False
 
@@ -468,6 +495,17 @@ def _extract_location_strict(text: str) -> tuple:
         if len(c1) > 40 or len(c2) > 40:
             continue
         return c1, c2, c3
+
+    # Fallback: JSON with "location_name" and "province" fields
+    json_city = re.search(r'"location_name"\s*:\s*"([^"]+)"', text)
+    json_province = re.search(r'"province"\s*:\s*"([^"]+)"', text)
+    if json_city:
+        city = json_city.group(1).strip()
+        if not _is_template_placeholder(city) and len(city) <= 40:
+            province = json_province.group(1).strip() if json_province else "China"
+            country = "China"
+            continent = "Asia"
+            return city, country, continent
 
     return None, None, None
 
@@ -919,13 +957,35 @@ class GeoCoTPipeline:
             enable_knowledge_injection=prompt_config.get("enable_knowledge", True) if prompt_config else True,
         )
 
-    def run(self, image: Image.Image) -> GeoCoTResult:
+    def run(self, image: Image.Image,
+            sensor_elevation_m: Optional[float] = None,
+            sensor_temperature_c: Optional[float] = None,
+            sensor_humidity_pct: Optional[float] = None) -> GeoCoTResult:
         """Run the full 3-stage GeoCoT pipeline on a single image."""
+        # Build sensor hint for prompt injection
+        sensor_parts = []
+        if sensor_elevation_m is not None:
+            sensor_parts.append(f"- 海拔：{sensor_elevation_m:.0f}m")
+        if sensor_temperature_c is not None:
+            sensor_parts.append(f"- 温度：{sensor_temperature_c:.0f}°C")
+        if sensor_humidity_pct is not None:
+            sensor_parts.append(f"- 湿度：{sensor_humidity_pct:.0f}%")
+        if sensor_parts:
+            sensor_data = (
+                "【物理基准】设备实测数据，气压海拔已校准（误差±15%），温度湿度精度可靠：\n"
+                + "\n".join(sensor_parts)
+                + "\n"
+                + "你的视觉判断应与传感器数据一致。若图中证据与传感器严重冲突，以视觉为准但需明确标注。\n"
+            )
+        else:
+            sensor_data = ""
+
         image = resize_image_for_vlm(image)
         result = GeoCoTResult()
 
         for stage in GeoCoTStage:
-            prompt_text = self._prompt.get_prompt(stage, result.stage_outputs)
+            prompt_text = self._prompt.get_prompt(stage, result.stage_outputs,
+                                                   sensor_data=sensor_data)
 
             if stage == GeoCoTStage.LOCAL:
                 few_shot_prefix = self._prompt.build_few_shot_prefix(
@@ -954,9 +1014,10 @@ class GeoCoTPipeline:
 def create_qwen2vl_model_fn(
     model,
     processor,
-    max_new_tokens: int = 2048,
-    temperature: float = 0.3,
-    top_p: float = 0.85,
+    max_new_tokens: int = 4096,
+    temperature: float = 0.7,
+    top_p: float = 0.9,
+    enable_thinking: bool = True,
 ):
     """Create a model_fn for GeoCoTPipeline using Qwen2-VL.
 
@@ -970,7 +1031,11 @@ def create_qwen2vl_model_fn(
             {"type": "text", "text": prompt_text},
         ]}]
 
-        text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        text = processor.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True,
+        )
+        if not enable_thinking:
+            text = text.replace('<think>\n', '')
         image_inputs, video_inputs = process_vision_info(messages)
         inputs = processor(
             text=[text],
@@ -999,25 +1064,55 @@ def create_qwen2vl_model_fn(
     return model_fn
 
 
+def _detect_model_class(model_name: str):
+    """Detect the correct model class from config (supports Qwen2-VL and Qwen3-VL)."""
+    from transformers import AutoConfig
+    config = AutoConfig.from_pretrained(model_name, local_files_only=True)
+    if config.model_type == "qwen3_vl":
+        from transformers import Qwen3VLForConditionalGeneration
+        return Qwen3VLForConditionalGeneration
+    elif config.model_type == "qwen2_vl":
+        from transformers import Qwen2VLForConditionalGeneration
+        return Qwen2VLForConditionalGeneration
+    else:
+        from transformers import Qwen2VLForConditionalGeneration
+        print(f"  [WARN] Unknown model_type={config.model_type}, falling back to Qwen2VL")
+        return Qwen2VLForConditionalGeneration
+
+
 def load_qwen2vl(
-    model_name: str = "Qwen/Qwen2-VL-2B-Instruct",
+    model_name: str = "Qwen/Qwen3-VL-2B-Instruct",
     max_pixels: int = MAX_IMAGE_PIXELS,
     load_in_4bit: bool = False,
+    lora_path: str = None,
     offload_folder: str = None,
     gpu_memory: str = None,
     cpu_memory: str = "16GB",
+    max_new_tokens: int = 4096,
+    temperature: float = 0.7,
+    top_p: float = 0.9,
+    enable_thinking: bool = True,
 ):
-    """Load Qwen2-VL model and processor, return (model, processor, model_fn).
+    """Load Qwen2-VL / Qwen3-VL model and processor, return (model, processor, model_fn).
+
+    Auto-detects the model class from config.model_type. Default: Qwen3-VL-2B-Instruct
+    for native 2D/3D spatial perception via Interleaved-MRoPE.
 
     Args:
-        model_name: HuggingFace model ID
+        model_name: HuggingFace model ID (Qwen2-VL or Qwen3-VL)
         max_pixels: Max image pixels for processor
         load_in_4bit: Use 4-bit quantization (fits 7B in ~4.5GB VRAM)
+        lora_path: Path to LoRA adapter weights. If set, loads adapter,
+                   merges into base model, and returns the merged model.
+                   Inference speed is identical to base model after merge.
         offload_folder: Directory for CPU offloading (slower fallback)
         gpu_memory: Max GPU memory to use, e.g. "6GB"
         cpu_memory: Max CPU memory for offloaded layers
     """
-    from transformers import Qwen2VLForConditionalGeneration, AutoProcessor, BitsAndBytesConfig
+    from transformers import AutoProcessor, BitsAndBytesConfig
+
+    ModelClass = _detect_model_class(model_name)
+    print(f"  Model class: {ModelClass.__name__}")
 
     processor = AutoProcessor.from_pretrained(
         model_name,
@@ -1057,10 +1152,21 @@ def load_qwen2vl(
         load_kwargs["offload_folder"] = offload_folder
 
     print(f"  Mode: {'4-bit' if load_in_4bit else 'bfloat16'}, GPU limit: {gpu_memory or 'auto'}")
-    model = Qwen2VLForConditionalGeneration.from_pretrained(model_name, **load_kwargs)
+    model = ModelClass.from_pretrained(model_name, **load_kwargs)
     model.eval()
 
-    model_fn = create_qwen2vl_model_fn(model, processor)
+    # ── Load and merge LoRA adapter ──────────────────────────────────
+    if lora_path:
+        from peft import PeftModel
+        print(f"  Loading LoRA adapter from: {lora_path}")
+        model = PeftModel.from_pretrained(model, lora_path)
+        print(f"  Merging LoRA weights into base model...")
+        model = model.merge_and_unload()
+        print(f"  LoRA merged. Inference speed = base model speed.")
+
+    model_fn = create_qwen2vl_model_fn(model, processor, max_new_tokens=max_new_tokens,
+                                       temperature=temperature, top_p=top_p,
+                                       enable_thinking=enable_thinking)
     return model, processor, model_fn
 
 

@@ -30,6 +30,8 @@ Thumbs.db
 *.pt
 *.onnx
 *.bin
+*.safetensors
+models/
 checkpoints/
 
 # Jupyter
@@ -47,6 +49,7 @@ data/2bulu_kml/
 data/2bulu_tracks.json
 data/merged_geotagged.json
 data/vlm_finetune/
+data/yfcc_china/
 *.zip
 
 # Output (generated)
@@ -55,6 +58,7 @@ output/regression/
 output/moe_test/
 output/vlm_lora/merged/
 output/vlm_lora/checkpoint-*/
+output/vlm_lora_geocot/
 __pycache__/
 
 # Personal / temp
