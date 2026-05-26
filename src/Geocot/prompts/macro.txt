@@ -69,6 +69,21 @@
    - 若视觉明显矛盾（如传感器说4000m但图中是热带海滩）：标注矛盾，给出你基于视觉的估计
    - 格式：[最低米, 最高米]
 
+6. 建筑高度（如果图片中有建筑，它们有多高？）：
+   - super_tall: 超高层地标(>300m)，如上海中心/广州塔级别
+   - high_rise: 20-40层商务区，高楼密集
+   - mid_rise: 6-15层为主，典型中国城市住宅区
+   - low_rise: 1-3层，老城区/小镇/农村
+   - mixed: 高低混合，旧城改造典型
+   - no_buildings: 没看到建筑
+
+7. 人行道/地面铺装（如果可见，路面是什么材质的？）：
+   - red_brick_tiles: 红色方形地砖铺地
+   - grey_concrete: 灰色水泥地砖
+   - asphalt: 黑色柏油路面
+   - natural: 土路/碎石/草地
+   - not_visible: 看不清地面
+
 重要规则：
 - 只描述图片中**实际可见**的内容
 - 如果看到建筑、街道、车辆，地形选 urban_flat
@@ -86,10 +101,13 @@
   "terrain_type": "...",
   "vegetation_zone": "...",
   "urbanization": "...",
-  "elevation_estimate_m": [min, max]
+  "elevation_estimate_m": [min, max],
+  "building_height": "...",
+  "pavement_type": "..."
 }
 ```
 
 - visible_text_place_names：所有 HIGH-TRUST 的地名/官方标识文字，逐条列出
 - visible_text_notes：LOW-TRUST 的店招/品牌等（仅供参考，不用来定位）
 - 如果没有任何可见文字，visible_text_place_names 填空数组 []
+- building_height/pavement_type 如果用不到（野外场景），填写 "no_buildings" / "not_visible"

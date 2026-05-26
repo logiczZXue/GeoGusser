@@ -85,12 +85,12 @@ def check_vlm_output_quality(macro_text: str, regional_text: str, local_text: st
       - VLM explicitly says it can't see anything
       - Elevation estimate is wildly inconsistent with sensor
     """
-    # Empty or minimal output
-    if len(macro_text.strip()) < 50:
+    # Empty or minimal output (CoT outputs are 1000-5000 chars, even bare JSON is 100+)
+    if len(macro_text.strip()) < 100:
         return False, f"macro output too short ({len(macro_text.strip())} chars)"
-    if len(regional_text.strip()) < 50:
+    if len(regional_text.strip()) < 100:
         return False, f"regional output too short ({len(regional_text.strip())} chars)"
-    if len(local_text.strip()) < 50:
+    if len(local_text.strip()) < 80:
         return False, f"local output too short ({len(local_text.strip())} chars)"
 
     # Check for VLM refusal / image quality patterns
@@ -384,9 +384,9 @@ def main():
                         help="Path to merged_geotagged.json")
     parser.add_argument("--output", default="data/vlm_finetune/thinking_3stage_train.jsonl",
                         help="Output JSONL path")
-    parser.add_argument("--n", type=int, default=500,
+    parser.add_argument("--n", type=int, default=300,
                         help="Number of images to label")
-    parser.add_argument("--model-name", default="D:/Geocomp/models/Qwen3-VL-4B-Thinking",
+    parser.add_argument("--model-name", default="D:/Geocomp/models/Qwen/Qwen3-VL-8B-Thinking",
                         help="Path to Thinking model")
     parser.add_argument("--dry-run", action="store_true",
                         help="Preview sample distribution, don't run inference")
@@ -394,10 +394,10 @@ def main():
                         help="Skip self-consistency check (faster, for quick previews)")
     parser.add_argument("--filter-low-quality", action="store_true",
                         help="Detect and flag low-quality images (blurry, wall-only, etc.)")
-    parser.add_argument("--timeout", type=int, default=1800,
-                        help="Timeout per image in seconds (default 1800 = 30min)")
-    parser.add_argument("--max-tokens", type=int, default=4096,
-                        help="max_new_tokens for VLM (default 4096; lower = safer VRAM)")
+    parser.add_argument("--timeout", type=int, default=3600,
+                        help="Timeout per image in seconds (default 3600 = 60min)")
+    parser.add_argument("--max-tokens", type=int, default=8192,
+                        help="max_new_tokens for VLM (default 8192 for full CoT)")
     parser.add_argument("--seed", type=int, default=42,
                         help="Random seed for sampling")
     parser.add_argument("--shard", type=int, default=0,
@@ -451,7 +451,7 @@ def main():
         return
 
     # ── Load models ──────────────────────────────────────────────────────────
-    print(f"\nLoading 4B-Thinking model: {args.model_name}")
+    print(f"\nLoading 8B-Thinking model with CoT: {args.model_name}")
     model, processor, _ = load_qwen2vl(
         model_name=args.model_name,
         load_in_4bit=True,
@@ -635,7 +635,7 @@ def main():
             "quality": quality_flag,
             "quality_reason": quality_reason,
             "inference_time_s": round(dt, 1),
-            "teacher_model": "Qwen3-VL-4B-Thinking",
+            "teacher_model": "Qwen3-VL-8B-Thinking",
         }
         if quality_flag in ("ok", "low_quality_fusion"):
             # Keep in main output: good data + VLM mistakes (still useful for training)

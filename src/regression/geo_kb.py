@@ -559,6 +559,7 @@ COMPOUND_SCENES = {
             "climate_zone": "alpine",
             "vegetation_zone": "alpine_meadow",
             "language_script": "tibetan",
+            "landform_detail": "glacial_valley",
         },
         "bboxes": [
             BBox(27.5, 29.0, 85.5, 87.5, "Everest / Cho Oyu region (Himalaya)"),
@@ -569,6 +570,9 @@ COMPOUND_SCENES = {
             "mountain_rock_type": "snow_peaks_glaciers",
             "climate_zone": "alpine",
             "vegetation_zone": "alpine_meadow",
+            "language_script": "tibetan",
+            "terrain_type": "sharp_mountains",
+            "landform_detail": "plateau_plain",
         },
         "bboxes": [
             BBox(30.0, 32.0, 90.0, 95.0, "Nyainqentanglha / Namcha Barwa"),
@@ -984,6 +988,543 @@ COMPOUND_SCENES = {
             BBox(30.3, 30.9, 103.8, 104.3, "Chengdu basin metro"),
         ],
     },
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # CITY FINGERPRINTS — building_height + pavement + climate + architecture
+    # ═══════════════════════════════════════════════════════════════════════
+    # Each fingerprint uses the most reliable VLM elements to distinguish
+    # Chinese cities that would otherwise share identical broad features.
+    # ═══════════════════════════════════════════════════════════════════════
+
+    # ── Tier-1 / New Tier-1 cities ──────────────────────────────────────
+    "chengdu_red_brick_mid": {
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "building_height": "mid_rise",
+            "urbanization": "metropolis",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(30.3, 31.0, 103.8, 104.3, "Chengdu core"),
+            BBox(29.3, 29.8, 106.2, 106.8, "Chongqing core"),
+        ],
+    },
+    "shanghai_grey_high": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "high_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(31.0, 31.5, 121.1, 121.7, "Shanghai grey-pavement high-rise"),
+        ],
+    },
+    "beijing_grey_temperate": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(39.7, 40.2, 116.1, 116.7, "Beijing grey mid-rise temperate"),
+        ],
+    },
+    "nanjing_planetree_grey": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "high_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "tree_species": "plane_tree",
+        },
+        "bboxes": [
+            BBox(31.9, 32.2, 118.6, 118.9, "Nanjing downtown plane-tree + grey + high-rise"),
+        ],
+    },
+    "wuhan_river_grey": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "high_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(30.4, 30.8, 114.1, 114.5, "Wuhan high-rise river city"),
+        ],
+    },
+    "chongqing_red_brick_mountain": {
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "building_height": "high_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(29.3, 29.8, 106.2, 106.8, "Chongqing red-brick + high-rise mountain city"),
+        ],
+    },
+    "hangzhou_mid_grey_water": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(30.1, 30.4, 120.0, 120.4, "Hangzhou mid-rise grey"),
+        ],
+    },
+    "tianjin_grey_temperate_high": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "high_rise",
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(39.0, 39.3, 117.1, 117.8, "Tianjin high-rise temperate coastal"),
+        ],
+    },
+    "suzhou_hui_grey_water": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "architecture_style": "hui_style",
+        },
+        "bboxes": [
+            BBox(31.1, 31.4, 120.4, 120.8, "Suzhou hui-style + grey + water town"),
+        ],
+    },
+    "xian_grey_temperate_mid": {
+        "conditions": {
+            "pavement_type": "grey_concrete",
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(34.1, 34.4, 108.7, 109.1, "Xi'an temperate mid-rise"),
+        ],
+    },
+    "changsha_red_mid_river": {
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "water_visible": True,
+        },
+        "bboxes": [
+            BBox(28.0, 28.4, 112.8, 113.2, "Changsha red-brick mid-rise"),
+        ],
+    },
+
+    # ── Tier-2 provincial capitals ──────────────────────────────────────
+    "kunming_mid_highland": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(24.8, 25.2, 102.5, 103.0, "Kunming mid-rise highland"),
+        ],
+    },
+    "fuzhou_mid_coastal": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "tree_species": "banyan",
+        },
+        "bboxes": [
+            BBox(25.9, 26.2, 119.1, 119.5, "Fuzhou banyan subtropical coastal"),
+        ],
+    },
+    "guiyang_red_mid_hills": {
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(26.4, 26.8, 106.5, 106.9, "Guiyang red-brick hills"),
+        ],
+    },
+    "nanning_subtropical_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(22.6, 23.0, 108.1, 108.5, "Nanning subtropical mid-rise"),
+        ],
+    },
+    "zhengzhou_temperate_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(34.5, 34.9, 113.4, 113.9, "Zhengzhou temperate mid-rise"),
+        ],
+    },
+    "hefei_subtropical_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "vegetation_zone": "mixed_forest",
+        },
+        "bboxes": [
+            BBox(31.7, 32.0, 117.1, 117.4, "Hefei subtropical mid-rise"),
+        ],
+    },
+    "nanchang_subtropical_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(28.5, 28.9, 115.7, 116.1, "Nanchang subtropical mid-rise"),
+        ],
+    },
+
+    # ── NE China cities (temperate + medium_city) ───────────────────────
+    "shenyang_temperate_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "vegetation_zone": "mixed_forest",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(41.6, 42.0, 123.2, 123.6, "Shenyang temperate mid-rise"),
+        ],
+    },
+    "changchun_temperate_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "soil_color": "black",
+        },
+        "bboxes": [
+            BBox(43.7, 44.1, 125.1, 125.5, "Changchun temperate black-soil"),
+        ],
+    },
+    "dalian_coastal_temperate": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "water_visible": True,
+        },
+        "bboxes": [
+            BBox(38.8, 39.1, 121.4, 121.8, "Dalian coastal temperate"),
+        ],
+    },
+    "qingdao_coastal_temperate": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(35.9, 36.3, 120.2, 120.5, "Qingdao coastal hills temperate"),
+        ],
+    },
+
+    # ── NW / Arid region cities ─────────────────────────────────────────
+    "lanzhou_arid_valley": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "arid",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "desert_scrub",
+            "pavement_type": "grey_concrete",
+        },
+        "bboxes": [
+            BBox(36.0, 36.2, 103.6, 104.0, "Lanzhou arid valley city"),
+        ],
+    },
+    "urumqi_arid_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "arid",
+            "urbanization": "medium_city",
+            "language_script": "uyghur_arabic",
+            "pavement_type": "grey_concrete",
+            "vegetation_zone": "desert_scrub",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(43.6, 44.0, 87.4, 87.8, "Urumqi arid mid-rise"),
+        ],
+    },
+    "hohhot_arid_steppe": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "arid",
+            "urbanization": "medium_city",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(40.7, 41.0, 111.5, 111.9, "Hohhot arid steppe city"),
+        ],
+    },
+    "taiyuan_temperate_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(37.7, 38.1, 112.3, 112.7, "Taiyuan temperate mid-rise"),
+        ],
+    },
+    "shijiazhuang_temperate_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_deciduous",
+        },
+        "bboxes": [
+            BBox(37.9, 38.2, 114.3, 114.7, "Shijiazhuang temperate mid-rise"),
+        ],
+    },
+    "yinchuan_arid_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "arid",
+            "urbanization": "medium_city",
+            "pavement_type": "grey_concrete",
+            "vegetation_zone": "desert_scrub",
+        },
+        "bboxes": [
+            BBox(38.3, 38.7, 106.1, 106.4, "Yinchuan arid mid-rise"),
+        ],
+    },
+    "xining_arid_highland": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "arid",
+            "urbanization": "medium_city",
+            "terrain_type": "plateau",
+        },
+        "bboxes": [
+            BBox(36.5, 36.8, 101.6, 101.9, "Xining arid plateau city"),
+        ],
+    },
+
+    # ── Tropical / far south ────────────────────────────────────────────
+    "haikou_tropical_coastal": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "tropical",
+            "urbanization": "medium_city",
+            "vegetation_zone": "tropical_rainforest",
+        },
+        "bboxes": [
+            BBox(19.9, 20.2, 110.1, 110.5, "Haikou tropical coastal"),
+        ],
+    },
+
+    # ── S China coastal belt (subtropical + coastal + metropolis/med_city) ─
+    "xiamen_coastal_mid": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(24.3, 24.6, 117.9, 118.3, "Xiamen coastal hills"),
+        ],
+    },
+
+    # ── Architecture-anchored city fingerprints ─────────────────────────
+    "guangdong_arcade_banyan_subtropical": {
+        "conditions": {
+            "architecture_style": "arcade",
+            "tree_species": "banyan",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(22.5, 23.8, 112.8, 114.5, "Guangzhou / Foshan arcade + banyan"),
+            BBox(21.5, 22.5, 108.0, 109.5, "Guangxi coast arcade"),
+        ],
+    },
+    "xiamen_arcade_coastal": {
+        "conditions": {
+            "architecture_style": "arcade",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(24.3, 26.0, 117.5, 120.0, "S Fujian arcade cities (Xiamen/Quanzhou/Zhangzhou)"),
+        ],
+    },
+    "harbin_russian_ne": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "soil_color": "black",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(45.5, 46.0, 126.4, 127.0, "Harbin black soil temperate"),
+            BBox(43.5, 44.5, 124.5, 126.0, "Changchun / Jilin black soil"),
+        ],
+    },
+
+    # ── Tree-species-anchored city fingerprints ─────────────────────────
+    "beijing_gingko_courtyard": {
+        "conditions": {
+            "tree_species": "gingko",
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(39.7, 40.2, 116.1, 116.7, "Beijing gingko + temperate metro"),
+        ],
+    },
+    "south_china_camphor_metro": {
+        "conditions": {
+            "tree_species": "camphor",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(28.0, 32.5, 103.0, 122.0, "S China camphor metro cities"),
+        ],
+    },
+    "ne_china_poplar_black_soil": {
+        "conditions": {
+            "tree_species": "poplar",
+            "soil_color": "black",
+            "climate_zone": "temperate",
+        },
+        "bboxes": [
+            BBox(41.0, 48.5, 121.0, 135.5, "NE China poplar + black soil"),
+        ],
+    },
+    "north_china_poplar_temperate": {
+        "conditions": {
+            "tree_species": "poplar",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(33.0, 42.0, 105.0, 122.5, "N China poplar temperate cities"),
+        ],
+    },
+    "hangzhou_willow_water": {
+        "conditions": {
+            "tree_species": "willow",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "water_visible": True,
+        },
+        "bboxes": [
+            BBox(30.1, 30.4, 120.0, 120.4, "Hangzhou willow + water (West Lake)"),
+            BBox(31.1, 31.4, 120.4, 120.8, "Suzhou willow canals"),
+        ],
+    },
+    "south_china_banyan_coastal": {
+        "conditions": {
+            "tree_species": "banyan",
+            "climate_zone": "subtropical",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(22.5, 26.5, 109.0, 120.0, "S China banyan coastal hills"),
+        ],
+    },
+    "nw_china_poplar_arid": {
+        "conditions": {
+            "tree_species": "poplar",
+            "climate_zone": "arid",
+        },
+        "bboxes": [
+            BBox(36.0, 44.5, 87.0, 107.0, "NW China poplar arid cities"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════
+    # FAMOUS HIKING ROUTES — distinctive visual features + tight bboxes
+    # ═══════════════════════════════════════════════════════════════════════
+
+    # ── 鳌太线 (Aotai Line): Qinling granite boulder field above treeline ──
+    # Key visual: vast fields of rounded granite boulders (石海) at 3000-3700m,
+    # Qinling fir forest below, knife-edge ridges. Distinct from Huangshan
+    # (isolated pillars) or Huashan (sheer cliffs).
+    "aotai_boulder_field": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(33.8, 34.3, 107.4, 107.9, "鳌太线 Taibai Shan boulder field (elev 3000-3767m)"),
+        ],
+    },
+
+    # ── 洛克线 (Rock Line): Yading Three Holy Mountains + alpine lakes ──
+    # Key visual: three distinct pyramid snow peaks (Chenrezig/Jampayang/
+    # Chanadorje 5958-6032m) with turquoise alpine lakes at base, Tibetan
+    # prayer flags and stone houses, golden larch forests in autumn.
+    "yading_rock_line": {
+        "conditions": {
+            "mountain_rock_type": "alpine_lakes",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "language_script": "tibetan",
+            "architecture_style": "tibetan_stone",
+        },
+        "bboxes": [
+            BBox(28.2, 28.6, 100.2, 100.5, "洛克线 Yading Three Holy Mountains (Sichuan)"),
+        ],
+    },
+
+    # ── 狼塔线 (Langta Line): Central Tianshan glacial valley traverse ──
+    # Key visual: U-shaped glacial valleys, 3500-4000m snow peaks, alpine
+    # meadows with grazing yaks, Kazakh herder yurts, glacial rivers.
+    # Unlike generic Tianshan: specifically the valley corridor between
+    # Harlik and Bogda ranges.
+    "langta_tianshan_valley": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(43.0, 43.8, 85.5, 87.5, "狼塔线 Central Tianshan glacial valley (Xinjiang)"),
+        ],
+    },
 }
 
 
@@ -1024,6 +1565,14 @@ _FUZZY_RULES = {
     # tree_species: confusable pairs
     ("tree_species", "camphor"): {"banyan"},           # both subtropical broadleaf
     ("tree_species", "chinese_red_pine"): {"conifer"},  # generic conifer
+
+    # mountain_rock_type: alpine lakes ↔ snow peaks (Yading has both)
+    ("mountain_rock_type", "alpine_lakes"): {"snow_peaks_glaciers"},
+    ("mountain_rock_type", "snow_peaks_glaciers"): {"alpine_lakes"},
+
+    # landform_detail: granite boulder field ↔ rounded granite (鳌太线石海)
+    ("landform_detail", "granite_boulder_field"): {"granite_spheroidal_rounded"},
+    ("landform_detail", "granite_spheroidal_rounded"): {"granite_boulder_field"},
 }
 
 
@@ -1031,8 +1580,19 @@ def _fuzzy_match(expected_val: str, actual_val, cat: str) -> bool:
     """Check if actual_val matches expected_val, with fuzzy rules for common VLM confusions."""
     if actual_val is None:
         return False
-    # Handle list values (e.g. likely_provinces, elevation_estimate_m)
-    if isinstance(actual_val, (list, dict)):
+    # Handle dict values (e.g. nested objects) — can't match
+    if isinstance(actual_val, dict):
+        return False
+    # Handle list values (e.g. tree_species, elevation_estimate_m)
+    if isinstance(actual_val, list):
+        # For lists, check if expected_val is in the list
+        if expected_val in actual_val:
+            return True
+        # Also check fuzzy rules for each item
+        acceptable = _FUZZY_RULES.get((cat, expected_val), set())
+        for item in actual_val:
+            if item in acceptable:
+                return True
         return False
     if expected_val == actual_val:
         return True
@@ -1170,6 +1730,10 @@ LANDFORM_DETAILS = {
         BBox(26.0, 30.0, 98.5, 101.0, "Tiger Leaping Gorge / Nu River"),
         BBox(30.5, 31.5, 109.5, 111.5, "Three Gorges (Yangtze)"),
         BBox(29.0, 30.5, 94.0, 96.5, "Yarlung Tsangpo Grand Canyon"),
+        BBox(43.0, 44.0, 85.5, 87.5, "Tianshan glacial valleys (Langta)"),
+    ],
+    "granite_boulder_field": [
+        BBox(33.8, 34.3, 107.4, 107.9, "鳌太线 Taibai boulder field (石海) 3000-3767m"),
     ],
     "coastal_shore": [
         BBox(18.0, 42.0, 108.0, 123.0, "China coastline"),
@@ -1407,6 +1971,79 @@ URBANIZATION_LEVELS = {
     ],
 }
 
+# ── Building height (city-scale skyline distinction) ──────────────────
+BUILDING_HEIGHT = {
+    "super_tall": [
+        # CBDs with iconic >300m skyscrapers
+        BBox(31.20, 31.30, 121.44, 121.55, "Shanghai Lujiazui"),
+        BBox(22.51, 22.56, 113.92, 114.02, "Shenzhen Futian CBD"),
+        BBox(22.49, 22.54, 114.03, 114.10, "Shenzhen Nanshan"),
+        BBox(23.10, 23.15, 113.30, 113.37, "Guangzhou Tianhe CBD"),
+        BBox(39.88, 39.96, 116.42, 116.50, "Beijing CBD Guomao"),
+        BBox(31.97, 32.05, 118.72, 118.80, "Nanjing Hexi CBD"),
+        BBox(39.05, 39.13, 117.35, 117.45, "Tianjin Binhai"),
+        BBox(30.55, 30.63, 114.28, 114.38, "Wuhan Jiang'an CBD"),
+    ],
+    "high_rise": [
+        # 20-40 floor dense commercial/residential — 1st/2nd tier city cores
+        BBox(31.15, 31.40, 121.30, 121.65, "Shanghai inner ring"),
+        BBox(22.48, 22.65, 113.85, 114.20, "Shenzhen urban core"),
+        BBox(23.05, 23.20, 113.22, 113.45, "Guangzhou urban core"),
+        BBox(39.85, 40.05, 116.30, 116.55, "Beijing urban core"),
+        BBox(30.55, 30.75, 103.95, 104.20, "Chengdu south / Tianfu"),
+        BBox(29.50, 29.65, 106.45, 106.65, "Chongqing Yuzhong / Jiangbei"),
+        BBox(30.18, 30.38, 119.95, 120.30, "Hangzhou downtown / Binjiang"),
+        BBox(31.95, 32.12, 118.65, 118.85, "Nanjing downtown"),
+        BBox(34.20, 34.35, 108.85, 109.05, "Xi'an Gaoxin"),
+        BBox(30.55, 30.70, 114.20, 114.40, "Wuhan downtown"),
+        BBox(36.60, 36.75, 117.00, 117.15, "Jinan CBD"),
+        BBox(28.10, 28.25, 112.90, 113.05, "Changsha downtown"),
+        BBox(22.80, 22.95, 113.55, 113.75, "Dongguan downtown"),
+        BBox(24.45, 24.60, 118.05, 118.20, "Xiamen downtown"),
+        BBox(38.00, 38.15, 114.40, 114.60, "Shijiazhuang downtown"),
+    ],
+    "mid_rise": [
+        # 6-15 floors — most Chinese urban areas
+        BBox(18.0, 48.0, 97.0, 135.5, "Urban China (generic mid-rise)"),
+    ],
+    "low_rise": [
+        # 1-3 floors — old towns, small cities, rural towns
+        BBox(18.0, 48.0, 97.0, 135.5, "Low-rise China (broad)"),
+    ],
+    "mixed": [
+        BBox(18.0, 48.0, 97.0, 135.5, "Mixed urban China (broad)"),
+    ],
+    "no_buildings": [
+        # Wilderness / rural without visible buildings
+        BBox(18.0, 55.0, 73.0, 136.0, "All China — no buildings constraint"),
+    ],
+}
+
+# ── Pavement type (sidewalk material ≡ city fingerprint) ────────────
+PAVEMENT_TYPE = {
+    "red_brick_tiles": [
+        # Strong Sichuan Basin signal — Chengdu/Chongqing sidewalks
+        BBox(28.5, 32.5, 103.0, 110.0, "Sichuan Basin red-brick zone"),
+        BBox(25.5, 27.5, 105.5, 108.5, "Guizhou red-brick zone"),
+        BBox(23.0, 25.5, 107.0, 110.5, "Guangxi red-brick (partial)"),
+    ],
+    "grey_concrete": [
+        # Dominant in East/North China cities
+        BBox(18.0, 45.0, 110.0, 135.5, "E/NE China grey concrete zone"),
+        BBox(18.0, 45.0, 97.0, 110.0, "Central China grey concrete"),
+    ],
+    "asphalt": [
+        # Roads everywhere — minimal spatial constraint
+        BBox(18.0, 55.0, 73.0, 136.0, "All China asphalt"),
+    ],
+    "natural": [
+        BBox(18.0, 55.0, 73.0, 136.0, "All China natural ground"),
+    ],
+    "not_visible": [
+        BBox(18.0, 55.0, 73.0, 136.0, "All China — no constraint"),
+    ],
+}
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Lookup helpers
@@ -1441,6 +2078,8 @@ def get_bboxes_for_element(category: str, value) -> list[BBox]:
         "infrastructure_tags": INFRASTRUCTURE_TAGS,
         "rock_color": ROCK_COLORS,
         "urbanization": URBANIZATION_LEVELS,
+        "building_height": BUILDING_HEIGHT,
+        "pavement_type": PAVEMENT_TYPE,
         "likely_provinces": PROVINCE_BBOXES,
     }
 
@@ -1468,4 +2107,5 @@ def get_all_categories() -> list[str]:
         "climate_zone", "terrain_type", "vegetation_zone",
         "tree_species", "architecture_style", "language_script",
         "mountain_rock_type", "soil_color", "sky_quality",
+        "building_height", "pavement_type", "urbanization",
     ]

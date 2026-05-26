@@ -1085,6 +1085,7 @@ def load_qwen2vl(
     max_pixels: int = MAX_IMAGE_PIXELS,
     load_in_4bit: bool = False,
     lora_path: str = None,
+    merge_lora: bool = True,
     offload_folder: str = None,
     gpu_memory: str = None,
     cpu_memory: str = "16GB",
@@ -1155,14 +1156,17 @@ def load_qwen2vl(
     model = ModelClass.from_pretrained(model_name, **load_kwargs)
     model.eval()
 
-    # ── Load and merge LoRA adapter ──────────────────────────────────
+    # ── Load LoRA adapter ──────────────────────────────────────────
     if lora_path:
         from peft import PeftModel
         print(f"  Loading LoRA adapter from: {lora_path}")
         model = PeftModel.from_pretrained(model, lora_path)
-        print(f"  Merging LoRA weights into base model...")
-        model = model.merge_and_unload()
-        print(f"  LoRA merged. Inference speed = base model speed.")
+        if merge_lora:
+            print(f"  Merging LoRA weights into base model...")
+            model = model.merge_and_unload()
+            print(f"  LoRA merged. Inference speed = base model speed.")
+        else:
+            print(f"  LoRA kept as adapter (no merge). 4-bit quantization preserved.")
 
     model_fn = create_qwen2vl_model_fn(model, processor, max_new_tokens=max_new_tokens,
                                        temperature=temperature, top_p=top_p,

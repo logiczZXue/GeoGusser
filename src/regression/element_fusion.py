@@ -237,8 +237,11 @@ def filter_by_elevation(bboxes: list[BBox], elevation_m: float,
 # ═══════════════════════════════════════════════════════════════════════════
 
 def parse_geocot_json(text: str) -> dict:
-    """Extract structured JSON from GeoCoT output text."""
-    # Markdown code block
+    """Extract structured JSON from GeoCoT output text (CoT-safe).
+
+    Handles both code-fenced JSON and raw JSON at end of Thinking chain-of-thought.
+    """
+    # 1) Markdown code block — greedy to capture full multi-line JSON
     m = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
     if m:
         try:
@@ -246,8 +249,9 @@ def parse_geocot_json(text: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    # Standalone JSON
-    for m in re.finditer(r'\{[^{}]*\}', text):
+    # 2) Last JSON-like block in text (CoT puts answer JSON at the end)
+    matches = list(re.finditer(r'\{[^{}]*\}', text))
+    for m in reversed(matches):
         try:
             obj = json.loads(m.group(0))
             if any(k in obj for k in ['climate_zone', 'language_script', 'scene_type',
@@ -255,6 +259,19 @@ def parse_geocot_json(text: str) -> dict:
                 return obj
         except json.JSONDecodeError:
             continue
+
+    # 3) Fallback: try tail of long text (CoT reasoning, answer at the end)
+    if len(text) > 400:
+        tail = text[-800:]
+        for m in re.finditer(r'\{[^{}]*\}', tail):
+            try:
+                obj = json.loads(m.group(0))
+                if any(k in obj for k in ['climate_zone', 'language_script',
+                                            'terrain_type', 'vegetation_zone']):
+                    return obj
+            except json.JSONDecodeError:
+                continue
+
     return {}
 
 
@@ -460,7 +477,8 @@ def extract_all_elements(macro_json: dict, regional_json: dict, local_json: dict
     that GeoKB has no mapping for.
     """
     elements = {}
-    for key in ['climate_zone', 'terrain_type', 'vegetation_zone', 'urbanization']:
+    for key in ['climate_zone', 'terrain_type', 'vegetation_zone', 'urbanization',
+                 'building_height', 'pavement_type']:
         val = macro_json.get(key)
         if _is_valid_element_value(val):
             elements[key] = val
@@ -1235,10 +1253,42 @@ def fuse_elements_v3(
     # ── Step 3: Compound scenes ───────────────────────────────────────────
     compound_matches = match_compound_scenes_soft(elements, min_ratio=0.5)
     if compound_matches:
-        for scene_name, scene_bboxes, ratio in compound_matches:
-            search_bboxes.extend(scene_bboxes)
         top3 = [f"{m[0]}({m[2]:.0%})" for m in compound_matches[:3]]
         ex.append(f"[COMPOUND] {len(compound_matches)} match(es): {', '.join(top3)}")
+
+        # High-confidence compound scenes (≥75%) provide tight spatial anchors.
+        # When element bboxes are broad (urban China ≈ 25M km²), compound
+        # scenes are the ONLY discriminative spatial signal. Restrict the
+        # search space to their union to prevent grid search from drifting
+        # into regions with no realistic match.
+        # Use 100%-match compound scenes to RESTRICT the search space
+        # (all conditions match exactly = strong spatial anchor).
+        # 75-99% scenes only contribute bboxes for scoring, not restriction,
+        # since a single element mismatch means the VLM may have made 1 error.
+        perfect_scenes = [(n, b, r) for n, b, r in compound_matches if r >= 1.0]
+        if perfect_scenes:
+            compound_only = []
+            for _, bboxes, _ in perfect_scenes:
+                compound_only.extend(bboxes)
+            compound_only = _dedup_bboxes(compound_only)
+            # Intersect compound-only space with elevation bboxes for refinement
+            if elevation_bboxes:
+                trimmed = intersect_bbox_lists([compound_only, elevation_bboxes])
+                if trimmed:
+                    compound_only = _dedup_bboxes(trimmed)
+            # Keep only element-derived bboxes that intersect with perfect scenes
+            restricted = list(compound_only)
+            for bboxes in all_element_bboxes:
+                inter = intersect_bbox_lists([bboxes, compound_only])
+                if inter:
+                    restricted.extend(inter)
+            search_bboxes = _dedup_bboxes(restricted)
+            ex.append(f"[COMPOUND-RESTRICT] {len(perfect_scenes)} perfect-match scenes "
+                      f"→ search area {bbox_total_area_km2(search_bboxes):,.0f} km²")
+        else:
+            # No perfect scenes → extend search with all compound bboxes
+            for _, scene_bboxes, _ in compound_matches:
+                search_bboxes.extend(scene_bboxes)
     else:
         ex.append("[COMPOUND] No compound scenes matched")
 
@@ -1278,6 +1328,67 @@ def fuse_elements_v3(
         else:
             # No elevation sensor → moderate GeoCoT reliance
             geo_weight = 0.20
+
+        # ── Step 5.5: Anti-bias correction ──────────────────────────────
+        # VLM models systematically predict Sichuan/Yunnan (28.5-30.0°N,
+        # 101.0-104.5°E) for non-Sichuan images. When GeoCoT lands in this
+        # region, cross-check VLM elements + sensors for exonerating evidence.
+        bias_lat_lo, bias_lat_hi = 28.5, 30.0
+        bias_lng_lo, bias_lng_hi = 101.0, 104.5
+        if bias_lat_lo <= glat <= bias_lat_hi and bias_lng_lo <= glng <= bias_lng_hi:
+            n_exonerate = 0
+            # Climate check: Sichuan Basin is subtropical (temp 25-32°C, humid 65-85%)
+            climate_val = str(elements.get("climate_zone", "")).lower()
+            if climate_val in ("temperate", "boreal", "arid", "alpine"):
+                n_exonerate += 1
+            # Temperature check: Sichuan July temp is 25-32°C
+            if sensor_temperature_c is not None:
+                if sensor_temperature_c < 20 or sensor_temperature_c > 35:
+                    n_exonerate += 1
+            # Humidity check: Sichuan July humidity is 65-85%
+            if sensor_humidity_pct is not None:
+                if sensor_humidity_pct < 50:
+                    n_exonerate += 1
+            # Vegetation check: Sichuan Basin is broadleaf_evergreen
+            veg_val = str(elements.get("vegetation_zone", "")).lower()
+            if veg_val in ("broadleaf_deciduous", "conifer_forest", "desert_scrub",
+                           "grassland", "alpine_meadow"):
+                n_exonerate += 1
+            # Soil check: Sichuan Basin is red/purple soil
+            soil_val = str(elements.get("soil_color", "")).lower()
+            if soil_val in ("black", "yellow", "grey", "white"):
+                n_exonerate += 1
+            # Architecture check
+            arch_val = str(elements.get("architecture_style", "")).lower()
+            if arch_val in ("tibetan_stone", "hui_style", "russian", "mongolian_yurt"):
+                n_exonerate += 1
+
+            # Check if strong compound scenes point AWAY from the bias region
+            compound_away = False
+            for scene_name, scene_bboxes, ratio in compound_matches:
+                if ratio < 0.75:
+                    continue
+                # Check if ALL scene bboxes are outside the bias region
+                all_outside = all(
+                    b.lat_max < bias_lat_lo or b.lat_min > bias_lat_hi or
+                    b.lng_max < bias_lng_lo or b.lng_min > bias_lng_hi
+                    for b in scene_bboxes
+                )
+                if all_outside:
+                    compound_away = True
+                    ex.append(f"[ANTI-BIAS] compound '{scene_name}' ({ratio:.0%}) "
+                              f"points outside Sichuan → reducing GeoCoT trust")
+                    break
+
+            if n_exonerate >= 2 or (n_exonerate >= 1 and compound_away):
+                geo_weight *= 0.25
+                ex.append(f"[ANTI-BIAS] {n_exonerate} elements + compound "
+                          f"exonerate Sichuan → geo_weight slashed to {geo_weight:.3f}")
+            elif n_exonerate >= 1 or compound_away:
+                geo_weight *= 0.50
+                ex.append(f"[ANTI-BIAS] {'compound' if compound_away else 'element'} "
+                          f"suggests non-Sichuan → geo_weight reduced to {geo_weight:.3f}")
+
         ex.append(f"[GEOCO-WEIGHT] adaptive weight={geo_weight:.2f} (elevation prune "
                   f"{elev_pct:.0f}% of China)" if elevation_bboxes else
                   f"[GEOCO-WEIGHT] adaptive weight={geo_weight:.2f} (no elevation sensor)")
@@ -1286,6 +1397,40 @@ def fuse_elements_v3(
     element_infos = precompute_element_infos(elements, search_area)
     element_weights = compute_element_weights(
         elements, sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct)
+
+    # ── Elevation veto: when VLM elevation_estimate_m is wildly wrong,
+    #     tighten search with sensor-anchored elevation pre-pruning ──────────
+    elev_key = None
+    for (cat, val) in element_weights:
+        if cat == "elevation_estimate_m":
+            elev_key = (cat, val)
+            break
+    if elev_key and sensor_elevation_m is not None:
+        elev_w = element_weights.get(elev_key, 0.70)
+        if elev_w < 0.15:
+            # VLM elevation is extremely inconsistent with sensor → veto it
+            # Re-run elevation pre-pruning with tighter tolerance (±25%)
+            tight_bboxes = dem.find_elevation_range(
+                sensor_elevation_m, tolerance_pct=0.25)
+            if tight_bboxes:
+                # Intersect tight elevation with current search space
+                new_search = []
+                for sb in search_bboxes:
+                    trimmed = intersect_bbox_lists([[sb], tight_bboxes])
+                    if trimmed:
+                        new_search.extend(trimmed)
+                if new_search:
+                    old_area = bbox_total_area_km2(search_bboxes)
+                    new_area = bbox_total_area_km2(new_search)
+                    ex.append(f"[ELEV-VETO] VLM elevation wt={elev_w:.2f}, "
+                              f"sensor veto → area {old_area:,.0f}→{new_area:,.0f} km²")
+                    search_bboxes = _dedup_bboxes(new_search)
+                    search_area = new_area
+                    # Recompute element infos with tightened search area
+                    element_infos = precompute_element_infos(elements, search_area)
+                    # Also reduce geo_weight since sensors are more reliable
+                    geo_weight *= 0.5
+
     best_lat, best_lng, uncertainty, all_points = grid_search(
         search_bboxes,
         elements,

@@ -92,7 +92,7 @@ MOCK_CASES = [
         "name": "gongga_snow",
         "elements": {
             "climate_zone": "alpine", "terrain_type": "sharp_mountains",
-            "vegetation_zone": "alpine_meadow", "mountain_rock_type": "snow_peaks_glaciers",
+            "vegetation_zone": "conifer_forest", "mountain_rock_type": "snow_peaks_glaciers",
             "elevation_estimate_m": 4500,
         },
         "true_lat": 29.59, "true_lng": 101.88,
@@ -272,6 +272,385 @@ MOCK_CASES = [
         "expected_region": "Zhangye/Gansu",
         "scene_category": "danxia",
     },
+    # ═══════════════════════════════════════════════════════════════════════
+    # FAILURE MODE TEST CASES — target the 3 failure modes
+    # ═══════════════════════════════════════════════════════════════════════
+    # ── 改善3: City confusion (Chengdu vs Shanghai) ───────────────────
+    {
+        "name": "chengdu_midrise_redbrick",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "red_brick_tiles",
+            "language_script": "simplified_chinese", "architecture_style": "modern_residential",
+            "elevation_estimate_m": 500,
+        },
+        "true_lat": 30.57, "true_lng": 104.06,
+        "expected_region": "Chengdu/Sichuan",
+        "scene_category": "urban_confusion",
+    },
+    {
+        "name": "shanghai_highrise_grey",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "high_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese", "architecture_style": "modern_glass",
+            "tree_species": ["plane_tree"],
+            "elevation_estimate_m": 5,
+        },
+        "true_lat": 31.23, "true_lng": 121.47,
+        "expected_region": "Shanghai",
+        "scene_category": "urban_confusion",
+    },
+    # ── 改善1: Elevation absurdity (VLM says [10,50] at 424m Chengdu) ─
+    {
+        "name": "chengdu_elevation_absurd",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "red_brick_tiles",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": [10, 50],  # VLM wildly wrong
+        },
+        "true_lat": 30.57, "true_lng": 104.06,
+        "expected_region": "Chengdu/Sichuan (elevation=424m, VLM says 10-50m)",
+        "scene_category": "elevation_failure",
+    },
+    {
+        "name": "kunming_elevation_absurd",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "medium_city",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": [0, 100],  # VLM says sea level, truth ~1900m
+        },
+        "true_lat": 25.04, "true_lng": 102.68,
+        "expected_region": "Kunming/Yunnan (elevation=1890m, VLM says 0-100m)",
+        "scene_category": "elevation_failure",
+    },
+    # ── 改善2: Systematic bias (GeoCoT predicts Sichuan for E China) ──
+    {
+        "name": "huangshan_bias_geocot",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest", "mountain_rock_type": "granite_spheroidal",
+            "soil_color": "yellow_brown",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 1600,
+        },
+        "true_lat": 30.13, "true_lng": 118.16,
+        "expected_region": "Huangshan/Anhui (GeoCoT biased to 29.5,103.0)",
+        "scene_category": "bias_failure",
+        # Simulate GeoCoT predicting Sichuan for an Anhui image
+        "geocot_prediction": (29.55, 103.00),
+    },
+    {
+        "name": "nanjing_bias_geocot",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "high_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "tree_species": ["plane_tree"],
+            "elevation_estimate_m": 20,
+        },
+        "true_lat": 32.06, "true_lng": 118.79,
+        "expected_region": "Nanjing/Jiangsu (GeoCoT biased to 29.0,103.5)",
+        "scene_category": "bias_failure",
+        "geocot_prediction": (29.00, 103.50),
+    },
+    # ═══════════════════════════════════════════════════════════════════════
+    # CITY FINGERPRINT TEST CASES — verify new city compound scenes
+    # ═══════════════════════════════════════════════════════════════════════
+    {
+        "name": "wuhan_highrise_grey",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "high_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 30,
+        },
+        "true_lat": 30.59, "true_lng": 114.30,
+        "expected_region": "Wuhan/Hubei",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "chongqing_highrise_redbrick",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "high_rise", "pavement_type": "red_brick_tiles",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 250,
+        },
+        "true_lat": 29.56, "true_lng": 106.55,
+        "expected_region": "Chongqing",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "hangzhou_midrise_grey",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "tree_species": ["willow"],
+            "elevation_estimate_m": 10,
+        },
+        "true_lat": 30.25, "true_lng": 120.16,
+        "expected_region": "Hangzhou/Zhejiang",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "tianjin_highrise_grey",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "urban_flat",
+            "vegetation_zone": "mixed_forest", "urbanization": "metropolis",
+            "building_height": "high_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 5,
+        },
+        "true_lat": 39.14, "true_lng": 117.20,
+        "expected_region": "Tianjin",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "xian_midrise_grey",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "urban_flat",
+            "vegetation_zone": "mixed_forest", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "architecture_style": "traditional_official",
+            "elevation_estimate_m": 400,
+        },
+        "true_lat": 34.26, "true_lng": 108.94,
+        "expected_region": "Xi'an/Shaanxi",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "changsha_midrise_redbrick",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "red_brick_tiles",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 50,
+            "water_visible": True,
+        },
+        "true_lat": 28.22, "true_lng": 112.97,
+        "expected_region": "Changsha/Hunan",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "kunming_midrise_highland",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "soil_color": "red",
+            "elevation_estimate_m": 1890,
+        },
+        "true_lat": 25.04, "true_lng": 102.68,
+        "expected_region": "Kunming/Yunnan",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "fuzhou_midrise_banyan",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "tree_species": ["banyan"],
+            "elevation_estimate_m": 10,
+        },
+        "true_lat": 26.07, "true_lng": 119.30,
+        "expected_region": "Fuzhou/Fujian",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "guiyang_midrise_hills",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "red_brick_tiles",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 1100,
+        },
+        "true_lat": 26.64, "true_lng": 106.71,
+        "expected_region": "Guiyang/Guizhou",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "lanzhou_arid_midrise",
+        "elements": {
+            "climate_zone": "arid", "terrain_type": "urban_flat",
+            "vegetation_zone": "desert_scrub", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 1520,
+        },
+        "true_lat": 36.06, "true_lng": 103.80,
+        "expected_region": "Lanzhou/Gansu",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "urumqi_arid_midrise",
+        "elements": {
+            "climate_zone": "arid", "terrain_type": "urban_flat",
+            "vegetation_zone": "desert_scrub", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "uyghur_arabic",
+            "elevation_estimate_m": 800,
+        },
+        "true_lat": 43.83, "true_lng": 87.62,
+        "expected_region": "Urumqi/Xinjiang",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "dalian_coastal_temperate",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "rolling_hills",
+            "vegetation_zone": "mixed_forest", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "water_visible": True,
+            "elevation_estimate_m": 50,
+        },
+        "true_lat": 38.92, "true_lng": 121.63,
+        "expected_region": "Dalian/Liaoning",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "qingdao_coastal_temperate",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "rolling_hills",
+            "vegetation_zone": "mixed_forest", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 30,
+        },
+        "true_lat": 36.07, "true_lng": 120.38,
+        "expected_region": "Qingdao/Shandong",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "shenyang_temperate_midrise",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "urban_flat",
+            "vegetation_zone": "mixed_forest", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 50,
+        },
+        "true_lat": 41.80, "true_lng": 123.43,
+        "expected_region": "Shenyang/Liaoning",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "haikou_tropical_midrise",
+        "elements": {
+            "climate_zone": "tropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "tropical_rainforest", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "tree_species": ["coconut_palm"],
+            "elevation_estimate_m": 5,
+        },
+        "true_lat": 20.02, "true_lng": 110.34,
+        "expected_region": "Haikou/Hainan",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "nanchang_subtropical_midrise",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "medium_city",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "elevation_estimate_m": 30,
+        },
+        "true_lat": 28.68, "true_lng": 115.88,
+        "expected_region": "Nanchang/Jiangxi",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "xiamen_coastal_midrise",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "architecture_style": "arcade",
+            "tree_species": ["banyan"],
+            "elevation_estimate_m": 20,
+        },
+        "true_lat": 24.47, "true_lng": 118.08,
+        "expected_region": "Xiamen/Fujian",
+        "scene_category": "city_fingerprint",
+    },
+    {
+        "name": "suzhou_willow_hui_style",
+        "elements": {
+            "climate_zone": "subtropical", "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen", "urbanization": "metropolis",
+            "building_height": "mid_rise", "pavement_type": "grey_concrete",
+            "language_script": "simplified_chinese",
+            "architecture_style": "hui_style",
+            "tree_species": ["willow"],
+            "water_visible": True,
+            "elevation_estimate_m": 5,
+        },
+        "true_lat": 31.30, "true_lng": 120.63,
+        "expected_region": "Suzhou/Jiangsu",
+        "scene_category": "city_fingerprint",
+    },
+
+    # ── Famous hiking routes ────────────────────────────────────────────
+    {
+        "name": "aotai_boulder_field",
+        "elements": {
+            "climate_zone": "temperate", "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "mountain_rock_type": "granite_spheroidal",
+            "landform_detail": "granite_boulder_field",
+            "elevation_estimate_m": 3400,
+        },
+        "true_lat": 33.95, "true_lng": 107.75,
+        "expected_region": "鳌太线 Taibai Shan (Shaanxi)",
+        "scene_category": "granite_mountain",
+    },
+    {
+        "name": "yading_rock_line",
+        "elements": {
+            "climate_zone": "alpine", "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "mountain_rock_type": "alpine_lakes",
+            "language_script": "tibetan",
+            "architecture_style": "tibetan_stone",
+            "elevation_estimate_m": 4200,
+        },
+        "true_lat": 28.40, "true_lng": 100.35,
+        "expected_region": "洛克线 Yading (Sichuan)",
+        "scene_category": "snow_mountain",
+    },
+    {
+        "name": "langta_tianshan_valley",
+        "elements": {
+            "climate_zone": "alpine", "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "landform_detail": "river_canyon",
+            "elevation_estimate_m": 3000,
+        },
+        "true_lat": 43.40, "true_lng": 86.50,
+        "expected_region": "狼塔线 Central Tianshan (Xinjiang)",
+        "scene_category": "snow_mountain",
+    },
 ]
 
 
@@ -422,6 +801,12 @@ def run_mock_benchmark(cases: list[dict] = None, v3: bool = False) -> list[dict]
         if sensor_temp:
             sensor_str += f", {sensor_temp:.0f}C, {sensor_humid:.0f}%RH"
         print(f"  Sensor: {sensor_str}")
+        if case.get("geocot_prediction"):
+            gp = case["geocot_prediction"]
+            print(f"  GeoCoT (biased): ({gp[0]:.2f}, {gp[1]:.2f})")
+
+        # Pass GeoCoT prediction if test case has one (for bias failure testing)
+        geocot_pred = case.get("geocot_prediction")
 
         t0 = time.time()
         if v3:
@@ -430,6 +815,7 @@ def run_mock_benchmark(cases: list[dict] = None, v3: bool = False) -> list[dict]
                 sensor_elevation_m=sensor_elev,
                 sensor_temperature_c=sensor_temp,
                 sensor_humidity_pct=sensor_humid,
+                geocot_prediction=geocot_pred,
             )
         else:
             result = fuse_elements(
@@ -437,6 +823,7 @@ def run_mock_benchmark(cases: list[dict] = None, v3: bool = False) -> list[dict]
                 sensor_elevation_m=sensor_elev,
                 sensor_temperature_c=sensor_temp,
                 sensor_humidity_pct=sensor_humid,
+                geocot_prediction=geocot_pred,
             )
         elapsed = time.time() - t0
 
