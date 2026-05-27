@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 import torch
 from PIL import Image
 from Geocot.Geocot import GeoCoTPipeline, load_qwen2vl, create_qwen2vl_model_fn
-from regression.element_fusion import fuse_elements_v3, extract_all_elements, parse_geocot_json
+from regression.element_fusion import fuse_elements_v3, extract_all_elements, parse_geocot_json, score_sensor_consistency
 from regression.dem_lookup import get_dem
 from regression.climate_lookup import get_climate
 
@@ -46,6 +46,33 @@ def load_diverse_images():
     return picks[:N_IMAGES]
 
 
+def run_one_inference(img, pipeline, sensor_elev, sensor_temp, sensor_humid):
+    """Single VLM inference with JSON retry. Returns (elements, dt, n_retries, all_ok)."""
+    t0 = time.time()
+    n_retries = 0
+    max_retries = 1
+
+    while True:
+        result = pipeline.run(
+            img,
+            sensor_elevation_m=sensor_elev,
+            sensor_temperature_c=sensor_temp,
+            sensor_humidity_pct=sensor_humid,
+        )
+        mj = parse_geocot_json(result.stage_outputs.get("macro", ""))
+        rj = parse_geocot_json(result.stage_outputs.get("regional", ""))
+        lj = parse_geocot_json(result.stage_outputs.get("local", ""))
+
+        if all([mj, rj, lj]) or n_retries >= max_retries:
+            break
+        n_retries += 1
+        print(f"    JSON parse failed, retry {n_retries}/{max_retries}...", flush=True)
+
+    elements = extract_all_elements(mj or {}, rj or {}, lj or {})
+    dt = time.time() - t0
+    return elements, dt, n_retries, all([mj, rj, lj])
+
+
 def main():
     images = load_diverse_images()
     print(f"Test images: {len(images)}")
@@ -61,8 +88,8 @@ def main():
     print("\nLoading VLM...")
     model, processor, _ = load_qwen2vl(
         model_name=MODEL_PATH, load_in_4bit=True,
-        max_new_tokens=2048, temperature=0.6, enable_thinking=False)
-    model_fn = create_qwen2vl_model_fn(model, processor, max_new_tokens=2048, temperature=0.6, enable_thinking=False)
+        max_new_tokens=1024, temperature=0.6, enable_thinking=False)
+    model_fn = create_qwen2vl_model_fn(model, processor, max_new_tokens=1024, temperature=0.6, enable_thinking=False)
     pipeline = GeoCoTPipeline(model_fn, {"prompts_dir": PROMPTS_DIR})
 
     results = []
@@ -89,44 +116,39 @@ def main():
         if sensor_humid: sensor_str += f" RH={sensor_humid:.0f}%"
         print(f"  Sensors: {sensor_str}", flush=True)
 
-        # ── VLM inference with retry on JSON failure ──────────────────────────
+        # ── Adaptive N=2: sensor-scored VLM inference ────────────────────────
         img = Image.open(img_path).convert("RGB")
-        t0 = time.time()
-        n_retries = 0
-        max_retries = 1
 
-        while True:
-            result = pipeline.run(
-                img,
-                sensor_elevation_m=sensor_elev,
-                sensor_temperature_c=sensor_temp,
-                sensor_humidity_pct=sensor_humid,
-            )
+        # First inference
+        elements, dt, n_retries, all_ok = run_one_inference(
+            img, pipeline, sensor_elev, sensor_temp, sensor_humid)
+        sensor_score = score_sensor_consistency(
+            elements, sensor_elev, sensor_temp, sensor_humid)
+        n_samples = 1
 
-            macro = result.stage_outputs.get("macro", "")
-            regional = result.stage_outputs.get("regional", "")
-            local = result.stage_outputs.get("local", "")
+        # Adaptive second inference if sensor score is low
+        if sensor_score < 0.80:
+            print(f"  Score={sensor_score:.2f}<0.80 → 2nd inference...", flush=True)
+            elements2, dt2, n_retries2, all_ok2 = run_one_inference(
+                img, pipeline, sensor_elev, sensor_temp, sensor_humid)
+            sensor_score2 = score_sensor_consistency(
+                elements2, sensor_elev, sensor_temp, sensor_humid)
+            dt += dt2
+            n_retries += n_retries2
+            n_samples = 2
+            if sensor_score2 > sensor_score:
+                elements = elements2
+                all_ok = all_ok2
+                sensor_score = sensor_score2
 
-            mj = parse_geocot_json(macro)
-            rj = parse_geocot_json(regional)
-            lj = parse_geocot_json(local)
-
-            if all([mj, rj, lj]) or n_retries >= max_retries:
-                break
-            n_retries += 1
-            print(f"  JSON parse failed, retry {n_retries}/{max_retries}...", flush=True)
-
-        dt = time.time() - t0
         total_time += dt
+        vlm_elev = elements.get("elevation_estimate_m", "N/A")
 
-        all_ok = all([mj, rj, lj])
-        json_status = "OK" if all_ok else f"MISSING:{' M' if not mj else ''}{' R' if not rj else ''}{' L' if not lj else ''}"
+        json_status = "OK" if all_ok else "MISSING"
         if n_retries > 0:
             json_status += f" (retry={n_retries})"
-
-        # ── Build elements via extract_all_elements ────────────────────────
-        elements = extract_all_elements(mj, rj, lj)
-        vlm_elev = elements.get("elevation_estimate_m", "N/A")
+        if n_samples > 1:
+            json_status += f" N={n_samples}"
 
         # ── Fusion with sensor data ────────────────────────────────────────
         fusion = fuse_elements_v3(
@@ -139,14 +161,13 @@ def main():
         pred_lng = fusion.longitude
         err = haversine(true_lat, true_lng, pred_lat, pred_lng) if pred_lat and pred_lng else 9999
 
-        # Extract search area from explanation
         search_area_str = "N/A"
         for line in fusion.explanation_parts:
             if line.startswith("[SEARCH-AREA]"):
                 search_area_str = line.split("Union:")[1].strip() if "Union:" in line else line
                 break
 
-        print(f"  {dt:.0f}s  VLM_elev={vlm_elev}  JSON:{json_status}")
+        print(f"  {dt:.0f}s  VLM_elev={vlm_elev}  score={sensor_score:.2f}  JSON:{json_status}")
         print(f"  Fusion:({pred_lat:.2f},{pred_lng:.2f}) err={err:.0f}km  {search_area_str}", flush=True)
 
         results.append({
@@ -163,6 +184,8 @@ def main():
             "time_s": dt,
             "json_ok": all_ok,
             "n_retries": n_retries,
+            "n_samples": n_samples,
+            "sensor_score": sensor_score,
             "n_elements": len(elements),
             "explanation": fusion.explanation_parts,
         })

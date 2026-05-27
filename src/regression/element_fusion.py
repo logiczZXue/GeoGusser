@@ -1351,6 +1351,24 @@ HARD_ELEMENT_CATEGORIES = {
 }
 
 
+def score_sensor_consistency(
+    elements: dict,
+    sensor_elevation_m: Optional[float] = None,
+    sensor_temperature_c: Optional[float] = None,
+    sensor_humidity_pct: Optional[float] = None,
+) -> float:
+    """Aggregate sensor-consistency score ∈ [0,1] for Best-of-N candidate selection."""
+    weights = compute_element_weights(
+        elements,
+        sensor_elevation_m=sensor_elevation_m,
+        sensor_temperature_c=sensor_temperature_c,
+        sensor_humidity_pct=sensor_humidity_pct,
+    )
+    if not weights:
+        return 0.0
+    return sum(weights.values()) / len(weights)
+
+
 def fuse_elements_v3(
     elements: dict,
     sensor_elevation_m: Optional[float] = None,

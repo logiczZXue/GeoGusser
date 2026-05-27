@@ -1028,6 +1028,75 @@ COMPOUND_SCENES = {
     },
 
     # ═══════════════════════════════════════════════════════════════════════
+    # GEOGRAPHIC COMPETITION MIRRORS — prevent single-region lock-in
+    # ═══════════════════════════════════════════════════════════════════════
+    # Problem: generic compound scenes (e.g. sichuan_basin_city, zhengzhou_
+    # temperate_mid) use conditions that are equally true in distant cities.
+    # Without competing scenes, East China photos lock to Sichuan, Beijing
+    # photos lock to Zhengzhou/Taiyuan — producing catastrophic errors.
+    #
+    # Solution: mirror scenes with identical conditions but different bboxes.
+    # When both match → COMPOUND-DISPERSE → neither locks → grid search decides.
+    # When only one matches → correctly restricts to that region.
+    #
+    # Key design rule: any compound scene with ≥3 generic conditions that
+    # span multiple distant cities needs a geographic competitor.
+    "east_china_subtropical_city": {
+        "conditions": {
+            "urbanization": "medium_city",
+            "climate_zone": "subtropical",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(30.0, 32.5, 118.0, 122.0, "Shanghai/Nanjing/Hangzhou delta"),
+            BBox(28.0, 30.5, 112.0, 118.0, "Changsha/Nanchang/Wuhan"),
+        ],
+    },
+    "east_china_overcast": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "sky_quality": "overcast_grey",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(30.0, 32.5, 118.0, 122.0, "East China overcast urban"),
+            BBox(28.0, 30.5, 112.0, 118.0, "Mid-Yangtze overcast urban"),
+        ],
+    },
+
+    # ── North China Plain ↔ Central Plains (Zhengzhou/Taiyuan) ──────────
+    # zhengzhou_temperate_mid and taiyuan_temperate_mid share identical
+    # conditions (mid_rise+temperate+medium_city+urban_flat) with Beijing/
+    # Tianjin/Shijiazhuang. These mirrors prevent Beijing photos from being
+    # locked to Zhengzhou or Taiyuan by COMPOUND-RESTRICT.
+    "north_china_plain_temperate_city": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(37.5, 42.0, 114.0, 120.0, "Beijing/Tianjin/Hebei/Shandong"),
+            BBox(41.0, 43.0, 122.0, 126.0, "Liaoning/Jilin temperate cities"),
+        ],
+    },
+    "north_china_plain_temperate_deciduous": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_deciduous",
+        },
+        "bboxes": [
+            BBox(37.5, 42.0, 114.0, 120.0, "Beijing/Tianjin/Hebei/Shandong deciduous"),
+            BBox(41.0, 43.0, 122.0, 126.0, "Liaoning/Jilin temperate deciduous"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════
     # CITY FINGERPRINTS — building_height + pavement + climate + architecture
     # ═══════════════════════════════════════════════════════════════════════
     # Each fingerprint uses the most reliable VLM elements to distinguish
