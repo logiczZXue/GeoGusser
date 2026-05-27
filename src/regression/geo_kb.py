@@ -988,6 +988,44 @@ COMPOUND_SCENES = {
             BBox(30.3, 30.9, 103.8, 104.3, "Chengdu basin metro"),
         ],
     },
+    "sichuan_basin_city": {
+        # Low-threshold variant: VLM often calls Chengdu/Chongqing "medium_city"
+        # instead of "metropolis" from single street photos. This catches the
+        # same element combo that currently matches Nanning/Nanchang at 100%.
+        "conditions": {
+            "urbanization": "medium_city",
+            "climate_zone": "subtropical",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(28.5, 32.5, 103.0, 110.0, "Sichuan Basin / Chongqing"),
+        ],
+    },
+    "sichuan_basin_overcast": {
+        # Sichuan Basin is famous for persistent cloud/fog trapped by
+        # surrounding mountains. Subtropical + overcast urban = strong signal.
+        "conditions": {
+            "climate_zone": "subtropical",
+            "sky_quality": "overcast_grey",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(28.5, 32.5, 103.0, 110.0, "Sichuan Basin overcast"),
+        ],
+    },
+    "sichuan_red_brick_city": {
+        # Red brick pavement is highly characteristic of Chengdu/Chongqing.
+        # Lower threshold: accepts medium_city, doesn't require building_height.
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "climate_zone": "subtropical",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(28.5, 32.5, 103.0, 110.0, "Sichuan Basin red-brick zone"),
+        ],
+    },
 
     # ═══════════════════════════════════════════════════════════════════════
     # CITY FINGERPRINTS — building_height + pavement + climate + architecture
@@ -1473,11 +1511,12 @@ COMPOUND_SCENES = {
     # ═══════════════════════════════════════════════════════════════════════
     # FAMOUS HIKING ROUTES — distinctive visual features + tight bboxes
     # ═══════════════════════════════════════════════════════════════════════
+    # Each route has a "full" variant (high precision, strict conditions)
+    # and a "low" variant (high recall, 2-3 conditions) so VLM doesn't
+    # need to output all 6 fields perfectly to trigger a match.
+    # ═══════════════════════════════════════════════════════════════════════
 
     # ── 鳌太线 (Aotai Line): Qinling granite boulder field above treeline ──
-    # Key visual: vast fields of rounded granite boulders (石海) at 3000-3700m,
-    # Qinling fir forest below, knife-edge ridges. Distinct from Huangshan
-    # (isolated pillars) or Huashan (sheer cliffs).
     "aotai_boulder_field": {
         "conditions": {
             "mountain_rock_type": "granite_spheroidal",
@@ -1489,11 +1528,18 @@ COMPOUND_SCENES = {
             BBox(33.8, 34.3, 107.4, 107.9, "鳌太线 Taibai Shan boulder field (elev 3000-3767m)"),
         ],
     },
+    "aotai_boulder_field_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "terrain_type": "sharp_mountains",
+            "climate_zone": "temperate",
+        },
+        "bboxes": [
+            BBox(33.5, 35.5, 106.5, 109.0, "秦岭太白山花岗岩山区 (鳌太线/华山区域)"),
+        ],
+    },
 
     # ── 洛克线 (Rock Line): Yading Three Holy Mountains + alpine lakes ──
-    # Key visual: three distinct pyramid snow peaks (Chenrezig/Jampayang/
-    # Chanadorje 5958-6032m) with turquoise alpine lakes at base, Tibetan
-    # prayer flags and stone houses, golden larch forests in autumn.
     "yading_rock_line": {
         "conditions": {
             "mountain_rock_type": "alpine_lakes",
@@ -1507,12 +1553,18 @@ COMPOUND_SCENES = {
             BBox(28.2, 28.6, 100.2, 100.5, "洛克线 Yading Three Holy Mountains (Sichuan)"),
         ],
     },
+    "yading_rock_line_low": {
+        "conditions": {
+            "mountain_rock_type": "alpine_lakes",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(27.5, 30.0, 99.5, 101.5, "稻城亚丁/洛克线 高山湖区 (川西)"),
+        ],
+    },
 
     # ── 狼塔线 (Langta Line): Central Tianshan glacial valley traverse ──
-    # Key visual: U-shaped glacial valleys, 3500-4000m snow peaks, alpine
-    # meadows with grazing yaks, Kazakh herder yurts, glacial rivers.
-    # Unlike generic Tianshan: specifically the valley corridor between
-    # Harlik and Bogda ranges.
     "langta_tianshan_valley": {
         "conditions": {
             "mountain_rock_type": "snow_peaks_glaciers",
@@ -1523,6 +1575,99 @@ COMPOUND_SCENES = {
         },
         "bboxes": [
             BBox(43.0, 43.8, 85.5, 87.5, "狼塔线 Central Tianshan glacial valley (Xinjiang)"),
+        ],
+    },
+    "langta_valley_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(41.0, 44.5, 80.0, 89.0, "天山冰川峡谷区域 (狼塔线/博格达)"),
+        ],
+    },
+
+    # ── 武功山 (Wugongshan): Subtropical alpine meadow ridgeline ──
+    # Unique in China: golden grassland above treeline at only 1500-1900m
+    # in subtropical E China. No snow, no granite pillars — just endless
+    # rolling grass ridges. Boardwalk trails visible in many photos.
+    "wugongshan_alpine_meadow": {
+        "conditions": {
+            "vegetation_zone": "alpine_meadow",
+            "climate_zone": "subtropical",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(27.3, 27.7, 113.8, 114.3, "武功山 subtropical alpine meadow (江西)"),
+        ],
+    },
+
+    # ── 雨崩 (Yubeng): Meili Snow Mountain pilgrimage trek ──
+    # Tibetan village nestled below 6740m Kawagarbo, prayer flags, rhododendron
+    # forests, dramatic elevation change from 3000m village to 4000m passes.
+    "yubeng_meili_trek": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "language_script": "tibetan",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(28.3, 28.6, 98.6, 99.0, "雨崩/梅里雪山徒步 (Yubeng / Meili Snow Mtn)"),
+        ],
+    },
+    "yubeng_meili_trek_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "language_script": "tibetan",
+        },
+        "bboxes": [
+            BBox(27.0, 30.0, 97.5, 101.5, "藏区雪山区域 (梅里/贡嘎/雅拉)"),
+        ],
+    },
+
+    # ── 扎尕那 (Zhagana): Tibetan limestone spires + villages ──
+    # Dramatic sharp limestone pinnacles rising above Tibetan villages
+    # at 3000-4000m in Gansu/Sichuan border. Unlike Guilin (subtropical,
+    # low-elevation karst towers), Zhagana is alpine karst with Tibetan culture.
+    "zhagana_limestone_tibetan": {
+        "conditions": {
+            "terrain_type": "karst_peaks",
+            "climate_zone": "alpine",
+            "language_script": "tibetan",
+        },
+        "bboxes": [
+            BBox(33.8, 34.5, 102.5, 103.5, "扎尕那 alpine karst + Tibetan (Gansu/Sichuan)"),
+        ],
+    },
+
+    # ── 虎跳峡 (Tiger Leaping Gorge): Deep canyon between Jade Dragon & Haba ──
+    # World's deepest river gorge: 2000m+ cliffs on both sides, Jinsha River
+    # below, Jade Dragon Snow Mtn (5596m) above. Distinct from Three Gorges
+    # (subtropical, lower relief) — this is alpine canyon with snow peaks visible.
+    "tiger_leaping_gorge_trek": {
+        "conditions": {
+            "landform_detail": "river_canyon",
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(27.0, 27.5, 100.0, 100.5, "虎跳峡 Tiger Leaping Gorge (Yunnan)"),
+        ],
+    },
+
+    # ── 喀拉峻 (Kalajun): Tianshan alpine meadow plateau ──
+    # Vast rolling alpine meadows at 2000-3000m with Tianshan snow peaks
+    # on the horizon. Kazakh yurts in summer. Unlike Inner Mongolia grassland
+    # (temperate, lower elevation, no snow peaks).
+    "kalajun_tianshan_meadow": {
+        "conditions": {
+            "vegetation_zone": "alpine_meadow",
+            "climate_zone": "alpine",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(42.5, 43.5, 81.0, 83.0, "喀拉峻 Tianshan alpine meadow (Xinjiang)"),
         ],
     },
 }

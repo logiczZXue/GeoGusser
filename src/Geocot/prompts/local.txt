@@ -1,88 +1,40 @@
-综合之前的分析：
-- 宏观：{macro_output}
-- 区域：{regional_output}
+宏观: {macro_output}
+区域: {regional_output}
 
-请综合所有视觉线索。像一位经验丰富的徒步者一样，根据你**实际看到的东西**进行推理：
+综合所有视觉线索，填入下方 JSON 字段。每个字段必须从给定的英文值中选择。
 
-1. 这是什么具体场景类型？
-   - city_street: 城市街道(有建筑、道路、车辆、行人)
-   - mountain_trail_karst: 山野步道+喀斯特地貌(灰白石灰岩峰)
-   - mountain_trail_granite: 山野步道+花岗岩地貌(圆润浅色巨石)
-   - mountain_trail_sandstone: 山野步道+砂岩地貌(红棕色岩柱/层壁)
-   - mountain_trail_snow: 山野步道+雪峰冰川
-   - rural_village: 乡村/农田
-   - tourist_scenic: 旅游景区(有游客设施、标识)
-   - wilderness_forest: 原始森林
-   - desert: 沙漠/戈壁
-   - grassland: 草原
-   - coastal: 海岸/海边
-   - river_valley: 河流/河谷
+字段定义：
 
-2. 更细致的地貌描述（选最接近的）：
-   - limestone_tower_karst_scattered: 稀疏的灰白石灰岩孤峰(像阳朔)
-   - limestone_tower_karst_dense: 密集的灰白石灰岩峰林(像桂林市区)
-   - granite_spheroidal_rounded: 圆润的花岗岩球形巨石+奇松(像黄山)
-   - granite_spheroidal_sharp: 尖锐的花岗岩山峰+裸岩(像华山)
-   - quartz_sandstone_pillars: 红棕色石英砂岩柱林(像张家界)
-   - red_sandstone_danxia: 红色层状丹霞岩壁(像张掖/武夷山)
-   - snow_peaks_glaciers: 雪峰+冰川
-   - alpine_meadow: 高山草甸
-   - plateau_plain: 高原平地
-   - river_canyon: 深切河谷/峡谷
-   - coastal_shore: 海岸线
-   - urban_flat: 城市平地
-   - null: 以上都不是
+scene_type: 具体场景类型
+  选项: city_street | mountain_trail_karst | mountain_trail_granite | mountain_trail_sandstone | mountain_trail_snow | rural_village | tourist_scenic | wilderness_forest | desert | grassland | coastal | river_valley
 
-3. 岩石颜色（能看到裸露岩石的话）：
-   - grey_white: 灰白色(石灰岩/花岗岩)
-   - red_brown: 红棕色(丹霞/砂岩)
-   - yellow_brown: 黄褐色(土质/风化花岗岩)
-   - dark_grey: 深灰色(玄武岩/片岩)
-   - black: 黑色(玄武岩)
-   - white: 白色(雪/盐)
-   - mixed: 杂色
-   - null: 看不到岩石
+landform_detail: 更细致的地貌
+  选项: limestone_tower_karst_scattered | limestone_tower_karst_dense | granite_spheroidal_rounded | granite_spheroidal_sharp | quartz_sandstone_pillars | red_sandstone_danxia | snow_peaks_glaciers | alpine_meadow | plateau_plain | river_canyon | coastal_shore | urban_flat | null
 
-4. 土壤颜色（能看到裸露土壤的话）：
-   - red: 红色(南方红壤)
-   - yellow: 黄色(黄壤)
-   - brown: 棕色
-   - black: 黑色(东北黑土)
-   - grey: 灰色(荒漠/高原)
-   - white: 白色(盐碱)
-   - loess_yellow: 黄土色(黄土高原)
-   - null: 看不到土壤
+rock_color: 岩石颜色 (如可见)
+  选项: grey_white | red_brown | yellow_brown | dark_grey | black | white | mixed | null
 
-5. 能看到水吗？
-   - false: 看不到
-   - true: 能看到 → 什么类型？
-     - river: 河流
-     - lake: 湖泊
-     - ocean: 海洋
-     - stream: 小溪
-     - waterfall: 瀑布
-     - glacier: 冰川
+soil_color: 土壤颜色 (如可见)
+  选项: red | yellow | brown | black | grey | white | loess_yellow | null
 
-6. 有什么**独特的、一眼就能认出来的**特征？
-   - 独特山形（如金字塔形山峰、四峰并列等）
-   - 标志性建筑（如布达拉宫、东方明珠等）
-   - 独特设施（如百龙天梯、缆车、索道等）
-   - 明显的文字标识
-   - 如果没有任何独特特征，写空数组 []
+water_visible: 能看到水吗?
+  true 或 false
 
-7. 你有多大把握？
-   - high: 多个独有特征一致指向同一位置
-   - medium: 能缩小到省份/区域，但不确定具体地点
-   - low: 图片缺乏独有特征，只能基于一般特征推测
+water_type: 水体类型 (water_visible=false 则填 null)
+  选项: river | lake | ocean | stream | waterfall | glacier | null
 
-写出简洁的推理段落（2-4句），连接你**看到的**和**推断的**。
+distinctive_features: 独特的一眼特征
+  如: 金字塔形山峰、标志性建筑(布达拉宫/东方明珠)、缆车索道、百龙天梯等
+  没有就空数组 []
 
-然后输出坐标。对于不确定的情况，给出一个大致范围的中心点。
+confidence: 把握程度
+  选项: high | medium | low
 
-**输出格式：必须使用上面列出的英文值，禁止使用中文描述。province 用英文（如 Guangdong, Sichuan）。**
+province: 最可能的省份英文名
 
+输出 JSON(只输出JSON，不要其他内容):
 ```json
-{
+{{
   "scene_type": "...",
   "landform_detail": "...",
   "rock_color": "...",
@@ -90,14 +42,7 @@
   "water_visible": true/false,
   "water_type": "...",
   "distinctive_features": [...],
-  "altitude_estimate_m": 数字,
-  "confidence": "high/medium/low",
-  "location_name": "地名",
-  "province": "省份英文名",
-  "latitude": 数字,
-  "longitude": 数字
-}
+  "confidence": "...",
+  "province": "..."
+}}
 ```
-
-最后单独一行输出：
-COORDINATES: 纬度, 经度

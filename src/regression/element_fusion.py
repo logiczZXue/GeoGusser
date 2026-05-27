@@ -1149,6 +1149,197 @@ def fuse_elements(
 
 
 # ═══════════════════════════════════════════════════════════════════════════
+# Climate zone validation via physical sensor constraints
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Köppen-Geiger informed: each climate zone's physically possible bounds.
+# Ranges are deliberately WIDE to accommodate seasonal variation.
+# Only physically IMPOSSIBLE combinations trigger hard veto.
+CLIMATE_PHYSICS = {
+    "tropical": {       # e.g. Hainan, S Taiwan
+        "temp_range": (18, 38),      # year-round warm
+        "humid_range": (55, 100),
+        "elev_max": 2000,            # lapse rate makes high tropical impossible
+    },
+    "subtropical": {    # e.g. Yangtze basin, SE China
+        "temp_range": (8, 38),
+        "humid_range": (50, 100),
+        "elev_max": 3000,
+    },
+    "temperate": {      # e.g. N China Plain, NE China
+        "temp_range": (-15, 35),
+        "humid_range": (25, 85),
+        "elev_max": 3500,
+    },
+    "arid": {           # e.g. Xinjiang, Gansu, Inner Mongolia
+        "temp_range": (-20, 42),
+        "humid_range": (5, 55),      # arid = low humidity is defining trait
+        "elev_max": 5000,
+    },
+    "alpine": {         # e.g. Tibet Plateau, Tianshan
+        "temp_range": (-25, 22),     # even summer is cool at altitude
+        "humid_range": (15, 75),
+        "elev_min": 2000,            # alpine needs high elevation
+    },
+    "boreal": {         # e.g. N Heilongjiang, N Inner Mongolia
+        "temp_range": (-30, 25),
+        "humid_range": (30, 75),
+        "elev_min": 300,
+        "elev_max": 3000,
+    },
+}
+
+# Standard atmospheric lapse rate: temperature drops ~6.5°C per 1000m elevation gain
+LAPSE_RATE = 6.5  # °C / 1000m
+
+
+def _sensor_climate_zone(
+    temperature_c: float,
+    humidity_pct: float,
+    elevation_m: float,
+) -> str:
+    """Infer most likely climate zone from physical sensor readings alone.
+
+    Uses temperature-elevation-humidity constraints. Conservative: only
+    returns a zone when the sensor signal is unambiguous.
+    """
+    # ── Elevation-first rules ──────────────────────────────────────────
+    if elevation_m > 2500:
+        return "alpine"
+    if elevation_m > 1800 and temperature_c < 18:
+        return "alpine"
+
+    # ── Humidity-first rules ───────────────────────────────────────────
+    if humidity_pct < 40 and temperature_c > 15:
+        return "arid"
+
+    # ── Temperature-first rules ────────────────────────────────────────
+    if temperature_c > 25:
+        if humidity_pct > 65:
+            if elevation_m < 2000:
+                return "subtropical"
+            return "temperate"  # high elev + warm → temperate highland
+        if humidity_pct < 45:
+            return "arid"
+        return "subtropical"  # warm + moderate humidity → subtropical by default
+
+    if temperature_c < 5:
+        if elevation_m > 2000:
+            return "alpine"
+        if elevation_m > 500:
+            return "boreal"
+        return "temperate"
+
+    # ── Ambiguous zone ─────────────────────────────────────────────────
+    return ""  # can't determine, don't override VLM
+
+
+def validate_climate_zone(
+    vlm_climate: str,
+    sensor_elevation_m: Optional[float] = None,
+    sensor_temperature_c: Optional[float] = None,
+    sensor_humidity_pct: Optional[float] = None,
+) -> tuple[str, float, str]:
+    """Cross-validate VLM climate_zone against physical sensor readings.
+
+    Two-tier approach:
+      Tier 1 (hard veto): VLM output is physically IMPOSSIBLE → replace.
+      Tier 2 (soft down-weight): VLM output is suspicious → reduce weight.
+
+    Returns:
+      corrected_zone: climate zone to use (may be same as vlm_climate)
+      weight_mul: multiplier for this element's scoring weight (0.0–1.0)
+      reason: explanation string (empty if no issue)
+    """
+    if not vlm_climate or vlm_climate not in CLIMATE_PHYSICS:
+        return vlm_climate, 1.0, ""
+
+    physics = CLIMATE_PHYSICS[vlm_climate]
+    reasons = []
+
+    # ── Tier 1: Hard impossibility checks ──────────────────────────────
+
+    # Check elevation bounds
+    if sensor_elevation_m is not None:
+        elev_min = physics.get("elev_min", 0)
+        elev_max = physics.get("elev_max", 9000)
+        if sensor_elevation_m < elev_min:
+            reasons.append(f"elev {sensor_elevation_m:.0f}m < min {elev_min}m")
+        if sensor_elevation_m > elev_max:
+            reasons.append(f"elev {sensor_elevation_m:.0f}m > max {elev_max}m")
+
+    # Check temperature bounds
+    if sensor_temperature_c is not None:
+        t_lo, t_hi = physics["temp_range"]
+        if sensor_temperature_c < t_lo - 5:  # 5°C slack for weather anomalies
+            reasons.append(f"temp {sensor_temperature_c:.0f}°C << range [{t_lo},{t_hi}]")
+        if sensor_temperature_c > t_hi + 5:
+            reasons.append(f"temp {sensor_temperature_c:.0f}°C >> range [{t_lo},{t_hi}]")
+
+    # Check humidity bounds (arid's defining trait is low humidity)
+    if sensor_humidity_pct is not None:
+        h_lo, h_hi = physics["humid_range"]
+        if sensor_humidity_pct < h_lo - 10:
+            reasons.append(f"humid {sensor_humidity_pct:.0f}% << range [{h_lo},{h_hi}]")
+        if vlm_climate == "arid" and sensor_humidity_pct > h_hi + 10:
+            reasons.append(f"arid but humid={sensor_humidity_pct:.0f}% >> {h_hi}%")
+
+    # Temperature-elevation combined check (lapse rate physics)
+    if sensor_temperature_c is not None and sensor_elevation_m is not None:
+        # At sea level, 29°C. At 4000m, lapse rate says ~29 - 4*6.5 = 3°C.
+        sea_level_equiv = sensor_temperature_c + (sensor_elevation_m / 1000) * LAPSE_RATE
+        if vlm_climate == "alpine" and sea_level_equiv > 35:
+            reasons.append(f"sea-level-equiv {sea_level_equiv:.0f}°C at {sensor_elevation_m:.0f}m impossible for alpine")
+        if vlm_climate == "tropical" and sea_level_equiv < 15:
+            reasons.append(f"sea-level-equiv {sea_level_equiv:.0f}°C too cold for tropical")
+
+    # Check extreme severity: elevation > 2× bound or humidity > 2× for arid
+    extreme = False
+    if sensor_elevation_m is not None:
+        elev_min = physics.get("elev_min", 0)
+        elev_max = physics.get("elev_max", 9000)
+        if sensor_elevation_m > elev_max * 1.5 and elev_max > 0:
+            extreme = True
+        if sensor_elevation_m < elev_min * 0.5 and elev_min > 0:
+            extreme = True
+    if vlm_climate == "arid" and sensor_humidity_pct is not None:
+        h_hi = physics["humid_range"][1]
+        if sensor_humidity_pct > h_hi * 1.4:
+            extreme = True
+
+    if len(reasons) >= 2 or extreme:
+        # Multiple or extreme violations → override with sensor-inferred zone
+        inferred = _sensor_climate_zone(
+            sensor_temperature_c or 20, sensor_humidity_pct or 50,
+            sensor_elevation_m or 500)
+        if inferred and inferred != vlm_climate:
+            reason_str = "; ".join(reasons)
+            tag = "[CLIMATE-VETO]" if len(reasons) >= 2 else "[CLIMATE-VETO-EXTREME]"
+            return inferred, 0.1, f"{tag} {vlm_climate} impossible ({reason_str}) -> {inferred}"
+
+    # ── Tier 2: Soft inconsistency → down-weight ──────────────────────
+
+    if len(reasons) == 1:
+        return vlm_climate, 0.3, f"[CLIMATE-SOFT] {vlm_climate} suspicious ({reasons[0]}) -> weight reduced"
+
+    # Check for "borderline" cases: temperate but sensor suggests subtropical
+    if (vlm_climate == "temperate" and sensor_temperature_c is not None
+            and sensor_humidity_pct is not None):
+        # Combined temp+humid threshold: warm AND humid → subtropical
+        if sensor_temperature_c >= 26 and sensor_humidity_pct > 72:
+            inferred = _sensor_climate_zone(
+                sensor_temperature_c, sensor_humidity_pct, sensor_elevation_m or 500)
+            if inferred in ("subtropical", "tropical"):
+                return inferred, 0.5, f"[CLIMATE-SOFT] temperate unlikely at {sensor_temperature_c:.0f}C + {sensor_humidity_pct:.0f}%RH -> {inferred}"
+
+    if (vlm_climate == "subtropical" and sensor_temperature_c is not None
+            and sensor_temperature_c < 10):
+        return vlm_climate, 0.3, f"[CLIMATE-SOFT] subtropical but {sensor_temperature_c:.0f}°C, possible winter"
+
+    return vlm_climate, 1.0, ""
+
+
+# ═══════════════════════════════════════════════════════════════════════════
 # Sensor-First Fusion (v2.2)
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -1189,6 +1380,24 @@ def fuse_elements_v3(
         ex.append(f"[SENSOR] Temperature: {sensor_temperature_c:.1f}°C")
     if sensor_humidity_pct is not None:
         ex.append(f"[SENSOR] Humidity: {sensor_humidity_pct:.0f}%")
+
+    # ── Step 1.25: Climate zone validation ─────────────────────────────
+    # Cross-check VLM climate_zone against physical sensor readings.
+    # Two-tier: hard veto (physically impossible → replace) or soft down-weight.
+    climate_weight_mul = 1.0
+    if sensor_temperature_c is not None or sensor_elevation_m is not None:
+        vlm_climate = str(elements.get("climate_zone", ""))
+        corrected, climate_weight_mul, climate_reason = validate_climate_zone(
+            vlm_climate,
+            sensor_elevation_m=sensor_elevation_m,
+            sensor_temperature_c=sensor_temperature_c,
+            sensor_humidity_pct=sensor_humidity_pct,
+        )
+        if corrected != vlm_climate and corrected:
+            elements["climate_zone"] = corrected
+            ex.append(climate_reason)
+        elif climate_weight_mul < 1.0:
+            ex.append(climate_reason)
 
     # ── Step 1.5: Elevation pre-pruning (sensor-first spatial narrowing) ────
     # Use DEM reverse lookup to find regions compatible with the elevation
@@ -1263,28 +1472,73 @@ def fuse_elements_v3(
         # into regions with no realistic match.
         # Use 100%-match compound scenes to RESTRICT the search space
         # (all conditions match exactly = strong spatial anchor).
-        # 75-99% scenes only contribute bboxes for scoring, not restriction,
-        # since a single element mismatch means the VLM may have made 1 error.
+        # 75-99% scenes only contribute bboxes for scoring, not restriction.
+        #
+        # SAFETY: Cross-validate perfect scenes with VLM's own likely_provinces.
+        # If VLM says "Shanghai" but perfect-match compound scenes all point to
+        # Zhengzhou/Taiyuan, the VLM made an element error (e.g. temperate vs
+        # subtropical). Don't restrict — let scoring sort it out.
         perfect_scenes = [(n, b, r) for n, b, r in compound_matches if r >= 1.0]
         if perfect_scenes:
+            # ── Cross-validation #1: province consistency ─────────────────
+            province_bboxes = []
+            likely_val = elements.get("likely_provinces", [])
+            if isinstance(likely_val, list) and likely_val:
+                for prov in likely_val:
+                    pb = get_bboxes_for_element("likely_provinces", prov)
+                    if pb:
+                        province_bboxes.extend(pb)
+
             compound_only = []
             for _, bboxes, _ in perfect_scenes:
                 compound_only.extend(bboxes)
             compound_only = _dedup_bboxes(compound_only)
-            # Intersect compound-only space with elevation bboxes for refinement
-            if elevation_bboxes:
-                trimmed = intersect_bbox_lists([compound_only, elevation_bboxes])
-                if trimmed:
-                    compound_only = _dedup_bboxes(trimmed)
-            # Keep only element-derived bboxes that intersect with perfect scenes
-            restricted = list(compound_only)
-            for bboxes in all_element_bboxes:
-                inter = intersect_bbox_lists([bboxes, compound_only])
-                if inter:
-                    restricted.extend(inter)
-            search_bboxes = _dedup_bboxes(restricted)
-            ex.append(f"[COMPOUND-RESTRICT] {len(perfect_scenes)} perfect-match scenes "
-                      f"→ search area {bbox_total_area_km2(search_bboxes):,.0f} km²")
+
+            trust_restriction = True
+            if province_bboxes:
+                overlap = intersect_bbox_lists([compound_only, province_bboxes])
+                if not overlap:
+                    trust_restriction = False
+                    ex.append(f"[COMPOUND-XVAL] perfect scenes contradict "
+                              f"likely_provinces={likely_val} → not restricting")
+
+            # ── Cross-validation #2: spatial dispersion ───────────────────
+            if trust_restriction and len(perfect_scenes) >= 2:
+                centers = []
+                for _, bboxes, _ in perfect_scenes:
+                    for b in bboxes:
+                        centers.append((b.center_lat, b.center_lng))
+                if len(centers) >= 2:
+                    max_dist = 0
+                    for i in range(len(centers)):
+                        for j in range(i + 1, len(centers)):
+                            d = haversine_km(centers[i][0], centers[i][1],
+                                            centers[j][0], centers[j][1])
+                            max_dist = max(max_dist, d)
+                    if max_dist > 500:
+                        trust_restriction = False
+                        ex.append(f"[COMPOUND-DISPERSE] perfect scenes scattered "
+                                  f"{max_dist:.0f}km → not restricting")
+
+            if trust_restriction:
+                # Intersect compound-only space with elevation bboxes
+                if elevation_bboxes:
+                    trimmed = intersect_bbox_lists([compound_only, elevation_bboxes])
+                    if trimmed:
+                        compound_only = _dedup_bboxes(trimmed)
+                # Keep only element-derived bboxes that intersect with perfect scenes
+                restricted = list(compound_only)
+                for bboxes in all_element_bboxes:
+                    inter = intersect_bbox_lists([bboxes, compound_only])
+                    if inter:
+                        restricted.extend(inter)
+                search_bboxes = _dedup_bboxes(restricted)
+                ex.append(f"[COMPOUND-RESTRICT] {len(perfect_scenes)} perfect-match scenes "
+                          f"→ search area {bbox_total_area_km2(search_bboxes):,.0f} km²")
+            else:
+                # Cross-validation failed → contribute bboxes without restricting
+                for _, scene_bboxes, _ in compound_matches:
+                    search_bboxes.extend(scene_bboxes)
         else:
             # No perfect scenes → extend search with all compound bboxes
             for _, scene_bboxes, _ in compound_matches:
@@ -1397,6 +1651,18 @@ def fuse_elements_v3(
     element_infos = precompute_element_infos(elements, search_area)
     element_weights = compute_element_weights(
         elements, sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct)
+
+    # ── Climate weight adjustment ───────────────────────────────────────
+    # Apply climate validation multiplier from Step 1.25.
+    if climate_weight_mul < 1.0:
+        # Find the climate_zone key in element_weights and scale it
+        climate_keys = [(cat, val) for (cat, val) in element_weights
+                        if cat == "climate_zone"]
+        for key in climate_keys:
+            old_w = element_weights[key]
+            element_weights[key] = old_w * climate_weight_mul
+        if climate_keys:
+            ex.append(f"[CLIMATE-WEIGHT] climate_zone weight ×{climate_weight_mul:.2f}")
 
     # ── Elevation veto: when VLM elevation_estimate_m is wildly wrong,
     #     tighten search with sensor-anchored elevation pre-pruning ──────────
