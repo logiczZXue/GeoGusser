@@ -8,7 +8,7 @@ Three-inference ensemble per image:
 
 Output: JSONL with per-field hard + soft labels.
 """
-import sys, json, time, os
+import sys, json, time, os, argparse
 from pathlib import Path
 from collections import Counter
 
@@ -21,10 +21,11 @@ from regression.element_fusion import parse_geocot_json, extract_all_elements
 from regression.dem_lookup import get_dem
 from regression.climate_lookup import get_climate
 
-TEACHER_MODEL = "D:/Geocomp/models/Qwen/Qwen3-VL-8B-Instruct"
-PROMPTS_DIR = str(Path(__file__).resolve().parent.parent / "src" / "Geocot" / "prompts")
-IMAGE_LIST = "D:/Geocomp/output/selected_500_test_results_v5_4b_instruct_70.json"
-OUTPUT = "D:/Geocomp/output/geovlm_teacher_labels.jsonl"
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROMPTS_DIR = str(PROJECT_ROOT / "src" / "Geocot" / "prompts")
+TEACHER_MODEL = os.environ.get("TEACHER_MODEL", str(PROJECT_ROOT / "models" / "Qwen" / "Qwen3-VL-8B-Instruct"))
+IMAGE_LIST = os.environ.get("IMAGE_LIST", str(PROJECT_ROOT / "data" / "mapillary_500" / "image_list.json"))
+OUTPUT = os.environ.get("OUTPUT", str(PROJECT_ROOT / "output" / "geovlm_teacher_labels.jsonl"))
 NUM_SAMPLES = 500  # target: 1000 total, start with 500
 SEEDS = [0, 42, 99]
 
@@ -90,6 +91,10 @@ def ensemble_vote(elements_list: list[dict]) -> dict:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--max-samples", type=int, default=NUM_SAMPLES)
+    args = parser.parse_args()
+
     # Load image list
     with open(IMAGE_LIST, encoding="utf-8") as f:
         base_images = json.load(f)
@@ -104,7 +109,11 @@ def main():
         print(f"Resume: {len(completed)} done")
 
     images = [r for r in base_images if r["image"] not in completed]
-    images = images[:NUM_SAMPLES - len(completed)]
+    limit = args.max_samples - len(completed)
+    if limit <= 0:
+        print("All done!")
+        return
+    images = images[:limit]
     print(f"Images to label: {len(images)}")
 
     # Load DEM + Climate
