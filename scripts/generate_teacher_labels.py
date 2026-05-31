@@ -44,9 +44,9 @@ def run_single(img, pipeline, elev, temp, humid):
 
 def ensemble_vote(elements_list: list[dict]) -> dict:
     """Majority voting across 3 runs per field. Returns hard + soft labels."""
-    fields = ["climate_zone_pred", "terrain_type_pred", "vegetation_zone_pred",
-              "urbanization_pred", "architecture_style_pred", "pavement_type_pred",
-              "language_script_pred"]
+    fields = ["climate_zone", "terrain_type", "vegetation_zone",
+              "urbanization", "architecture_style", "pavement_type",
+              "language_script"]
     hard_labels = {}
     soft_labels = {}
     vote_quality = {}
@@ -139,6 +139,7 @@ def main():
         true_lng = sample.get("true_lng", sample.get("lng", 0))
 
         print(f"\n[{i+1}/{len(images)}] {name}", flush=True)
+        t_start = time.time()
 
         # Sensor simulation
         elev = dem.query(true_lat, true_lng) if dem else 500
@@ -180,7 +181,8 @@ def main():
                     print(f"  Sensor override elevation: {est:.0f}m -> [{elev*0.85:.0f}, {elev*1.15:.0f}]")
 
         quality_counts = Counter(labels["quality"].values())
-        print(f"  Quality: {dict(quality_counts)}")
+        dt = time.time() - t_start
+        print(f"  Quality: {dict(quality_counts)} | {dt:.0f}s", flush=True)
 
         # Write JSONL record
         record = {
