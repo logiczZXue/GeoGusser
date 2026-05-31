@@ -172,3 +172,150 @@ def explain_chain(
         f"total prune={total_prune:.1%} of China"
     )
     return "\n".join(lines)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Compound scene clustering (E+B hybrid: DBSCAN + Soft Fusion)
+# ═══════════════════════════════════════════════════════════════════════════
+
+def cluster_compound_bboxes(compound_matches, eps_km=300, min_samples=2):
+    """DBSCAN cluster compound scene bboxes by geographic proximity.
+
+    Used in DISPERSE mode: instead of hard-excluding scattered bboxes,
+    group them into clusters and assign each cluster a weight for soft
+    scoring. Main clusters (many overlapping bboxes) get strong bonus;
+    isolated bboxes get weak bonus. No area is ever hard-excluded.
+
+    Args:
+        compound_matches: list of (scene_name, bboxes, ratio) tuples
+        eps_km: max distance (km) for two bbox centers to be neighbors
+        min_samples: min bboxes to form a core cluster
+
+    Returns:
+        list of (cluster_weight, bboxes) sorted by weight descending.
+        cluster_weight ∈ (0, 1] = n_bboxes_in_cluster / total_bboxes.
+        Noise points (label=-1) each get weight = 1/total_bboxes.
+    """
+    # Collect all bboxes with centers
+    all_bboxes = []
+    centers = []
+    for _, bboxes, _ in compound_matches:
+        for b in bboxes:
+            all_bboxes.append(b)
+            centers.append((b.center_lat, b.center_lng))
+
+    n = len(all_bboxes)
+    if n < 2:
+        return [(1.0, all_bboxes)]
+
+    # Build neighbor graph via haversine distance
+    neighbors = [[] for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            d = haversine_km(centers[i][0], centers[i][1],
+                           centers[j][0], centers[j][1])
+            if d < eps_km:
+                neighbors[i].append(j)
+
+    # DBSCAN: expand clusters from core points
+    visited = [False] * n
+    labels = [-1] * n  # -1 = noise
+    cluster_id = 0
+    min_neighbors = min_samples - 1  # exclude self
+
+    for i in range(n):
+        if visited[i]:
+            continue
+        visited[i] = True
+        if len(neighbors[i]) < min_neighbors:
+            continue  # noise
+        # Core point → BFS expand cluster
+        queue = [i]
+        labels[i] = cluster_id
+        while queue:
+            q = queue.pop(0)
+            for nb in neighbors[q]:
+                if not visited[nb]:
+                    visited[nb] = True
+                    if len(neighbors[nb]) >= min_neighbors:
+                        queue.append(nb)
+                if labels[nb] == -1:
+                    labels[nb] = cluster_id
+        cluster_id += 1
+
+    # Group bboxes by cluster label
+    clusters = {}
+    for i, label in enumerate(labels):
+        if label not in clusters:
+            clusters[label] = []
+        clusters[label].append(all_bboxes[i])
+
+    total = n
+    result = []
+    for label, bboxes in clusters.items():
+        w = len(bboxes) / total
+        result.append((w, bboxes))
+
+    result.sort(key=lambda x: x[0], reverse=True)
+    return result
+
+
+def subtract_bboxes(keep_bboxes: list[BBox], remove_bboxes: list[BBox]) -> list[BBox]:
+    """Subtract remove_bboxes from keep_bboxes.
+
+    For each keep bbox, split around each overlapping remove bbox into
+    non-overlapping rectangular fragments. Returns the remaining pieces.
+    If all keep bboxes are fully covered, returns an empty list.
+    """
+    result = list(keep_bboxes)
+    for rem in remove_bboxes:
+        new_result = []
+        for b in result:
+            # No overlap → keep as-is
+            if (b.lat_min >= rem.lat_max or b.lat_max <= rem.lat_min or
+                    b.lng_min >= rem.lng_max or b.lng_max <= rem.lng_min):
+                new_result.append(b)
+            else:
+                # Split b into up to 4 fragments around rem
+                # Left: west of rem
+                if b.lng_min < rem.lng_min:
+                    new_result.append(BBox(
+                        b.lat_min, b.lat_max, b.lng_min, rem.lng_min, b.label))
+                # Right: east of rem
+                if b.lng_max > rem.lng_max:
+                    new_result.append(BBox(
+                        b.lat_min, b.lat_max, rem.lng_max, b.lng_max, b.label))
+                # Bottom: south of rem, within rem's lng band
+                lng_lo = max(b.lng_min, rem.lng_min)
+                lng_hi = min(b.lng_max, rem.lng_max)
+                if b.lat_min < rem.lat_min:
+                    new_result.append(BBox(
+                        b.lat_min, rem.lat_min, lng_lo, lng_hi, b.label))
+                # Top: north of rem, within rem's lng band
+                if b.lat_max > rem.lat_max:
+                    new_result.append(BBox(
+                        rem.lat_max, b.lat_max, lng_lo, lng_hi, b.label))
+        result = new_result
+        if not result:
+            break
+    return result
+
+
+def cluster_zones_to_bonus_zones(clusters):
+    """Convert cluster output to bonus-zone format for scoring.
+
+    Each cluster's bboxes are merged into a union bbox (min/max of all).
+    Returns list of (weight, union_bbox) sorted by weight descending.
+    """
+    zones = []
+    for weight, bboxes in clusters:
+        lat_min = min(b.lat_min for b in bboxes)
+        lat_max = max(b.lat_max for b in bboxes)
+        lng_min = min(b.lng_min for b in bboxes)
+        lng_max = max(b.lng_max for b in bboxes)
+        union = BBox(lat_min, lat_max, lng_min, lng_max,
+                     f"cluster_w{weight:.2f}")
+        zones.append((weight, union))
+    return zones

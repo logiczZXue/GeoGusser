@@ -971,11 +971,44 @@ class GeoCoTPipeline:
         if sensor_humidity_pct is not None:
             sensor_parts.append(f"- 湿度：{sensor_humidity_pct:.0f}%")
         if sensor_parts:
+            # Build hard physical constraints from sensor values.
+            # Only exclude what is PHYSICALLY IMPOSSIBLE — no exceptions or
+            # "unless" clauses that create ambiguity.
+            constraints = []
+            if sensor_elevation_m is not None:
+                e = sensor_elevation_m
+                if e < 200:
+                    constraints.append("- 海拔<200m → 排除 alpine气候、plateau地形")
+                if e > 3000:
+                    constraints.append("- 海拔>3000m → 排除 tropical/subtropical气候、urban_flat/farmland_plain地形")
+            if sensor_temperature_c is not None:
+                t = sensor_temperature_c
+                if t < 10:
+                    constraints.append("- 温度<10°C → 排除 tropical 气候")
+                if t > 30:
+                    constraints.append("- 温度>30°C → 排除 alpine/boreal 气候")
+            if sensor_humidity_pct is not None:
+                h = sensor_humidity_pct
+                if h < 30:
+                    constraints.append("- 湿度<30% → 排除 tropical_rainforest、arid气候下除外")
+                if h > 70:
+                    constraints.append("- 湿度>70% → 排除 desert_scrub")
+
+            constraint_text = ""
+            if constraints:
+                constraint_text = (
+                    "\n【硬约束 — 物理排除】\n"
+                    "根据传感器数据，以下场景在物理上极不可能。\n"
+                    "除非图中视觉证据极其压倒性，否则不要选择：\n"
+                    + "\n".join(constraints) + "\n"
+                )
+
             sensor_data = (
                 "【物理基准】设备实测数据，气压海拔已校准（误差±15%），温度湿度精度可靠：\n"
                 + "\n".join(sensor_parts)
+                + constraint_text
                 + "\n"
-                + "你的视觉判断应与传感器数据一致。若图中证据与传感器严重冲突，以视觉为准但需明确标注。\n"
+                + "海拔估计必须以传感器值为锚点（±15%内）。若图中证据与传感器严重冲突，以视觉为准但需明确标注。\n"
             )
         else:
             sensor_data = ""
@@ -1045,8 +1078,6 @@ def create_qwen2vl_model_fn(
             return_tensors="pt",
         ).to(model.device)
 
-        torch.cuda.empty_cache()
-
         with torch.no_grad():
             output_ids = model.generate(
                 **inputs,
@@ -1059,6 +1090,11 @@ def create_qwen2vl_model_fn(
         result = processor.batch_decode(
             output_ids[:, inputs.input_ids.shape[1]:], skip_special_tokens=True
         )[0]
+
+        # Free VRAM: generate() leaves large tensors on GPU
+        del inputs, output_ids
+        torch.cuda.empty_cache()
+
         return result.strip()
 
     return model_fn
@@ -1209,3 +1245,104 @@ def create_hf_model_fn(model, processor, device, temperature=0.7, top_p=0.9, max
         return response.strip()
 
     return model_fn
+
+
+# ---------------------------------------------------------------------------
+# GeoVLM backend — edge-optimized geographic element extraction
+# ---------------------------------------------------------------------------
+
+def load_geovlm(
+    checkpoint_path: str = None,
+    hidden_dim: int = 512,
+    vit_model_name: str = "google/vit-base-patch16-224",
+    device: str = "cpu",
+):
+    """Load GeoVLM model for element extraction.
+
+    Args:
+        checkpoint_path: Path to trained .pt checkpoint (None = random init)
+        hidden_dim: Hidden dimension (must match checkpoint)
+        vit_model_name: HuggingFace ViT model identifier
+        device: 'cpu', 'cuda', or 'npu' (OpenVINO)
+
+    Returns:
+        (model, model_fn) where model_fn(image, sensor_dict) -> elements dict
+    """
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+    from geovlm.model import GeoVLM, GeoVLMConfig
+
+    config = GeoVLMConfig(
+        vit_model_name=vit_model_name,
+        hidden_dim=hidden_dim,
+    )
+    model = GeoVLM(config)
+
+    if checkpoint_path and Path(checkpoint_path).exists():
+        state = torch.load(checkpoint_path, map_location=device)
+        model.load_state_dict(state["model"] if "model" in state else state)
+        print(f"  GeoVLM checkpoint loaded from: {checkpoint_path}")
+    elif checkpoint_path:
+        print(f"  [WARN] GeoVLM checkpoint not found: {checkpoint_path}, using random weights")
+
+    model.to(device)
+    model.eval()
+
+    def model_fn(image, sensor_elevation_m=None, sensor_temperature_c=None,
+                 sensor_humidity_pct=None):
+        """Extract elements from a single image. Returns elements dict."""
+        return model.predict(
+            image,
+            sensor_elevation_m=sensor_elevation_m,
+            sensor_temperature_c=sensor_temperature_c,
+            sensor_humidity_pct=sensor_humidity_pct,
+        )
+
+    return model, model_fn
+
+
+class GeoVLMPipeline:
+    """Thin wrapper making GeoVLM usable as drop-in replacement for GeoCoT's 3-stage VLM.
+
+    Usage in test scripts — replaces the 3-stage VLM pipeline:
+        model, model_fn = load_geovlm(checkpoint_path="geovlm_final.pt")
+        pipe = GeoVLMPipeline(model_fn)
+        elements = pipe.extract(img, elev, temp, humid)
+        # elements dict passes directly to fuse_elements_v3()
+    """
+
+    def __init__(self, model_fn):
+        self._model_fn = model_fn
+
+    def extract(self, image: "Image.Image",
+                sensor_elevation_m: Optional[float] = None,
+                sensor_temperature_c: Optional[float] = None,
+                sensor_humidity_pct: Optional[float] = None) -> dict:
+        """Run element extraction on a single image. Returns elements dict ready for fusion."""
+        return self._model_fn(
+            image,
+            sensor_elevation_m=sensor_elevation_m,
+            sensor_temperature_c=sensor_temperature_c,
+            sensor_humidity_pct=sensor_humidity_pct,
+        )
+
+    def batch_extract(self, images: list, sensor_values: list) -> list[dict]:
+        """Extract elements from a batch of images.
+
+        Args:
+            images: list of PIL Images
+            sensor_values: list of (elev, temp, humid) tuples
+        Returns:
+            list of elements dicts
+        """
+        results = []
+        for img, (elev, temp, humid) in zip(images, sensor_values):
+            results.append(self._model_fn(
+                img,
+                sensor_elevation_m=elev,
+                sensor_temperature_c=temp,
+                sensor_humidity_pct=humid,
+            ))
+        return results

@@ -184,6 +184,10 @@ def score_location(
     geocot_prediction: Optional[tuple[float, float]] = None,
     geo_weight: float = 0.0,
     element_weights: Optional[dict] = None,
+    province_bboxes: Optional[list[BBox]] = None,
+    province_bonus_weight: float = 0.0,
+    cluster_bonus_zones: Optional[list[tuple[float, "BBox"]]] = None,
+    compound_dispersed: bool = False,
 ) -> float:
     """Weighted log-likelihood score for a single (lat, lng) cell.
 
@@ -219,6 +223,22 @@ def score_location(
     else:
         w_elev = 0.50
         w_compound = 0.15
+
+    # Elevation-adaptive gating (V5): low elevation can't prune China.
+    # At 63m, ±35% covers 9.6M km² (102% of China) — DEM matching is pure
+    # noise. At 3500m, the same tolerance covers a thin altitude band that
+    # strongly constrains location.
+    # EXCEPTION: in DISPERSE mode VLM spatial signals are already scattered
+    # and conflicting — elevation sensor is one of the few reliable anchors,
+    # so we keep full weight regardless of altitude.
+    if sensor_elevation_m is not None and not compound_dispersed:
+        if sensor_elevation_m < 200:
+            w_elev *= 0.3   # true lowland: DEM noise (~102% of China at 60m)
+        elif sensor_elevation_m < 500:
+            w_elev *= 0.6   # mid-elevation: partial signal (excludes coasts & plateaus)
+        elif sensor_elevation_m < 2000:
+            w_elev *= 0.6
+        # >2000m: keep full weight (strong constraint)
 
     score = 0.0
 
@@ -283,6 +303,31 @@ def score_location(
         sigma = 300.0
         score += geo_weight * math.exp(-0.5 * (dist / sigma) ** 2)
 
+    # ── Province-level prior (soft bonus, only when compound is ambiguous) ─
+    if province_bboxes and province_bonus_weight > 0.001:
+        for b in province_bboxes:
+            if b.lat_min <= lat <= b.lat_max and b.lng_min <= lng <= b.lng_max:
+                # Gaussian proximity from bbox center, sigma = half-width
+                dx = (lng - b.center_lng) * 111.0
+                dy = (lat - b.center_lat) * 111.0
+                dist = math.sqrt(dx * dx + dy * dy)
+                half_w = max((b.lat_max - b.lat_min) * 111.0 / 2, 100.0)
+                proximity = math.exp(-0.5 * (dist / half_w) ** 2)
+                score += province_bonus_weight * proximity
+                break
+
+    # ── Cluster bonus (E+B hybrid: DBSCAN cluster soft scoring) ──────────
+    # Only active in DISPERSE mode. Dense clusters (many bboxes) give strong
+    # bonus; isolated bboxes give weak bonus. No area is hard-excluded.
+    if cluster_bonus_zones:
+        for cw, zone in cluster_bonus_zones:
+            if zone.lat_min <= lat <= zone.lat_max and zone.lng_min <= lng <= zone.lng_max:
+                # Bonus ∝ cluster_weight × compound_anchor_ratio
+                # Main clusters: cw ≥ 0.5 → bonus up to 0.15
+                # Minor clusters: cw ≤ 0.3 → bonus ~0.03-0.06
+                score += w_compound * cw
+                break
+
     return score
 
 
@@ -338,6 +383,10 @@ def grid_search(
     geocot_prediction: Optional[tuple[float, float]] = None,
     geo_weight: float = 0.0,
     element_weights: Optional[dict] = None,
+    province_bboxes: Optional[list[BBox]] = None,
+    province_bonus_weight: float = 0.0,
+    cluster_bonus_zones: Optional[list[tuple[float, "BBox"]]] = None,
+    compound_dispersed: bool = False,
 ) -> tuple[float, float, float, list[tuple[float, float, float]]]:
     """Grid-search within constraint area for best-scoring location.
 
@@ -372,6 +421,10 @@ def grid_search(
                     sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
                     dem, climate, geocot_prediction, geo_weight,
                     element_weights=element_weights,
+                    province_bboxes=province_bboxes,
+                    province_bonus_weight=province_bonus_weight,
+                    cluster_bonus_zones=cluster_bonus_zones,
+                    compound_dispersed=compound_dispersed,
                 )
                 all_points.append((lat, lng, s))
                 lng += step_deg
@@ -399,6 +452,10 @@ def grid_search(
                     sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
                     dem, climate, geocot_prediction, geo_weight,
                     element_weights=element_weights,
+                    province_bboxes=province_bboxes,
+                    province_bonus_weight=province_bonus_weight,
+                    cluster_bonus_zones=cluster_bonus_zones,
+                    compound_dispersed=compound_dispersed,
                 )
                 refined.append((rlat, rlng, s))
 

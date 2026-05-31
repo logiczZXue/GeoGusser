@@ -1,0 +1,452 @@
+[
+  {
+    "name": "133452462423810.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\133452462423810.jpg",
+    "lat": 30.555991829552,
+    "lng": 104.14693848238,
+    "v4_error": 922.2015877500304,
+    "province_zone": "central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "1243979060453989.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary_trails\\1243979060453989.jpg",
+    "lat": 30.125955910095,
+    "lng": 118.1646655732,
+    "v4_error": 2.3041637746258843,
+    "province_zone": "central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "667006629392251.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary_trails\\667006629392251.jpg",
+    "lat": 30.1267808,
+    "lng": 118.1640125,
+    "v4_error": 2.4063819750291144,
+    "province_zone": "central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "257929419411328.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\257929419411328.jpg",
+    "lat": 39.980545964891,
+    "lng": 116.21503983633,
+    "v4_error": 780.2093556366009,
+    "province_zone": "E_coast",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "886076708613973.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\886076708613973.jpg",
+    "lat": 39.995879683835,
+    "lng": 116.22491524291,
+    "v4_error": 182.2863492878679,
+    "province_zone": "E_coast",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "487639195796001.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\487639195796001.jpg",
+    "lat": 40.034675262786,
+    "lng": 116.58751992083,
+    "v4_error": 213.09194977382694,
+    "province_zone": "E_coast",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "474414787011957.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\474414787011957.jpg",
+    "lat": 25.055639,
+    "lng": 110.445038,
+    "v4_error": 86.68358947229078,
+    "province_zone": "S_central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "3024704274456801.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\3024704274456801.jpg",
+    "lat": 25.06968202356,
+    "lng": 102.63942067587,
+    "v4_error": 80.78983638278821,
+    "province_zone": "S_central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "393424889595518.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary_trails\\393424889595518.jpg",
+    "lat": 27.203155937419,
+    "lng": 100.04327070015,
+    "v4_error": 1741.659003326072,
+    "province_zone": "S_central",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "7041647535927061.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\7041647535927061.jpg",
+    "lat": 22.603631105797,
+    "lng": 114.01162527745,
+    "v4_error": 83.3158653881277,
+    "province_zone": "S",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "757640229618288.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\757640229618288.jpg",
+    "lat": 22.678047445116,
+    "lng": 114.20655028162,
+    "v4_error": 104.42171229850435,
+    "province_zone": "S",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "391781459995781.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\391781459995781.jpg",
+    "lat": 22.60298525122,
+    "lng": 114.00950471033,
+    "v4_error": 1003.7920704949888,
+    "province_zone": "S",
+    "group": "wilderness_rural"
+  },
+  {
+    "name": "158233233892513.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\158233233892513.jpg",
+    "lat": 40.098992479992,
+    "lng": 116.36421618137,
+    "v4_error": 192.5800244345885,
+    "province_zone": "E_coast",
+    "group": "small_town_village"
+  },
+  {
+    "name": "467715771163335.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\467715771163335.jpg",
+    "lat": 39.824344111705,
+    "lng": 116.50277803761,
+    "v4_error": 206.48614842686055,
+    "province_zone": "E_coast",
+    "group": "small_town_village"
+  },
+  {
+    "name": "256868516136864.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\256868516136864.jpg",
+    "lat": 39.866968939085,
+    "lng": 116.5735079005,
+    "v4_error": 212.3588291324459,
+    "province_zone": "E_coast",
+    "group": "small_town_village"
+  },
+  {
+    "name": "298483685110304.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\298483685110304.jpg",
+    "lat": 39.859806711502,
+    "lng": 116.48079932632,
+    "v4_error": 204.46870298632763,
+    "province_zone": "E_coast",
+    "group": "small_town_village"
+  },
+  {
+    "name": "463694508735275.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\463694508735275.jpg",
+    "lat": 30.606477601665,
+    "lng": 103.96574901945,
+    "v4_error": 1324.1653125635448,
+    "province_zone": "central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "1322675734838267.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1322675734838267.jpg",
+    "lat": 31.313664291181,
+    "lng": 121.54125011899,
+    "v4_error": 1221.2675106792137,
+    "province_zone": "central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "955890791680808.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\955890791680808.jpg",
+    "lat": 30.756959538324,
+    "lng": 104.06016184525,
+    "v4_error": 6.539123726129889,
+    "province_zone": "central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "240095721239881.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\240095721239881.jpg",
+    "lat": 30.298415814835,
+    "lng": 120.04262247808,
+    "v4_error": 253.40058517993765,
+    "province_zone": "central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "572239151250625.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary_trails\\572239151250625.jpg",
+    "lat": 27.197154654382,
+    "lng": 100.04602327708,
+    "v4_error": 1741.4569076912542,
+    "province_zone": "S_central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "183286734189918.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary_trails\\183286734189918.jpg",
+    "lat": 27.186199148995,
+    "lng": 100.0511484181,
+    "v4_error": 31.92046997964193,
+    "province_zone": "S_central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "776385861594388.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\776385861594388.jpg",
+    "lat": 29.600365510681,
+    "lng": 106.60632664006,
+    "v4_error": 249.90996872520307,
+    "province_zone": "S_central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "1142192439646431.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1142192439646431.jpg",
+    "lat": 25.06572323255,
+    "lng": 102.64056077089,
+    "v4_error": 510.28339781859916,
+    "province_zone": "S_central",
+    "group": "small_town_village"
+  },
+  {
+    "name": "1632137140509968.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1632137140509968.jpg",
+    "lat": 40.097853866795,
+    "lng": 116.25241068806,
+    "v4_error": 369.1658951854385,
+    "province_zone": "E_coast",
+    "group": "medium_city"
+  },
+  {
+    "name": "176717487700645.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\176717487700645.jpg",
+    "lat": 40.002636777767,
+    "lng": 116.260725341,
+    "v4_error": 654.3031658647737,
+    "province_zone": "E_coast",
+    "group": "medium_city"
+  },
+  {
+    "name": "956737795143423.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\956737795143423.jpg",
+    "lat": 39.830452734679,
+    "lng": 116.41578260397,
+    "v4_error": 642.2113048249204,
+    "province_zone": "E_coast",
+    "group": "medium_city"
+  },
+  {
+    "name": "1816073538572666.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1816073538572666.jpg",
+    "lat": 39.888910128622,
+    "lng": 116.34396015425,
+    "v4_error": 643.0734080450048,
+    "province_zone": "E_coast",
+    "group": "medium_city"
+  },
+  {
+    "name": "160384856029371.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\160384856029371.jpg",
+    "lat": 32.060900527527,
+    "lng": 118.84852825601,
+    "v4_error": 50.51526736680627,
+    "province_zone": "central",
+    "group": "medium_city"
+  },
+  {
+    "name": "2493274454203279.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\2493274454203279.jpg",
+    "lat": 32.026664836971,
+    "lng": 118.77711989906,
+    "v4_error": 57.765075294433,
+    "province_zone": "central",
+    "group": "medium_city"
+  },
+  {
+    "name": "331026378419881.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\331026378419881.jpg",
+    "lat": 31.218398208349,
+    "lng": 121.56826263539,
+    "v4_error": 172.06989662340558,
+    "province_zone": "central",
+    "group": "medium_city"
+  },
+  {
+    "name": "839872189936160.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\839872189936160.jpg",
+    "lat": 31.19736541019,
+    "lng": 121.41519726494,
+    "v4_error": 252.9196025218075,
+    "province_zone": "central",
+    "group": "medium_city"
+  },
+  {
+    "name": "1804989349992767.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1804989349992767.jpg",
+    "lat": 22.572007610572,
+    "lng": 114.09241963502,
+    "v4_error": 1199.333603992247,
+    "province_zone": "S",
+    "group": "medium_city"
+  },
+  {
+    "name": "1606501896754358.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1606501896754358.jpg",
+    "lat": 22.69619386375,
+    "lng": 114.23983360906,
+    "v4_error": 72.20443251295897,
+    "province_zone": "S",
+    "group": "medium_city"
+  },
+  {
+    "name": "498795701243154.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\498795701243154.jpg",
+    "lat": 23.15393508814,
+    "lng": 113.26798573821,
+    "v4_error": 1185.7917141867456,
+    "province_zone": "S",
+    "group": "medium_city"
+  },
+  {
+    "name": "289576953817048.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\289576953817048.jpg",
+    "lat": 22.641236326693,
+    "lng": 114.15030613095,
+    "v4_error": 1189.7536470024634,
+    "province_zone": "S",
+    "group": "medium_city"
+  },
+  {
+    "name": "25393031560396423.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\25393031560396423.jpg",
+    "lat": 29.550547872165,
+    "lng": 106.59557494337,
+    "v4_error": 249.93799389208309,
+    "province_zone": "S_central",
+    "group": "medium_city"
+  },
+  {
+    "name": "2879813588926951.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\2879813588926951.jpg",
+    "lat": 39.895542755909,
+    "lng": 116.54083344887,
+    "v4_error": 38.887502152068215,
+    "province_zone": "E_coast",
+    "group": "metropolis"
+  },
+  {
+    "name": "301164051494824.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\301164051494824.jpg",
+    "lat": 39.895756131485,
+    "lng": 116.21908885325,
+    "v4_error": 11.439511947842853,
+    "province_zone": "E_coast",
+    "group": "metropolis"
+  },
+  {
+    "name": "157666966291673.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\157666966291673.jpg",
+    "lat": 39.860105921115,
+    "lng": 116.54245381745,
+    "v4_error": 5.6304777127293635,
+    "province_zone": "E_coast",
+    "group": "metropolis"
+  },
+  {
+    "name": "294120739009877.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\294120739009877.jpg",
+    "lat": 39.831975393783,
+    "lng": 116.41846281502,
+    "v4_error": 28.54021074720547,
+    "province_zone": "E_coast",
+    "group": "metropolis"
+  },
+  {
+    "name": "769471713935451.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\769471713935451.jpg",
+    "lat": 25.031373227702,
+    "lng": 102.72955729037,
+    "v4_error": 1183.5000324778662,
+    "province_zone": "S_central",
+    "group": "metropolis"
+  },
+  {
+    "name": "741449472369954.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\741449472369954.jpg",
+    "lat": 29.632745838759,
+    "lng": 106.48860734707,
+    "v4_error": 1114.9468071532963,
+    "province_zone": "S_central",
+    "group": "metropolis"
+  },
+  {
+    "name": "235633128588286.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\235633128588286.jpg",
+    "lat": 25.049302462781,
+    "lng": 102.66020054432,
+    "v4_error": 1195.798200990581,
+    "province_zone": "S_central",
+    "group": "metropolis"
+  },
+  {
+    "name": "1444490357210204.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1444490357210204.jpg",
+    "lat": 29.526664939849,
+    "lng": 106.49013943156,
+    "v4_error": 19.891464405378823,
+    "province_zone": "S_central",
+    "group": "metropolis"
+  },
+  {
+    "name": "1133167867161416.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\1133167867161416.jpg",
+    "lat": 31.36042404456,
+    "lng": 121.49453774292,
+    "v4_error": 11.564509920674393,
+    "province_zone": "central",
+    "group": "metropolis"
+  },
+  {
+    "name": "901009941570414.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\901009941570414.jpg",
+    "lat": 34.221582394333,
+    "lng": 108.87011500373,
+    "v4_error": 13.085130828812698,
+    "province_zone": "central",
+    "group": "metropolis"
+  },
+  {
+    "name": "5469903626431157.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\5469903626431157.jpg",
+    "lat": 30.607040041224,
+    "lng": 104.06704958697,
+    "v4_error": 280.8370236357528,
+    "province_zone": "central",
+    "group": "metropolis"
+  },
+  {
+    "name": "4253776657986019.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\4253776657986019.jpg",
+    "lat": 31.395177114123,
+    "lng": 121.47678426997,
+    "v4_error": 1247.9209614827519,
+    "province_zone": "central",
+    "group": "metropolis"
+  },
+  {
+    "name": "722973253102332.jpg",
+    "path": "D:\\Geocomp\\data\\mapillary\\722973253102332.jpg",
+    "lat": 22.570073964498,
+    "lng": 113.94343459119,
+    "v4_error": 6.224988775798775,
+    "province_zone": "S",
+    "group": "metropolis"
+  }
+]

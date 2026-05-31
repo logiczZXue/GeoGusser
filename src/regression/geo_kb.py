@@ -676,6 +676,34 @@ COMPOUND_SCENES = {
         ],
     },
 
+    # ── Inner Mongolia grassland mirror competition ───────────────────────
+    # inner_mongolia_grassland covers the entire 41-51N steppe belt. These
+    # mirrors create healthy competition for different steppe sub-regions:
+    # Hulunbuir (meadow steppe, lush, many rivers) vs Xilingol (typical
+    # steppe, drier, classic rolling grassland). All share temperate +
+    # grassland + grassland_steppe. When VLM can't distinguish → DISPERSE.
+    "hulunbuir_meadow_steppe": {
+        "conditions": {
+            "vegetation_zone": "grassland",
+            "terrain_type": "grassland_steppe",
+            "climate_zone": "temperate",
+            "language_script": "mongolian",
+        },
+        "bboxes": [
+            BBox(47.5, 51.0, 117.0, 126.0, "Hulunbuir meadow steppe (E Inner Mongolia)"),
+        ],
+    },
+    "xilingol_temperate_steppe": {
+        "conditions": {
+            "vegetation_zone": "grassland",
+            "terrain_type": "grassland_steppe",
+            "climate_zone": "temperate",
+        },
+        "bboxes": [
+            BBox(42.0, 46.5, 110.0, 120.0, "Xilingol typical steppe (C Inner Mongolia)"),
+        ],
+    },
+
     # ── Tropical landscapes ────────────────────────────────────────────
     "xishuangbanna_tropical": {
         "conditions": {
@@ -831,6 +859,32 @@ COMPOUND_SCENES = {
         ],
     },
 
+    # ── Junggar / Turpan deserts ─────────────────────────────────────────
+    # Gurbantunggut (古尔班通古特) in Junggar Basin — China's 2nd largest
+    # desert. Fixed/semi-fixed dunes, distinct from Taklamakan's mobile dunes.
+    # Turpan Depression (吐鲁番盆地) — lowest point in China (-154m), flaming
+    # mountain (火焰山), unique arid basin with grape valleys.
+    "junggar_desert": {
+        "conditions": {
+            "vegetation_zone": "desert_scrub",
+            "climate_zone": "arid",
+            "terrain_type": "desert_dunes",
+        },
+        "bboxes": [
+            BBox(44.0, 47.5, 85.0, 91.0, "Junggar Basin / Gurbantunggut Desert"),
+        ],
+    },
+    "turpan_depression": {
+        "conditions": {
+            "vegetation_zone": "sparse",
+            "climate_zone": "arid",
+            "terrain_type": "desert_dunes",
+        },
+        "bboxes": [
+            BBox(42.0, 43.5, 88.5, 91.0, "Turpan Depression / Flaming Mountain"),
+        ],
+    },
+
     # ── NE China forest ───────────────────────────────────────────────
     "ne_china_conifer_forest": {
         "conditions": {
@@ -939,6 +993,41 @@ COMPOUND_SCENES = {
             BBox(28.5, 30.5, 90.5, 92.0, "Lhasa / Shigatse area"),
             BBox(31.0, 33.0, 96.0, 97.5, "Yushu / Nangqen (S Qinghai)"),
             BBox(27.0, 29.0, 98.5, 100.0, "Shangri-La / Diqing (NW Yunnan)"),
+        ],
+    },
+
+    # ── Architecture-anchored: tulou, stilt house, soviet ─────────────────
+    # VLM can identify these architecture styles (regional.txt architecture_style
+    # field) but GeoKB lacked compound scenes to leverage them.
+    "fujian_tulou_earthen": {
+        "conditions": {
+            "architecture_style": "tulou",
+            "climate_zone": "subtropical",
+            "urbanization": "rural",
+        },
+        "bboxes": [
+            BBox(24.0, 25.5, 116.5, 117.5, "Fujian tulou (Nanjing/Yongding)"),
+        ],
+    },
+    "sw_china_stilt_house": {
+        "conditions": {
+            "architecture_style": "stilt_house",
+            "climate_zone": "subtropical",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(25.5, 29.0, 106.0, 111.5, "SW stilt house: Guizhou/W Hunan/N Guangxi"),
+        ],
+    },
+    "ne_china_soviet_industrial": {
+        "conditions": {
+            "architecture_style": "soviet_industrial",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+        },
+        "bboxes": [
+            BBox(41.5, 46.0, 122.0, 127.0, "NE soviet-industrial: Changchun/Harbin/Shenyang"),
+            BBox(43.0, 44.5, 87.0, 88.5, "Urumqi soviet-industrial"),
         ],
     },
 
@@ -1065,12 +1154,13 @@ COMPOUND_SCENES = {
         ],
     },
 
-    # ── North China Plain ↔ Central Plains (Zhengzhou/Taiyuan) ──────────
-    # zhengzhou_temperate_mid and taiyuan_temperate_mid share identical
-    # conditions (mid_rise+temperate+medium_city+urban_flat) with Beijing/
-    # Tianjin/Shijiazhuang. These mirrors prevent Beijing photos from being
-    # locked to Zhengzhou or Taiyuan by COMPOUND-RESTRICT.
-    "north_china_plain_temperate_city": {
+    # ── North China Plain cities — split by geography ──────────────────
+    # Formerly one huge scene (600km span) caused DISPERSE where Beijing
+    # and Zhengzhou clusters were indistinguishable. Now split into 3
+    # sub-regions (~200km each) so DBSCAN forms distinct clusters.
+    # Each also has a tree_species variant for city-level discrimination
+    # when VLM reliably extracts tree species.
+    "beijing_heb_temperate_medium": {
         "conditions": {
             "building_height": "mid_rise",
             "climate_zone": "temperate",
@@ -1078,7 +1168,40 @@ COMPOUND_SCENES = {
             "terrain_type": "urban_flat",
         },
         "bboxes": [
-            BBox(37.5, 42.0, 114.0, 120.0, "Beijing/Tianjin/Hebei/Shandong"),
+            BBox(37.5, 42.0, 114.0, 118.0, "Beijing/Tianjin/Hebei"),
+        ],
+    },
+    "beijing_plane_gingko_temperate": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+            "tree_species": "plane_tree",
+        },
+        "bboxes": [
+            BBox(39.7, 40.2, 116.1, 116.7, "Beijing plane-tree temperate"),
+        ],
+    },
+    "shandong_temperate_medium": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(35.0, 38.0, 116.0, 122.5, "Shandong temperate cities"),
+        ],
+    },
+    "liaoning_temperate_medium": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
             BBox(41.0, 43.0, 122.0, 126.0, "Liaoning/Jilin temperate cities"),
         ],
     },
@@ -1091,14 +1214,44 @@ COMPOUND_SCENES = {
             "vegetation_zone": "broadleaf_deciduous",
         },
         "bboxes": [
-            BBox(37.5, 42.0, 114.0, 120.0, "Beijing/Tianjin/Hebei/Shandong deciduous"),
-            BBox(41.0, 43.0, 122.0, 126.0, "Liaoning/Jilin temperate deciduous"),
+            BBox(37.5, 42.0, 114.0, 118.0, "Beijing/Tianjin/Hebei deciduous"),
+            BBox(35.0, 38.0, 116.0, 122.5, "Shandong deciduous"),
+            BBox(41.0, 43.0, 122.0, 126.0, "Liaoning/Jilin deciduous"),
         ],
     },
 
     # ═══════════════════════════════════════════════════════════════════════
     # CITY FINGERPRINTS — building_height + pavement + climate + architecture
     # ═══════════════════════════════════════════════════════════════════════
+    # ── North China Plain mirror competition — Shanxi & Guanzhong ──────────
+    # beijing_heb / shandong / liaoning all share identical conditions
+    # (mid_rise + temperate + medium_city + urban_flat). Without mirrors,
+    # Taiyuan/Xi'an photos also match only those 3 eastern scenes → bias east.
+    # These mirrors create healthy competition: all 5 scenes match together
+    # → DISPERSE → multi-hypothesis resolves via sensor/elevation/other elements.
+    "shanxi_temperate_midrise": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(37.0, 40.5, 112.0, 114.5, "Shanxi basin: Taiyuan/Datong/Yangquan"),
+        ],
+    },
+    "guanzhong_temperate_midrise": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "medium_city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(34.0, 35.5, 107.5, 110.5, "Guanzhong plain: Xi'an/Xianyang/Baoji"),
+        ],
+    },
+
     # Each fingerprint uses the most reliable VLM elements to distinguish
     # Chinese cities that would otherwise share identical broad features.
     # ═══════════════════════════════════════════════════════════════════════
@@ -1283,9 +1436,10 @@ COMPOUND_SCENES = {
             "climate_zone": "temperate",
             "urbanization": "medium_city",
             "terrain_type": "urban_flat",
+            "tree_species": "poplar",
         },
         "bboxes": [
-            BBox(34.5, 34.9, 113.4, 113.9, "Zhengzhou temperate mid-rise"),
+            BBox(34.5, 34.9, 113.4, 113.9, "Zhengzhou temperate mid-rise + poplar"),
         ],
     },
     "hefei_subtropical_mid": {
@@ -1739,6 +1893,2052 @@ COMPOUND_SCENES = {
             BBox(42.5, 43.5, 81.0, 83.0, "喀拉峻 Tianshan alpine meadow (Xinjiang)"),
         ],
     },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # P0-1: Tropical <25N — 8 scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── Hainan inland monsoon forest ────────────────────────────────────────
+    "hainan_inland_monsoon_forest": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "vegetation_zone": "tropical_monsoon_forest",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(18.5, 19.5, 109.0, 110.5, "Hainan inland monsoon forest (五指山区域)"),
+        ],
+    },
+
+    # ── Hainan coastal urban ────────────────────────────────────────────────
+    "hainan_coastal_urban": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "tree_species": "coconut",
+            "urbanization": "city",
+        },
+        "bboxes": [
+            BBox(18.2, 20.0, 109.0, 111.0, "Hainan coastal urban (海口/三亚/琼海)"),
+        ],
+    },
+
+    # ── Xishuangbanna rubber plantation ─────────────────────────────────────
+    "xishuangbanna_rubber_plantation": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "vegetation_zone": "tropical_monsoon_forest",
+            "terrain_type": "rolling_hills",
+            "language_script": "tibetan",
+        },
+        "bboxes": [
+            BBox(21.5, 22.5, 100.0, 101.5, "Xishuangbanna rubber plantation + tropical hills"),
+        ],
+    },
+
+    # ── Dehong tropical border ──────────────────────────────────────────────
+    "dehong_tropical_border": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "vegetation_zone": "tropical_monsoon_forest",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(23.8, 25.0, 97.5, 99.0, "Dehong tropical border (德宏/缅甸边界)"),
+        ],
+    },
+
+    # ── Guangxi tropical karst ──────────────────────────────────────────────
+    "guangxi_tropical_karst": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "terrain_type": "karst_peaks",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(21.5, 23.0, 106.5, 108.5, "Guangxi tropical karst (桂西南)"),
+        ],
+    },
+
+    # ── Pearl River Delta clear-sky subtropical ───────────────────────────
+    # PRD skies tend toward clear_blue (coastal maritime air). Sichuan Basin
+    # is famous for persistent overcast. When VLM sees clear skies with
+    # subtropical urban elements, PRD is much more likely than Sichuan.
+    "prd_clear_sky_subtropical": {
+        "conditions": {
+            "sky_quality": "clear_blue",
+            "climate_zone": "subtropical",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(22.0, 24.0, 113.0, 115.0, "PRD clear-sky subtropical (Shenzhen/Guangzhou)"),
+        ],
+    },
+    # ── Pearl River Delta scooter subtropical ─────────────────────────────
+    # Electric scooters are ubiquitous in PRD cities (shared e-scooter fleets,
+    # narrow streets favor 2-wheelers). Sichuan cities have far fewer.
+    "prd_scooter_subtropical": {
+        "conditions": {
+            "infrastructure_tags": "electric_scooters",
+            "climate_zone": "subtropical",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(22.0, 23.8, 113.0, 114.5, "PRD scooter subtropical"),
+        ],
+    },
+
+    # ── Pearl River Delta tropical fringe ───────────────────────────────────
+    "pearl_river_delta_tropical_fringe": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "urbanization": "metropolis",
+            "vegetation_zone": "broadleaf_evergreen",
+            "tree_species": "banyan",
+            "water_visible": "yes",
+        },
+        "bboxes": [
+            BBox(22.0, 23.5, 113.0, 114.5, "Pearl River Delta tropical fringe (珠三角)"),
+        ],
+    },
+
+    # ── Leizhou Peninsula tropical ──────────────────────────────────────────
+    "leizhou_peninsula_tropical": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "tropical_monsoon_forest",
+        },
+        "bboxes": [
+            BBox(20.2, 21.5, 109.5, 110.5, "Leizhou Peninsula tropical (雷州半岛)"),
+        ],
+    },
+
+    # ── S China tropical hills generic (competition mirror) ─────────────────
+    "s_china_tropical_hills_generic": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "vegetation_zone": "broadleaf_evergreen",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(18.0, 24.0, 97.0, 111.0, "S China tropical hills generic"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # P0-2: Mountain >1000m — 14 scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── Qinling mid-elevation mixed ─────────────────────────────────────────
+    "qinling_mid_elevation_mixed": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+            "mountain_rock_type": "granite_spheroidal",
+        },
+        "bboxes": [
+            BBox(33.0, 34.5, 106.0, 110.0, "Qinling mid-elevation mixed forest (1500-2800m)"),
+        ],
+    },
+
+    # ── Qinling treeline conifer ────────────────────────────────────────────
+    "qinling_treeline_conifer": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "landform_detail": "above_treeline",
+        },
+        "bboxes": [
+            BBox(33.5, 34.3, 107.0, 108.5, "Qinling treeline+ conifer (2500-3767m)"),
+        ],
+    },
+
+    # ── Dabieshan mid-mountain ──────────────────────────────────────────────
+    "dabieshan_mid_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+            "mountain_rock_type": "granite_dome",
+        },
+        "bboxes": [
+            BBox(30.5, 32.0, 115.0, 117.5, "Dabieshan mid-mountain (500-1777m)"),
+        ],
+    },
+
+    # ── Wuyishan tea terraces ──────────────────────────────────────────────
+    "wuyishan_tea_terraces": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+            "mountain_rock_type": "red_sandstone_danxia",
+        },
+        "bboxes": [
+            BBox(27.5, 28.5, 117.5, 118.5, "Wuyishan tea terraces (武夷山岩茶)"),
+        ],
+    },
+
+    # ── Wuyishan low (low-threshold variant) ───────────────────────────────
+    "wuyishan_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(27.0, 29.0, 117.0, 119.0, "Wuyishan mountain area (broad)"),
+        ],
+    },
+
+    # ── Nanling subtropical mountain ────────────────────────────────────────
+    "nanling_subtropical_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+            "soil_color": "red",
+        },
+        "bboxes": [
+            BBox(24.5, 26.5, 111.0, 114.5, "Nanling subtropical mountain (南岭)"),
+        ],
+    },
+
+    # ── Luoxiao Jinggangshan ────────────────────────────────────────────────
+    "luoxiao_jinggangshan": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+            "soil_color": "red",
+            "mountain_rock_type": "granite_dome",
+        },
+        "bboxes": [
+            BBox(26.0, 27.5, 113.5, 115.5, "Luoxiao Mt / Jinggangshan (罗霄山/井冈山)"),
+        ],
+    },
+
+    # ── Daloushan limestone ─────────────────────────────────────────────────
+    "daloushan_limestone": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "karst_peaks",
+            "vegetation_zone": "broadleaf_evergreen",
+            "mountain_rock_type": "limestone_karst",
+        },
+        "bboxes": [
+            BBox(27.5, 29.5, 106.0, 108.5, "Daloushan limestone (大娄山/遵义)"),
+        ],
+    },
+
+    # ── Wumengshan highland ─────────────────────────────────────────────────
+    "wumengshan_highland": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "soil_color": "red",
+        },
+        "bboxes": [
+            BBox(25.5, 28.0, 103.0, 106.0, "Wumengshan highland (乌蒙山 2000-4000m)"),
+        ],
+    },
+
+    # ── Qilian arid mountain ────────────────────────────────────────────────
+    "qilian_arid_mountain": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "grassland_steppe",
+            "landform_detail": "above_treeline",
+        },
+        "bboxes": [
+            BBox(37.0, 40.0, 96.0, 103.0, "Qilian arid mountain (祁连山 >3500m)"),
+        ],
+    },
+
+    # ── Kunlun alpine desert ────────────────────────────────────────────────
+    "kunlun_alpine_desert": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "desert",
+            "landform_detail": "above_treeline",
+        },
+        "bboxes": [
+            BBox(35.0, 39.0, 76.0, 90.0, "Kunlun alpine desert (昆仑山)"),
+        ],
+    },
+
+    # ── Altai boreal larch ──────────────────────────────────────────────────
+    "altai_boreal_larch": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "language_script": "mongolian_cyrillic",
+        },
+        "bboxes": [
+            BBox(47.5, 49.5, 86.0, 90.0, "Altai boreal larch forest (阿尔泰泰加林)"),
+        ],
+    },
+
+    # ── Yulong + Haba conifer snow ──────────────────────────────────────────
+    "yulong_haba_conifer_snow": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "mountain_rock_type": "snow_peaks_glaciers",
+        },
+        "bboxes": [
+            BBox(26.8, 27.5, 100.0, 100.5, "Yulong+Haba snow mt conifer (玉龙/哈巴雪山)"),
+        ],
+    },
+
+    # ── SE China mountain generic (competition mirror) ──────────────────────
+    "se_china_mountain_generic": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(22.0, 29.0, 110.0, 120.0, "SE China mountain generic"),
+            BBox(29.0, 32.0, 115.0, 122.0, "E China mountain generic"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # P0-3: Subtropical 25-30N — 11 scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── Yunnan plateau conifer + red soil ───────────────────────────────────
+    "yunnan_plateau_conifer_red": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "vegetation_zone": "conifer_forest",
+            "soil_color": "red",
+            "terrain_type": "plateau",
+        },
+        "bboxes": [
+            BBox(24.0, 27.0, 100.0, 104.0, "Yunnan plateau conifer + red soil (滇中高原)"),
+        ],
+    },
+
+    # ── Yunnan karst plateau ────────────────────────────────────────────────
+    "yunnan_karst_plateau": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "karst_peaks",
+            "soil_color": "red",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(23.5, 26.5, 102.5, 106.0, "Yunnan karst plateau (滇东喀斯特高原)"),
+        ],
+    },
+
+    # ── Hunan red soil hills ────────────────────────────────────────────────
+    "hunan_red_soil_hills": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "soil_color": "red",
+            "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(27.0, 30.0, 110.0, 114.0, "Hunan red soil hills (湘中红壤丘陵)"),
+        ],
+    },
+
+    # ── Hunan red soil low (low-threshold variant) ──────────────────────────
+    "hunan_red_soil_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "soil_color": "red",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(25.0, 30.0, 109.0, 115.0, "Hunan/Jiangxi red soil zone"),
+        ],
+    },
+
+    # ── Jiangxi mixed forest hills ──────────────────────────────────────────
+    "jiangxi_mixed_forest_hills": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "vegetation_zone": "mixed_forest",
+            "soil_color": "red",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(27.0, 30.0, 115.0, 118.5, "Jiangxi mixed forest red hills"),
+        ],
+    },
+
+    # ── Fujian coastal tea hills ────────────────────────────────────────────
+    "fujian_coastal_tea_hills": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen",
+            "tree_species": "banyan",
+        },
+        "bboxes": [
+            BBox(24.5, 27.0, 117.0, 120.5, "Fujian coastal banyan + tea hills"),
+        ],
+    },
+
+    # ── Zhejiang bamboo subtropical ─────────────────────────────────────────
+    "zhejiang_bamboo_subtropical": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "vegetation_zone": "broadleaf_evergreen",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(29.0, 31.0, 119.0, 122.0, "Zhejiang bamboo + evergreen hills"),
+        ],
+    },
+
+    # ── Hubei yellow-brown hills ────────────────────────────────────────────
+    "hubei_yellow_brown_hills": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "soil_color": "yellow_brown",
+            "vegetation_zone": "mixed_forest",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(30.0, 32.5, 110.0, 114.5, "Hubei yellow-brown soil hills"),
+        ],
+    },
+
+    # ── Guangdong karst subtropical ─────────────────────────────────────────
+    "guangdong_karst_subtropical": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "karst_peaks",
+            "vegetation_zone": "broadleaf_evergreen",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(23.5, 25.5, 111.0, 114.5, "N Guangdong karst subtropical"),
+        ],
+    },
+
+    # ── Subtropical red soil generic (competition mirror) ───────────────────
+    "subtropical_red_soil_generic": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "soil_color": "red",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(24.0, 30.0, 102.0, 120.0, "S China red soil hills (broad)"),
+        ],
+    },
+
+    # ── Subtropical yellow-brown hills (competition mirror) ─────────────────
+    "subtropical_yellow_brown_hills": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "soil_color": "yellow_brown",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(28.0, 33.0, 106.0, 116.0, "Mid-China yellow-brown hills"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # P2: City Fingerprints — 19 scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── Chengdu camphor + flat basin core ───────────────────────────────────
+    "chengdu_camphor_flat": {
+        "conditions": {
+            "tree_species": "camphor",
+            "pavement_type": "red_brick_tiles",
+            "terrain_type": "urban_flat",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(30.4, 30.8, 103.9, 104.3, "Chengdu camphor + flat basin core"),
+        ],
+    },
+
+    # ── Chengdu flat low ────────────────────────────────────────────────────
+    "chengdu_flat_low": {
+        "conditions": {
+            "terrain_type": "urban_flat",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "pavement_type": "red_brick_tiles",
+        },
+        "bboxes": [
+            BBox(30.3, 31.0, 103.5, 104.5, "Chengdu plain wider area"),
+        ],
+    },
+
+    # ── Chongqing mountain-river ────────────────────────────────────────────
+    "chongqing_mountain_river": {
+        "conditions": {
+            "terrain_type": "sharp_mountains",
+            "building_height": "high_rise",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "water_visible": "yes",
+        },
+        "bboxes": [
+            BBox(29.3, 29.7, 106.3, 106.8, "Chongqing mountain+river+Yangtze"),
+        ],
+    },
+
+    # ── Chongqing rolling low ───────────────────────────────────────────────
+    "chongqing_rolling_low": {
+        "conditions": {
+            "terrain_type": "rolling_hills",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(29.0, 30.5, 105.5, 107.5, "Chongqing wider area (rolling terrain)"),
+        ],
+    },
+
+    # ── Sichuan basin twin cities (competition mirror for Chengdu/Chongqing)
+    "sichuan_basin_twin_cities": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "pavement_type": "red_brick_tiles",
+        },
+        "bboxes": [
+            BBox(29.0, 31.0, 103.5, 107.0, "Sichuan Basin twin cities (Chengdu/Chongqing rivalry)"),
+        ],
+    },
+
+    # ── Beijing wide street temperate ───────────────────────────────────────
+    "beijing_wide_street_temperate": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+            "building_height": "mid_rise",
+            "tree_species": "gingko",
+        },
+        "bboxes": [
+            BBox(39.7, 40.2, 116.0, 116.8, "Beijing wide street + gingko"),
+        ],
+    },
+
+    # ── Shenyang heavy industry ─────────────────────────────────────────────
+    "shenyang_heavy_industry": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+            "vegetation_zone": "broadleaf_deciduous",
+            "building_height": "mid_rise",
+            "soil_color": "black",
+        },
+        "bboxes": [
+            BBox(41.5, 42.2, 123.0, 124.0, "Shenyang heavy industry + black soil"),
+        ],
+    },
+
+    # ── Changchun black soil wide ───────────────────────────────────────────
+    "changchun_black_soil_wide": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "soil_color": "black",
+            "urbanization": "metropolis",
+            "building_height": "mid_rise",
+        },
+        "bboxes": [
+            BBox(43.5, 44.2, 125.0, 125.8, "Changchun black soil + wide streets"),
+        ],
+    },
+
+    # ── Changsha red river camphor ──────────────────────────────────────────
+    "changsha_red_river_camphor": {
+        "conditions": {
+            "pavement_type": "red_brick_tiles",
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "tree_species": "camphor",
+            "water_visible": "yes",
+        },
+        "bboxes": [
+            BBox(28.0, 28.4, 112.8, 113.2, "Changsha Xiang River + red brick + camphor"),
+        ],
+    },
+
+    # ── Nanchang lake plain ─────────────────────────────────────────────────
+    "nanchang_lake_plain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "terrain_type": "urban_flat",
+            "water_visible": "yes",
+        },
+        "bboxes": [
+            BBox(28.4, 28.9, 115.6, 116.2, "Nanchang Poyang Lake plain"),
+        ],
+    },
+
+    # ── Wuhan Yangtze + Han River ───────────────────────────────────────────
+    "wuhan_yangtze_han_river": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "urbanization": "metropolis",
+            "building_height": "high_rise",
+            "water_visible": "yes",
+            "pavement_type": "grey_concrete",
+        },
+        "bboxes": [
+            BBox(30.3, 30.8, 114.0, 114.6, "Wuhan Yangtze-Han River confluence"),
+        ],
+    },
+
+    # ── Xi'an ancient grey temperate ────────────────────────────────────────
+    "xian_ancient_grey_temperate": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "metropolis",
+            "pavement_type": "grey_concrete",
+            "architecture_style": "ancient_chinese",
+        },
+        "bboxes": [
+            BBox(34.0, 34.5, 108.7, 109.2, "Xi'an ancient city wall + grey"),
+        ],
+    },
+
+    # ── Zhengzhou Yellow River plain ────────────────────────────────────────
+    "zhengzhou_yellow_river_plain": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "urban_flat",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(34.5, 35.0, 113.3, 114.0, "Zhengzhou Yellow River alluvial plain"),
+        ],
+    },
+
+    # ── Taiyuan loess basin ─────────────────────────────────────────────────
+    "taiyuan_loess_basin": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "plateau",
+            "soil_color": "yellow_brown",
+            "vegetation_zone": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(37.5, 38.2, 112.2, 113.0, "Taiyuan loess basin (太原盆地)"),
+        ],
+    },
+
+    # ── Shijiazhuang deciduous flat ─────────────────────────────────────────
+    "shijiazhuang_deciduous_flat": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_deciduous",
+            "pavement_type": "grey_concrete",
+        },
+        "bboxes": [
+            BBox(37.8, 38.3, 114.2, 114.8, "Shijiazhuang N China Plain deciduous"),
+        ],
+    },
+
+    # ── North China temperate midrise generic (competition mirror) ──────────
+    "north_china_temperate_midrise_generic": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(34.0, 42.0, 112.0, 120.0, "N China temperate midrise generic"),
+            BBox(34.0, 42.0, 120.0, 126.0, "NE China temperate midrise generic"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Gap Fill: Low-threshold variants for existing hiking/mountain scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 虎跳峡低门槛变体 ──────────────────────────────────────────────────
+    "tiger_leaping_gorge_trek_low": {
+        "conditions": {
+            "landform_detail": "river_canyon",
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(26.5, 28.5, 99.5, 101.0, "虎跳峡/金沙江峡谷区域"),
+        ],
+    },
+
+    # ── 武功山低门槛变体 ──────────────────────────────────────────────────
+    "wugongshan_alpine_meadow_low": {
+        "conditions": {
+            "vegetation_zone": "alpine_meadow",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(27.0, 29.0, 113.0, 115.5, "武功山/华东高山草甸区域"),
+        ],
+    },
+
+    # ── 贡嘎/四姑娘山低门槛变体 ───────────────────────────────────────────
+    "gongga_siguniang_snow_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "terrain_type": "sharp_mountains",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(29.0, 31.5, 101.0, 103.5, "贡嘎/四姑娘山区域 (川西)"),
+        ],
+    },
+
+    # ── 稻城亚丁低门槛变体 ────────────────────────────────────────────────
+    "daocheng_yading_lakes_low": {
+        "conditions": {
+            "mountain_rock_type": "alpine_lakes",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(27.5, 30.5, 99.5, 101.0, "稻城亚丁高原湖区"),
+        ],
+    },
+
+    # ── 丹霞山低门槛变体 ──────────────────────────────────────────────────
+    "danxiashan_red_sandstone_low": {
+        "conditions": {
+            "mountain_rock_type": "red_sandstone_danxia",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(24.0, 27.0, 112.0, 115.0, "粤北丹霞地貌区域"),
+        ],
+    },
+
+    # ── 云南喀斯特高原低门槛变体 ──────────────────────────────────────────
+    "yunnan_karst_highland_low": {
+        "conditions": {
+            "terrain_type": "karst_peaks",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(23.0, 27.0, 102.0, 106.5, "云南/贵州喀斯特高原"),
+        ],
+    },
+
+    # ── 黄山/三清山花岗岩低门槛变体 ──────────────────────────────────────
+    "huangshan_granite_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "subtropical",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(29.5, 31.5, 116.0, 119.5, "皖南/赣北花岗岩山区 (黄山/三清山)"),
+        ],
+    },
+
+    # ── 三清山花岗岩低门槛变体 ──────────────────────────────────────────
+    "sanqingshan_granite_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_dome",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(28.0, 30.0, 117.0, 119.0, "赣东北花岗岩山区 (三清山)"),
+        ],
+    },
+
+    # ── 张家界砂岩低门槛变体 ─────────────────────────────────────────────
+    "zhangjiajie_sandstone_low": {
+        "conditions": {
+            "terrain_type": "sandstone_pillars",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(28.5, 30.0, 109.5, 111.5, "张家界/湘西石英砂岩区域"),
+        ],
+    },
+
+    # ── 九寨沟/黄龙低门槛变体 ─────────────────────────────────────────────
+    "jiuzhaigou_huanglong_low": {
+        "conditions": {
+            "mountain_rock_type": "alpine_lakes",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(32.0, 34.0, 103.0, 105.0, "九寨沟/黄龙高海拔湖区 (川北)"),
+        ],
+    },
+
+    # ── 梅里/玉龙低门槛变体 ──────────────────────────────────────────────
+    "meili_yulong_snow_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(27.0, 29.5, 98.0, 101.0, "滇西北雪山区域 (梅里/玉龙)"),
+        ],
+    },
+
+    # ── 珠峰高海拔荒漠低门槛变体 ──────────────────────────────────────────
+    "everest_high_desert_low": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "vegetation_zone": "alpine_meadow",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(27.5, 30.0, 85.0, 88.0, "喜马拉雅高海拔荒漠区域"),
+        ],
+    },
+
+    # ── 秦岭林线低门槛变体 ───────────────────────────────────────────────
+    "qinling_treeline_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(33.0, 35.0, 106.0, 109.5, "秦岭高海拔针叶林区域"),
+        ],
+    },
+
+    # ── 乌蒙山低门槛变体 ──────────────────────────────────────────────────
+    "wumengshan_highland_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(25.5, 28.5, 103.0, 106.5, "乌蒙山高地区域 (滇东北/黔西北)"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Gap Fill: High-risk & popular hiking routes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 墨脱徒步线 (Medog Trek): 派镇→墨脱, 中国最危险的徒步线 ──────────
+    "medog_trek": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(29.0, 29.8, 94.5, 95.8, "墨脱徒步线 (派镇→墨脱, 雅鲁藏布大峡谷)"),
+        ],
+    },
+    "medog_trek_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(28.5, 30.5, 94.0, 96.5, "藏东南峡谷徒步区域 (墨脱/察隅)"),
+        ],
+    },
+
+    # ── 夏特古道 (Xiate Ancient Trail): 昭苏→阿克苏, 天山冰川峡谷 ──────
+    "xiate_ancient_trail": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(42.0, 42.8, 80.5, 81.5, "夏特古道 (昭苏→阿克苏, 木扎尔特冰川)"),
+        ],
+    },
+    "xiate_ancient_trail_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(41.5, 43.5, 80.0, 82.0, "西天山冰川峡谷区域 (夏特/木扎尔特)"),
+        ],
+    },
+
+    # ── 乌孙古道 (Wusun Ancient Trail): 特克斯→库车, 天山南脉 ──────────
+    "wusun_ancient_trail": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+        },
+        "bboxes": [
+            BBox(42.5, 43.5, 82.0, 84.5, "乌孙古道 (特克斯→库车, 天山南脉)"),
+        ],
+    },
+    "wusun_ancient_trail_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(42.0, 44.0, 81.0, 85.0, "中天山冰川区域 (乌孙/巴音布鲁克)"),
+        ],
+    },
+
+    # ── 博格达大环线 (Bogda Circuit): 东天山, 博格达峰5445m ────────────
+    "bogda_circuit": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+        },
+        "bboxes": [
+            BBox(43.6, 44.2, 88.0, 89.0, "博格达大环线 (东天山博格达峰5445m)"),
+        ],
+    },
+    "bogda_circuit_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(43.0, 45.0, 87.0, 90.0, "东天山博格达/天山天池区域"),
+        ],
+    },
+
+    # ── 太白山南北穿越 (Taibai Traverse): 秦岭最高峰 ────────────────────
+    "taibai_traverse": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(33.8, 34.2, 107.6, 107.9, "太白山南北穿越 (厚畛子→汤峪, 拔仙台3767m)"),
+        ],
+    },
+    "taibai_traverse_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(33.5, 34.5, 107.0, 108.5, "秦岭太白山区域 (鳌太/南北穿越)"),
+        ],
+    },
+
+    # ── 船底顶 (Chuandiding): "广东户外毕业线" ──────────────────────────
+    "chuandiding_trek": {
+        "conditions": {
+            "mountain_rock_type": "granite_dome",
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(24.3, 24.6, 113.1, 113.6, "船底顶 (粤北, 广东户外毕业线1586m)"),
+        ],
+    },
+    "chuandiding_trek_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(24.0, 25.5, 112.5, 114.5, "粤北南岭山区 (船底顶/大东山)"),
+        ],
+    },
+
+    # ── 韭菜岭 (Jiucailing): 湘桂边境, 十大非著名山峰之首 ──────────────
+    "jiucailing_trek": {
+        "conditions": {
+            "mountain_rock_type": "granite_dome",
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(25.3, 25.6, 111.0, 111.5, "韭菜岭 (湘桂边境都庞岭, 2009m)"),
+        ],
+    },
+    "jiucailing_trek_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(25.0, 26.5, 110.0, 112.0, "湘桂边境都庞岭/海洋山脉区域"),
+        ],
+    },
+
+    # ── 喀纳斯徒步 (Kanas Trek): 阿尔泰山, 中国最美徒步线之一 ──────────
+    "kanas_trek": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "boreal",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(48.5, 49.2, 86.8, 87.8, "喀纳斯徒步 (喀纳斯湖→禾木→小黑湖, 阿尔泰山)"),
+        ],
+    },
+    "kanas_trek_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(47.5, 49.5, 86.0, 89.0, "阿尔泰山泰加林区域 (喀纳斯/禾木)"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Gap Fill: Eastern / SE coastal mountains
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 深圳沿海山脉 (梧桐山/七娘山/马峦山) ──────────────────────────────
+    "shenzhen_coastal_mountain": {
+        "conditions": {
+            "mountain_rock_type": "granite_dome",
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(22.4, 22.8, 113.8, 114.5, "深圳沿海山脉 (梧桐山943m/七娘山)"),
+        ],
+    },
+    "shenzhen_coastal_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(22.0, 23.5, 113.5, 115.0, "珠三角沿海山脉区域"),
+        ],
+    },
+
+    # ── 台湾阿里山山脉 (中低海拔亚热带) ─────────────────────────────────
+    "taiwan_subtropical_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(23.0, 24.5, 120.5, 121.5, "台湾阿里山山脉 (中低海拔亚热带)"),
+        ],
+    },
+
+    # ── 台湾玉山/雪山 (>3000m高山针叶林) ───────────────────────────────
+    "taiwan_alpine_conifer": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(23.2, 24.5, 120.8, 121.8, "台湾玉山/雪山 (>3000m高山针叶林)"),
+        ],
+    },
+
+    # ── 台湾山地通用低门槛 ────────────────────────────────────────────────
+    "taiwan_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(22.5, 25.0, 120.5, 122.0, "台湾山地通用场景"),
+        ],
+    },
+
+    # ── 海南五指山/鹦哥岭 热带山地雨林 ──────────────────────────────────
+    "hainan_tropical_mountain": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "tropical_monsoon_forest",
+        },
+        "bboxes": [
+            BBox(18.7, 19.2, 109.3, 110.0, "海南五指山/鹦哥岭 (热带山地雨林)"),
+        ],
+    },
+    "hainan_mountain_low": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(18.5, 20.0, 109.0, 110.5, "海南岛山地通用场景"),
+        ],
+    },
+
+    # ── 香港都市山脉 (太平山/狮子山) ────────────────────────────────────
+    "hk_coastal_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "urbanization": "metropolis",
+        },
+        "bboxes": [
+            BBox(22.2, 22.5, 114.1, 114.3, "香港沿海城市山脉 (太平山/狮子山)"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Gap Fill: Competition mirrors
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 西南喀斯特通用镜像 (广西/贵州/云南 karst 竞争) ──────────────────
+    "southwest_karst_generic": {
+        "conditions": {
+            "terrain_type": "karst_peaks",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(22.0, 28.0, 102.0, 111.0, "西南喀斯特通用 (广西/贵州/云南)"),
+        ],
+    },
+
+    # ── 华东花岗岩山区通用镜像 (黄山/三清山/天柱山 竞争) ──────────────
+    "east_china_granite_mountain_generic": {
+        "conditions": {
+            "mountain_rock_type": "granite_dome",
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(28.0, 32.0, 115.0, 120.0, "华东花岗岩山区通用 (黄山/三清山/天柱山)"),
+        ],
+    },
+
+    # ── 热带岛屿山地通用镜像 (海南/台湾 竞争) ──────────────────────────
+    "tropical_island_mountain_generic": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(18.0, 25.0, 109.0, 122.0, "中国热带海岛山地通用 (海南/台湾)"),
+        ],
+    },
+
+    # ── 西部高山峡谷通用镜像 (天山/昆仑/横断 竞争) ────────────────────
+    "western_alpine_valley_generic": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+            "landform_detail": "river_canyon",
+        },
+        "bboxes": [
+            BBox(28.0, 44.0, 80.0, 100.0, "西部高山峡谷通用 (天山/昆仑/横断)"),
+        ],
+    },
+
+    # ── 中部丘陵通用镜像 (湖北/湖南/江西/安徽 竞争) ──────────────────
+    "central_china_rolling_hills_generic": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "rolling_hills",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(28.0, 33.0, 110.0, 118.0, "中部丘陵通用 (湖北/湖南/江西/安徽)"),
+        ],
+    },
+
+    # ── 热带季雨林通用镜像 (西双版纳/德宏/海南 竞争) ──────────────────
+    "tropical_monsoon_forest_generic": {
+        "conditions": {
+            "climate_zone": "tropical",
+            "vegetation_zone": "tropical_monsoon_forest",
+        },
+        "bboxes": [
+            BBox(21.0, 25.0, 97.0, 111.0, "热带季雨林通用 (西双版纳/德宏/海南)"),
+        ],
+    },
+
+    # ── 东南沿海丘陵通用镜像 (福建/浙江 竞争) ──────────────────────────
+    "coastal_subtropical_hills_generic": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "rolling_hills",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(23.0, 28.0, 117.0, 122.0, "东南沿海丘陵通用 (福建/浙江)"),
+        ],
+    },
+
+    # ── 北方温带山地通用镜像 (秦岭/太行/长白山 竞争) ──────────────────
+    "northern_temperate_mountain_generic": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(33.0, 42.0, 106.0, 120.0, "北方温带山地通用 (秦岭/太行/长白山)"),
+        ],
+    },
+
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Final Gap Fill: Missing major mountain ranges + missing low variants
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 大巴山 (Daba Shan): 川陕鄂交界, 汉江与嘉陵江分水岭 ──────────────
+    "dabashan_mid_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+            "mountain_rock_type": "limestone_karst",
+        },
+        "bboxes": [
+            BBox(31.5, 33.0, 107.0, 110.5, "大巴山 (川陕鄂交界, 2000-3100m)"),
+        ],
+    },
+    "dabashan_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+        },
+        "bboxes": [
+            BBox(31.0, 33.5, 106.5, 111.0, "大巴山/米仓山区域 (川陕鄂交界)"),
+        ],
+    },
+
+    # ── 太行山 (Taihang Shan): 华北平原西缘, 中国最重要的山脉之一 ──────
+    "taihangshan_mountain": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_deciduous",
+            "mountain_rock_type": "limestone_karst",
+        },
+        "bboxes": [
+            BBox(35.0, 40.0, 112.0, 115.5, "太行山 (华北平原西缘, 1500-3000m)"),
+        ],
+    },
+    "taihangshan_mountain_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_deciduous",
+        },
+        "bboxes": [
+            BBox(34.0, 40.5, 111.0, 116.0, "太行山/吕梁山区域 (华北西缘山地)"),
+        ],
+    },
+
+    # ── 雪峰山 (Xuefeng Shan): 湘西, 沅江与资水分水岭 ──────────────────
+    "xuefengshan_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+            "soil_color": "red",
+        },
+        "bboxes": [
+            BBox(26.5, 28.5, 109.5, 111.5, "雪峰山 (湘西, 沅江/资水分水岭, 1500-2000m)"),
+        ],
+    },
+    "xuefengshan_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "soil_color": "red",
+        },
+        "bboxes": [
+            BBox(26.0, 29.0, 109.0, 112.0, "湘西山地 (雪峰山/武陵山)"),
+        ],
+    },
+
+    # ── 雁荡山 (Yandang Shan): 浙东南, 流纹岩地貌, 世界地质公园 ────────
+    "yandangshan_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+            "mountain_rock_type": "granite_dome",
+        },
+        "bboxes": [
+            BBox(28.0, 28.8, 120.5, 121.5, "雁荡山 (浙东南, 流纹岩地貌, 1100m)"),
+        ],
+    },
+    "yandangshan_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(27.5, 29.0, 120.0, 122.0, "浙东南沿海山脉 (雁荡山/括苍山)"),
+        ],
+    },
+
+    # ── 戴云山 (Daiyun Shan): 闽中, 福建南部最高峰 ────────────────────
+    "daiyunshan_mountain": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+            "mountain_rock_type": "granite_dome",
+        },
+        "bboxes": [
+            BBox(25.3, 26.2, 117.5, 119.0, "戴云山 (闽中, 福建南部最高峰1856m)"),
+        ],
+    },
+    "daiyunshan_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(25.0, 27.0, 117.0, 119.5, "闽中闽南山地 (戴云山/博平岭)"),
+        ],
+    },
+
+    # ── 阴山 (Yin Shan): Inner Mongolia, arid temperate mountain barrier ──
+    "yinshan_arid_mountain": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "sparse",
+        },
+        "bboxes": [
+            BBox(40.0, 42.5, 106.0, 114.0, "阴山 (Inner Mongolia arid mountain barrier)"),
+        ],
+    },
+    "yinshan_mountain_low": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(39.5, 43.0, 105.0, 115.0, "阴山/狼山区域 (内蒙古高原南缘)"),
+        ],
+    },
+
+    # ── 阿尔金山 (Altun Shan): Gansu/Qinghai/Xinjiang border, arid alpine ──
+    "altun_arid_mountain": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "desert_scrub",
+        },
+        "bboxes": [
+            BBox(37.5, 39.5, 86.0, 92.0, "Altun Shan (Gansu/Qinghai/Xinjiang border)"),
+        ],
+    },
+    "altun_mountain_low": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(37.0, 40.0, 85.0, 93.0, "阿尔金山/东昆仑区域"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Missing low-threshold variants for existing mountain scenes
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 大别山低门槛 ──────────────────────────────────────────────────────
+    "dabieshan_mid_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+        },
+        "bboxes": [
+            BBox(30.0, 32.5, 114.5, 117.5, "大别山区域 (鄂豫皖交界)"),
+        ],
+    },
+
+    # ── 天山雪峰冰川低门槛 ──────────────────────────────────────────────
+    "tianshan_snow_alpine_low": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(41.0, 45.0, 80.0, 90.0, "天山雪峰冰川区域 (西天山/中天山/东天山)"),
+        ],
+    },
+
+    # ── 秦岭太白山低门槛 ────────────────────────────────────────────────
+    "qinling_taibai_alpine_granite_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(33.0, 35.0, 106.5, 109.0, "秦岭太白山/鳌山花岗岩区域"),
+        ],
+    },
+
+    # ── 长白山火山低门槛 ────────────────────────────────────────────────
+    "changbaishan_volcanic_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "vegetation_zone": "conifer_forest",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(41.0, 43.0, 127.0, 129.0, "长白山火山区域 (吉林/朝鲜边境)"),
+        ],
+    },
+
+    # ── 喀拉峻天山草甸低门槛 ────────────────────────────────────────────
+    "kalajun_tianshan_meadow_low": {
+        "conditions": {
+            "vegetation_zone": "alpine_meadow",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(42.0, 44.5, 80.0, 83.5, "天山高山草甸区域 (喀拉峻/那拉提/巴音布鲁克)"),
+        ],
+    },
+
+    # ── 长白山阔叶林低门槛 ──────────────────────────────────────────────
+    "changbaishan_broadleaf_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "vegetation_zone": "broadleaf_deciduous",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(41.0, 44.0, 124.0, 129.0, "长白山阔叶林区域 (吉林/辽宁)"),
+        ],
+    },
+
+    # ── 华山/秦岭花岗岩低门槛 ──────────────────────────────────────────
+    "huashan_qinling_granite_low": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(33.5, 35.0, 108.5, 111.0, "华山/秦岭东段花岗岩山区"),
+        ],
+    },
+
+    # ── 昆仑高寒荒漠低门槛 ──────────────────────────────────────────────
+    "kunlun_alpine_desert_low": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "desert",
+        },
+        "bboxes": [
+            BBox(34.0, 40.0, 75.0, 92.0, "昆仑山/喀喇昆仑高寒荒漠区域"),
+        ],
+    },
+
+    # ── 大娄山石灰岩低门槛 ──────────────────────────────────────────────
+    "daloushan_limestone_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "karst_peaks",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(27.0, 30.0, 105.0, 109.0, "大娄山/黔北石灰岩区域 (遵义/毕节)"),
+        ],
+    },
+
+    # ── 武夷山丹霞低门槛 ─────────────────────────────────────────────────
+    "wuyishan_danxia_low": {
+        "conditions": {
+            "mountain_rock_type": "red_sandstone_danxia",
+            "climate_zone": "subtropical",
+        },
+        "bboxes": [
+            BBox(27.0, 29.0, 117.0, 119.0, "武夷山/闽北丹霞区域"),
+        ],
+    },
+
+    # ── 云南高原针叶林红壤低门槛 ──────────────────────────────────────
+    "yunnan_plateau_conifer_red_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "vegetation_zone": "conifer_forest",
+            "soil_color": "red",
+        },
+        "bboxes": [
+            BBox(23.5, 27.5, 99.0, 104.5, "云南高原针叶林红壤区域 (滇中高原)"),
+        ],
+    },
+
+    # ── 若尔盖高寒湿地低门槛 ────────────────────────────────────────────
+    "zoige_alpine_wetland_low": {
+        "conditions": {
+            "vegetation_zone": "alpine_meadow",
+            "terrain_type": "plateau",
+            "climate_zone": "alpine",
+        },
+        "bboxes": [
+            BBox(32.0, 35.0, 100.5, 104.0, "若尔盖/川西北高寒湿地草原区域"),
+        ],
+    },
+
+    # ── 罗霄山/井冈山低门槛 ────────────────────────────────────────────
+    "luoxiao_jinggangshan_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "mixed_forest",
+        },
+        "bboxes": [
+            BBox(25.5, 28.0, 113.0, 116.0, "罗霄山脉区域 (井冈山/武功山南段)"),
+        ],
+    },
+
+    # ── 南岭低门槛 ──────────────────────────────────────────────────────
+    "nanling_subtropical_mountain_low": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(24.0, 26.5, 110.0, 115.0, "南岭山脉区域 (湘赣粤桂交界)"),
+        ],
+    },
+
+    # ── 虎跳峡低门槛 ──────────────────────────────────────────────────
+    "tiger_leaping_gorge_low": {
+        "conditions": {
+            "landform_detail": "river_canyon",
+            "climate_zone": "subtropical",
+            "mountain_rock_type": "snow_peaks_glaciers",
+        },
+        "bboxes": [
+            BBox(26.5, 28.0, 99.5, 101.0, "虎跳峡/金沙江峡谷区域"),
+        ],
+    },
+
+    # ── 扎尕那石灰岩低门槛 ────────────────────────────────────────────
+    "zhagana_limestone_low": {
+        "conditions": {
+            "terrain_type": "karst_peaks",
+            "climate_zone": "alpine",
+            "language_script": "tibetan",
+        },
+        "bboxes": [
+            BBox(33.0, 35.5, 101.0, 104.5, "甘南/川西北石灰岩藏区 (扎尕那/郎木寺)"),
+        ],
+    },
+
+
+
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # >40N City Fingerprints — 9 missing cities + low variants + competition mirror
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 齐齐哈尔 (Qiqihar): 嫩江平原, 重工业+黑土 ───────────────────────
+    "qiqihar_black_soil_industrial": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "building_height": "mid_rise",
+            "vegetation_zone": "broadleaf_deciduous",
+        },
+        "bboxes": [
+            BBox(47.0, 47.6, 123.5, 124.5, "齐齐哈尔 (嫩江平原, 重工业+黑土)"),
+        ],
+    },
+    "qiqihar_city_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+        },
+        "bboxes": [
+            BBox(46.0, 48.5, 122.0, 126.0, "黑龙江西部城市 (齐齐哈尔/大庆)"),
+        ],
+    },
+
+    # ── 牡丹江 (Mudanjiang): 长白山北麓, 朝鲜族文化 ────────────────────
+    "mudanjiang_border_city": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "terrain_type": "rolling_hills",
+            "vegetation_zone": "mixed_forest",
+        },
+        "bboxes": [
+            BBox(44.3, 44.8, 129.3, 130.0, "牡丹江 (长白山北麓, 中俄朝边境)"),
+        ],
+    },
+    "mudanjiang_city_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(43.5, 45.5, 128.5, 131.0, "黑龙江南部城市 (牡丹江/绥芬河)"),
+        ],
+    },
+
+    # ── 吉林市 (Jilin City): 松花江畔, 雾凇之都 ───────────────────────
+    "jilin_city_river_industrial": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "building_height": "mid_rise",
+            "water_visible": "yes",
+        },
+        "bboxes": [
+            BBox(43.5, 44.0, 126.2, 127.0, "吉林市 (松花江畔, 化工+雾凇)"),
+        ],
+    },
+    "jilin_city_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+        },
+        "bboxes": [
+            BBox(43.0, 44.5, 125.5, 127.5, "吉林省中部城市 (吉林市)"),
+        ],
+    },
+
+    # ── 包头 (Baotou): 草原钢城, 稀土之都 ──────────────────────────────
+    "baotou_steppe_industrial": {
+        "conditions": {
+            "climate_zone": "arid",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+            "vegetation_zone": "grassland_steppe",
+            "building_height": "mid_rise",
+        },
+        "bboxes": [
+            BBox(40.3, 40.8, 109.5, 110.5, "包头 (草原钢城, 阴山南麓)"),
+        ],
+    },
+    "baotou_city_low": {
+        "conditions": {
+            "climate_zone": "arid",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(40.0, 41.5, 109.0, 111.0, "内蒙古中部城市 (包头/鄂尔多斯)"),
+        ],
+    },
+
+    # ── 赤峰 (Chifeng): 辽西, 农牧交错带 ────────────────────────────────
+    "chifeng_farming_pastoral": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "rolling_hills",
+            "vegetation_zone": "grassland_steppe",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(42.0, 42.5, 118.5, 119.5, "赤峰 (辽西, 农牧交错带)"),
+        ],
+    },
+    "chifeng_city_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "vegetation_zone": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(41.5, 43.0, 117.5, 120.5, "辽西/内蒙古东南部城市 (赤峰/通辽南)"),
+        ],
+    },
+
+    # ── 通辽 (Tongliao): 科尔沁草原腹地 ────────────────────────────────
+    "tongliao_grassland_city": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+            "vegetation_zone": "grassland_steppe",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(43.3, 43.9, 122.0, 123.0, "通辽 (科尔沁草原腹地)"),
+        ],
+    },
+    "tongliao_city_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(43.0, 44.5, 121.5, 123.5, "科尔沁地区城市 (通辽)"),
+        ],
+    },
+
+    # ── 海拉尔 (Hailar): 呼伦贝尔草原, 中俄蒙边境 ─────────────────────
+    "hailar_steppe_border": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "urbanization": "town",
+            "terrain_type": "grassland_steppe",
+            "vegetation_zone": "grassland_steppe",
+            "language_script": "mongolian_cyrillic",
+        },
+        "bboxes": [
+            BBox(49.0, 49.5, 119.5, 120.5, "海拉尔 (呼伦贝尔草原, 中俄蒙边境)"),
+        ],
+    },
+    "hailar_city_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "urbanization": "town",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(48.0, 50.0, 118.0, 121.5, "呼伦贝尔城市区域 (海拉尔/满洲里)"),
+        ],
+    },
+
+    # ── 佳木斯 (Jiamusi): 三江平原, 中国东极 ───────────────────────────
+    "jiamusi_river_plain": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "terrain_type": "urban_flat",
+            "vegetation_zone": "broadleaf_deciduous",
+        },
+        "bboxes": [
+            BBox(46.5, 47.0, 130.0, 130.8, "佳木斯 (三江平原, 松花江畔)"),
+        ],
+    },
+    "jiamusi_city_low": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "soil_color": "black",
+            "urbanization": "city",
+            "terrain_type": "urban_flat",
+        },
+        "bboxes": [
+            BBox(46.0, 47.5, 129.5, 132.0, "三江平原城市 (佳木斯/双鸭山/鹤岗)"),
+        ],
+    },
+
+    # ── 大同 (Datong): 煤都, 云冈石窟, 雁北重镇 ────────────────────────
+    "datong_loess_coal": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "plateau",
+            "soil_color": "yellow_brown",
+            "vegetation_zone": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(39.8, 40.3, 113.0, 113.8, "大同 (煤都/云冈石窟, 雁北盆地)"),
+        ],
+    },
+    "datong_city_low": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "terrain_type": "plateau",
+            "soil_color": "yellow_brown",
+        },
+        "bboxes": [
+            BBox(39.5, 41.0, 112.0, 114.5, "晋北城市 (大同/朔州)"),
+        ],
+    },
+
+    # ── >40N 城市通用竞争镜像 ───────────────────────────────────────────
+    "northeast_china_city_generic": {
+        "conditions": {
+            "climate_zone": "boreal",
+            "urbanization": "city",
+            "soil_color": "black",
+        },
+        "bboxes": [
+            BBox(41.0, 49.0, 122.0, 132.0, "东北城市通用 (黑吉辽)"),
+        ],
+    },
+    "inner_mongolia_city_generic": {
+        "conditions": {
+            "climate_zone": "arid",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(39.0, 50.0, 106.0, 121.0, "内蒙古城市通用 (呼和浩特/包头/海拉尔)"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Missing low variants for existing >40N cities
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    # ── 哈尔滨低门槛 ────────────────────────────────────────────────────
+    "harbin_ne_urban_low": {
+        "conditions": {
+            "soil_color": "black",
+            "urbanization": "city",
+            "climate_zone": "boreal",
+        },
+        "bboxes": [
+            BBox(44.5, 48.0, 125.0, 128.0, "哈尔滨/黑龙江中部城市区域"),
+        ],
+    },
+
+    # ── 沈阳低门槛 ──────────────────────────────────────────────────────
+    "shenyang_temperate_mid_low": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "city",
+        },
+        "bboxes": [
+            BBox(41.0, 43.0, 122.5, 125.0, "辽宁中部城市区域 (沈阳/抚顺/鞍山)"),
+        ],
+    },
+
+    # ── 长春低门槛 ──────────────────────────────────────────────────────
+    "changchun_temperate_mid_low": {
+        "conditions": {
+            "building_height": "mid_rise",
+            "climate_zone": "temperate",
+            "urbanization": "city",
+            "soil_color": "black",
+        },
+        "bboxes": [
+            BBox(43.0, 44.5, 124.5, 126.5, "长春/吉林省中部城市区域"),
+        ],
+    },
+
+    # ── 呼和浩特低门槛 ──────────────────────────────────────────────────
+    "hohhot_arid_steppe_low": {
+        "conditions": {
+            "climate_zone": "arid",
+            "urbanization": "city",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(40.0, 41.5, 110.5, 113.0, "呼和浩特/包头/鄂尔多斯区域"),
+        ],
+    },
+
+    # ── 乌鲁木齐低门槛 ──────────────────────────────────────────────────
+    "urumqi_arid_mid_low": {
+        "conditions": {
+            "climate_zone": "arid",
+            "urbanization": "city",
+            "language_script": "arabic",
+        },
+        "bboxes": [
+            BBox(43.0, 45.0, 87.0, 89.0, "北疆城市区域 (乌鲁木齐/昌吉)"),
+        ],
+    },
+
+    # ═══════════════════════════════════════════════════════════════════
+    # P1: Targeted fixes for 500-test failure patterns
+    # ═══════════════════════════════════════════════════════════════════
+
+    # ── P1-1: Yunnan-Guizhou Plateau (temperate mislabel) ─────────────
+
+    # NE China temperate has deciduous or mixed forest, NOT broadleaf_evergreen.
+    # red soil only occurs in S/SW China — combined with temperate = Yunnan Plateau.
+    "temperate_red_rolling_hills": {
+        "conditions": {
+            "climate_zone": "temperate",
+            "soil_color": "red",
+            "terrain_type": "rolling_hills",
+        },
+        "bboxes": [
+            BBox(23.0, 28.0, 100.0, 106.0, "Yunnan-Guizhou Plateau temperate red soil hills"),
+        ],
+    },
+
+    # ── P1-2: Huangshan / SE China granite mountains ──────────────────
+    # VLM uses "temperate" instead of "subtropical" for Huangshan (~30N, 1800m).
+    # Granite + broadleaf_evergreen is the Huangshan fingerprint.
+    "huangshan_temperate_granite": {
+        "conditions": {
+            "mountain_rock_type": "granite_spheroidal",
+            "climate_zone": "temperate",
+            "vegetation_zone": "broadleaf_evergreen",
+        },
+        "bboxes": [
+            BBox(29.5, 31.0, 117.5, 119.0, "Huangshan temperate granite + evergreen"),
+            BBox(27.0, 29.0, 117.0, 119.0, "Wuyi Mountains granite (N Fujian)"),
+        ],
+    },
+
+    # ── P1-3: Latitude-aware alpine (Tianshan vs Tibet) ───────────────
+    # VLM cannot distinguish Tianshan (43N) from Tibet (30N) — both get
+    # alpine + sharp_mountains + alpine_meadow. Granite_spheroidal is a
+    # Tianshan signal (Tibet peaks are mostly sedimentary/metamorphic).
+    "tianshan_alpine_granite": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "mountain_rock_type": "granite_spheroidal",
+            "vegetation_zone": "alpine_meadow",
+        },
+        "bboxes": [
+            BBox(41.0, 45.0, 80.0, 90.0, "Tianshan alpine granite + meadow (high latitude)"),
+            BBox(45.0, 49.0, 86.0, 92.0, "Altai alpine granite (high latitude)"),
+        ],
+    },
+
+    # Snow peaks with meadow at high latitude → Tianshan, not Tibet.
+    # Tibet snow peaks typically lack alpine_meadow (too arid, desert scrub instead).
+    "tianshan_snow_meadow": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "vegetation_zone": "alpine_meadow",
+        },
+        "bboxes": [
+            BBox(41.0, 44.0, 80.0, 89.0, "Tianshan snow peaks + meadow (high latitude)"),
+        ],
+    },
+
+    # Alpine meadow + grassland_steppe → Tianshan/Kalajun. Distinct from
+    # Tibet which has alpine_meadow + desert_scrub at similar elevations.
+    "tianshan_meadow_steppe": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "vegetation_zone": "alpine_meadow",
+            "terrain_type": "grassland_steppe",
+        },
+        "bboxes": [
+            BBox(41.5, 44.5, 80.0, 87.0, "Tianshan alpine meadow-steppe (Kalajun/Narat)"),
+        ],
+    },
+
+    # ── Tianshan north/south slope asymmetry ────────────────────────────────
+    # North slope (facing Junggar Basin): captures Atlantic moisture →
+    # boreal conifer forest + alpine meadow. South slope (facing Tarim Basin):
+    # rain-shadow → arid steppe → desert transition. This N/S asymmetry
+    # is the defining feature of Tianshan geography.
+    "tianshan_north_slope_boreal": {
+        "conditions": {
+            "mountain_rock_type": "snow_peaks_glaciers",
+            "climate_zone": "boreal",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(42.5, 45.5, 80.0, 91.0, "Tianshan N slope: boreal conifer (Ili/Narat)"),
+        ],
+    },
+    "tianshan_south_slope_arid": {
+        "conditions": {
+            "climate_zone": "arid",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "sparse",
+        },
+        "bboxes": [
+            BBox(40.5, 43.0, 78.0, 89.0, "Tianshan S slope: arid rain-shadow"),
+        ],
+    },
+
+    # ── Shangri-La / NW Yunnan high plateau (elevation >2500m) ──────────
+    # VLM often labels these as subtropical + sharp_mountains, which would
+    # normally map to SE China (~30N) or Sichuan. The conifer_forest or
+    # alpine_meadow vegetation at subtropical latitude is the key signal
+    # for NW Yunnan (26.5-28N, 99-101E). Bbox is tight because these
+    # conditions are very specific to the Hengduan foothills.
+    "shangrila_high_subtropical_conifer": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "conifer_forest",
+        },
+        "bboxes": [
+            BBox(25.5, 28.5, 98.0, 102.0, "Shangri-La/NW Yunnan high subtropical conifer"),
+        ],
+    },
+    "shangrila_high_subtropical_meadow": {
+        "conditions": {
+            "climate_zone": "subtropical",
+            "terrain_type": "sharp_mountains",
+            "vegetation_zone": "alpine_meadow",
+        },
+        "bboxes": [
+            BBox(25.5, 28.5, 98.0, 101.5, "Shangri-La/NW Yunnan high subtropical meadow"),
+        ],
+    },
+
+    # ── Low-threshold Tianshan (no rock_type needed) ────────────────────
+    # Existing Tianshan scenes require mountain_rock_type or snow_peaks
+    # which VLM rarely outputs. This low-threshold variant catches any
+    # alpine + sharp_mountains combination and maps it to >40N (Tianshan/
+    # Altai), distinguishing from Tibet which is at 28-35N.
+    "tianshan_alpine_low": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(41.0, 49.0, 80.0, 92.0, "Tianshan/Altai alpine mountains (>40N)"),
+        ],
+    },
+    # Tibet counterpart: alpine + sharp_mountains at 28-35N
+    "tibet_alpine_low": {
+        "conditions": {
+            "climate_zone": "alpine",
+            "terrain_type": "sharp_mountains",
+        },
+        "bboxes": [
+            BBox(28.0, 35.0, 78.0, 98.0, "Tibet/Qinghai alpine mountains (28-35N)"),
+        ],
+    },
+
 }
 
 

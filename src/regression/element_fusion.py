@@ -25,7 +25,8 @@ from .geo_kb import (
 from .dem_lookup import get_dem
 from .climate_lookup import get_climate, filter_by_climate
 from .constraint_solver import ConstraintSolver, ConstraintSource, ConstraintResult
-from .constraint_utils import bbox_total_area_km2, intersect_bbox_lists
+from .constraint_utils import bbox_total_area_km2, intersect_bbox_lists, \
+    cluster_compound_bboxes, cluster_zones_to_bonus_zones, subtract_bboxes
 from .scoring import (
     score_location, precompute_element_infos, grid_search,
     compute_element_weights,
@@ -478,7 +479,7 @@ def extract_all_elements(macro_json: dict, regional_json: dict, local_json: dict
     """
     elements = {}
     for key in ['climate_zone', 'terrain_type', 'vegetation_zone', 'urbanization',
-                 'building_height', 'pavement_type']:
+                 'building_height', 'pavement_type', 'ruled_out_features']:
         val = macro_json.get(key)
         if _is_valid_element_value(val):
             elements[key] = val
@@ -1369,6 +1370,101 @@ def score_sensor_consistency(
     return sum(weights.values()) / len(weights)
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+# Element-level agreement check (for Adaptive N=2/N=3 stability)
+# ═══════════════════════════════════════════════════════════════════════════
+
+_KEY_ELEMENTS = [
+    "climate_zone",
+    "terrain_type",
+    "vegetation_zone",
+    "urbanization",
+    "elevation_estimate_m",
+    "likely_provinces",
+]
+
+
+def compute_element_agreement(elements1: dict, elements2: dict) -> dict:
+    """Compare key localization elements between two VLM runs.
+
+    Returns dict with:
+      - agreement_score: float [0, 1] — overall agreement across all key elements
+      - per_element: dict[str, bool] — whether each element agrees
+      - disagree_count: int — number of key elements that differ
+    """
+    per_element = {}
+    agree_count = 0
+    total = 0
+
+    for key in _KEY_ELEMENTS:
+        v1 = elements1.get(key)
+        v2 = elements2.get(key)
+        total += 1
+
+        if key == "elevation_estimate_m":
+            # Compare midpoint within 50% tolerance of the average
+            try:
+                if isinstance(v1, (list, tuple)) and len(v1) == 2:
+                    m1 = (float(v1[0]) + float(v1[1])) / 2
+                else:
+                    m1 = float(str(v1).replace("[", "").replace("]", "").split(",")[0])
+                if isinstance(v2, (list, tuple)) and len(v2) == 2:
+                    m2 = (float(v2[0]) + float(v2[1])) / 2
+                else:
+                    m2 = float(str(v2).replace("[", "").replace("]", "").split(",")[0])
+                avg_m = (m1 + m2) / 2
+                tol = max(100, avg_m * 0.5)  # at least 100m tolerance
+                per_element[key] = abs(m1 - m2) <= tol
+            except (ValueError, TypeError, IndexError):
+                per_element[key] = False
+        elif key == "likely_provinces":
+            # Jaccard similarity >= 0.3 → agree
+            s1 = set(v1) if isinstance(v1, list) else set()
+            s2 = set(v2) if isinstance(v2, list) else set()
+            if not s1 and not s2:
+                per_element[key] = True  # both empty → agree
+            elif not s1 or not s2:
+                per_element[key] = False
+            else:
+                jaccard = len(s1 & s2) / len(s1 | s2)
+                per_element[key] = jaccard >= 0.3
+        else:
+            # String comparison (case-insensitive, normalize underscores)
+            s1 = str(v1).lower().replace(" ", "_").strip("[]'\"")
+            s2 = str(v2).lower().replace(" ", "_").strip("[]'\"")
+            per_element[key] = s1 == s2
+
+        if per_element[key]:
+            agree_count += 1
+
+    return {
+        "agreement_score": agree_count / total if total else 0.0,
+        "per_element": per_element,
+        "disagree_count": total - agree_count,
+    }
+
+
+def select_best_elements(candidates: list[tuple[dict, float, dict]]) -> tuple[dict, float]:
+    """Select the best element set from N candidates.
+
+    candidates: list of (elements, sensor_score, agreement_dict)
+    Returns: (best_elements, best_score)
+
+    Priority: prefer candidates whose elements agree with at least one other.
+    Among agreeing candidates, pick highest sensor_score.
+    If none agree, pick highest sensor_score.
+    """
+    if len(candidates) == 1:
+        return candidates[0][0], candidates[0][1]
+
+    # Find candidates that agree with at least one other (agreement_score >= 0.5)
+    consensus = [(e, s, a) for e, s, a in candidates
+                 if a.get("agreement_score", 0) >= 0.5]
+    pool = consensus if consensus else candidates
+    best = max(pool, key=lambda x: x[1])
+    return best[0], best[1]
+
+
 def fuse_elements_v3(
     elements: dict,
     sensor_elevation_m: Optional[float] = None,
@@ -1437,6 +1533,7 @@ def fuse_elements_v3(
             ex.append("[ELEV-PRUNE] No compatible elevation regions found")
 
     # ── Step 2: Geographic elements → bboxes ──────────────────────────────
+    all_element_bboxes = []
     if not elements:
         ex.append("[ELEMENTS] No elements")
         search_bboxes = list(elevation_bboxes) if elevation_bboxes else [BBox(18.0, 54.0, 73.0, 135.5, "China")]
@@ -1478,6 +1575,8 @@ def fuse_elements_v3(
             search_bboxes = [BBox(18.0, 54.0, 73.0, 135.5, "China")]
 
     # ── Step 3: Compound scenes ───────────────────────────────────────────
+    compound_dispersed = False
+    compound_xval_failed = False
     compound_matches = match_compound_scenes_soft(elements, min_ratio=0.5)
     if compound_matches:
         top3 = [f"{m[0]}({m[2]:.0%})" for m in compound_matches[:3]]
@@ -1513,12 +1612,15 @@ def fuse_elements_v3(
             compound_only = _dedup_bboxes(compound_only)
 
             trust_restriction = True
+            xval_failed = False
             if province_bboxes:
                 overlap = intersect_bbox_lists([compound_only, province_bboxes])
                 if not overlap:
                     trust_restriction = False
+                    xval_failed = True
+                    compound_xval_failed = True
                     ex.append(f"[COMPOUND-XVAL] perfect scenes contradict "
-                              f"likely_provinces={likely_val} → not restricting")
+                              f"likely_provinces={likely_val} → weak restriction")
 
             # ── Cross-validation #2: spatial dispersion ───────────────────
             if trust_restriction and len(perfect_scenes) >= 2:
@@ -1535,6 +1637,7 @@ def fuse_elements_v3(
                             max_dist = max(max_dist, d)
                     if max_dist > 500:
                         trust_restriction = False
+                        compound_dispersed = True
                         ex.append(f"[COMPOUND-DISPERSE] perfect scenes scattered "
                                   f"{max_dist:.0f}km → not restricting")
 
@@ -1553,10 +1656,79 @@ def fuse_elements_v3(
                 search_bboxes = _dedup_bboxes(restricted)
                 ex.append(f"[COMPOUND-RESTRICT] {len(perfect_scenes)} perfect-match scenes "
                           f"→ search area {bbox_total_area_km2(search_bboxes):,.0f} km²")
+            elif xval_failed:
+                # XVAL contradicts: compound elements don't align with VLM provinces.
+                # Strategy: trust VLM provinces over compounds. Intersect province
+                # bboxes with strong compound bboxes for a tight search space.
+                # If no intersection, fall back to province bboxes alone.
+                strong_scenes = [(n, b, r) for n, b, r in compound_matches if r >= 0.75]
+                strong_bboxes = []
+                for _, scene_bboxes, _ in strong_scenes:
+                    strong_bboxes.extend(scene_bboxes)
+                strong_bboxes = _dedup_bboxes(strong_bboxes)
+
+                # Intersect with province bboxes (trust VLM provinces)
+                if province_bboxes:
+                    inter_prov = intersect_bbox_lists([strong_bboxes, province_bboxes])
+                    if inter_prov:
+                        strong_bboxes = _dedup_bboxes(inter_prov)
+                        ex.append(f"[COMPOUND-XVAL-TIGHT] province ∩ strong compounds "
+                                  f"→ {bbox_total_area_km2(strong_bboxes):,.0f} km²")
+                    else:
+                        # Complete disagreement → trust provinces alone
+                        strong_bboxes = province_bboxes
+                        ex.append(f"[COMPOUND-XVAL-PROV] no overlap → trust provinces "
+                                  f"({bbox_total_area_km2(province_bboxes):,.0f} km²)")
+
+                if elevation_bboxes:
+                    trimmed = intersect_bbox_lists([strong_bboxes, elevation_bboxes])
+                    if trimmed:
+                        strong_bboxes = _dedup_bboxes(trimmed)
+                restricted = list(strong_bboxes)
+                for bboxes in all_element_bboxes:
+                    inter = intersect_bbox_lists([bboxes, strong_bboxes])
+                    if inter:
+                        restricted.extend(inter)
+                if restricted:
+                    search_bboxes = _dedup_bboxes(restricted)
+                else:
+                    search_bboxes = strong_bboxes
+                ex.append(f"[COMPOUND-XVAL-WEAK] {len(strong_scenes)} strong(≥75%) scenes "
+                          f"→ search area {bbox_total_area_km2(search_bboxes):,.0f} km²")
             else:
-                # Cross-validation failed → contribute bboxes without restricting
-                for _, scene_bboxes, _ in compound_matches:
-                    search_bboxes.extend(scene_bboxes)
+                # DISPERSE: genuinely scattered → compound scenes can't restrict.
+                # Fall back to per-element bbox intersection: each individual
+                # element (climate, terrain, vegetation, ...) has a GeoKB spatial
+                # footprint. Their intersection is tighter than province bonus alone.
+                element_inter = None
+                for bboxes in all_element_bboxes:
+                    if element_inter is None:
+                        element_inter = list(bboxes)
+                    else:
+                        inter = intersect_bbox_lists([element_inter, bboxes])
+                        if inter:
+                            element_inter = _dedup_bboxes(inter)
+                        else:
+                            element_inter = None
+                            break
+                if element_inter:
+                    elem_area = bbox_total_area_km2(element_inter)
+                    # Safety floor: too-small intersection likely excludes truth.
+                    # Only trust the intersection if it's ≥50,000 km² (~province-sized).
+                    if elem_area >= 50_000:
+                        ex.append(f"[COMPOUND-DISPERSE] → element-bbox intersection: "
+                                  f"{elem_area:,.0f} km²")
+                        search_bboxes = list(element_inter)
+                    else:
+                        ex.append(f"[COMPOUND-DISPERSE] element intersection too small "
+                                  f"({elem_area:,.0f} km²) → fall back to compound bboxes")
+                        for _, scene_bboxes, _ in compound_matches:
+                            search_bboxes.extend(scene_bboxes)
+                else:
+                    ex.append(f"[COMPOUND-DISPERSE] element intersection empty "
+                              f"→ fall back to compound bboxes")
+                    for _, scene_bboxes, _ in compound_matches:
+                        search_bboxes.extend(scene_bboxes)
         else:
             # No perfect scenes → extend search with all compound bboxes
             for _, scene_bboxes, _ in compound_matches:
@@ -1564,10 +1736,80 @@ def fuse_elements_v3(
     else:
         ex.append("[COMPOUND] No compound scenes matched")
 
+    # ── Broad XVAL: province-compound contradiction at any match level ────
+    # The narrow XVAL above only checks 100%-match scenes. But 75% matches
+    # can also be confidently wrong: VLM says "Guangdong" while compounds all
+    # point to Sichuan/Yangtze. When VLM provinces and compound bboxes have
+    # zero overlap, treat it as XVAL failure so the province prior activates.
+    if not compound_xval_failed and not compound_dispersed and compound_matches:
+        all_compound_bboxes = []
+        for _, bboxes, _ in compound_matches:
+            all_compound_bboxes.extend(bboxes)
+        all_compound_bboxes = _dedup_bboxes(all_compound_bboxes)
+
+        prov_bboxes = []
+        likely_val = elements.get("likely_provinces", [])
+        if isinstance(likely_val, list) and likely_val:
+            for prov in likely_val:
+                pb = get_bboxes_for_element("likely_provinces", prov)
+                if pb:
+                    prov_bboxes.extend(pb)
+
+        if prov_bboxes and all_compound_bboxes:
+            overlap = intersect_bbox_lists([all_compound_bboxes, prov_bboxes])
+            if not overlap:
+                compound_xval_failed = True
+                ex.append(f"[COMPOUND-XVAL-BROAD] all compound bboxes contradict "
+                          f"likely_provinces={likely_val} → province prior active")
+
     # ── Step 4: Coarse search space dedup ─────────────────────────────────
     search_bboxes = _dedup_bboxes(search_bboxes)
     search_area = bbox_total_area_km2(search_bboxes)
     ex.append(f"[SEARCH-AREA] Union: {len(search_bboxes)} region(s), {search_area:,.0f} km²")
+
+    # ── Step 4.5: Negative constraints — subtract ruled-out feature bboxes ──
+    # VLM is better at "I don't see X" than "this is not Province Y".
+    # Feature bboxes are much smaller than provinces → lower risk of
+    # accidentally excluding the correct location.
+    # Safety: max 5 features, skip if contradicted by positive selections.
+    MAX_RULED_OUT = 5
+    FEATURE_CATS = ['climate_zone', 'terrain_type', 'vegetation_zone',
+                     'urbanization', 'building_height', 'pavement_type']
+    ruled_out_features = elements.get("ruled_out_features", [])
+    if isinstance(ruled_out_features, list) and 1 <= len(ruled_out_features) <= MAX_RULED_OUT:
+        positive_values = set()
+        for cat in FEATURE_CATS:
+            val = elements.get(cat)
+            if val and isinstance(val, str):
+                positive_values.add(val)
+        safe_to_exclude = [f for f in ruled_out_features if f not in positive_values]
+        if safe_to_exclude:
+            ruled_out_bboxes = []
+            for feat_val in safe_to_exclude:
+                found = False
+                for cat in FEATURE_CATS:
+                    bboxes = get_bboxes_for_element(cat, feat_val)
+                    if bboxes:
+                        ruled_out_bboxes.extend(bboxes)
+                        found = True
+                        break
+                if not found:
+                    ex.append(f"[RULED-OUT] '{feat_val}' not in GeoKB, skipping")
+            if ruled_out_bboxes:
+                old_area = bbox_total_area_km2(search_bboxes)
+                search_bboxes = subtract_bboxes(search_bboxes, ruled_out_bboxes)
+                if search_bboxes:
+                    new_area = bbox_total_area_km2(search_bboxes)
+                    ex.append(f"[RULED-OUT] Excluded {len(safe_to_exclude)} feature(s) "
+                              f"{safe_to_exclude} → {old_area:,.0f}→{new_area:,.0f} km²")
+                else:
+                    search_bboxes = [BBox(18.0, 54.0, 73.0, 135.5, "China")]
+                    ex.append(f"[RULED-OUT] Subtraction emptied search space, "
+                              f"falling back to full China")
+        else:
+            ex.append(f"[RULED-OUT] All features contradict positive selections, skipping")
+    elif isinstance(ruled_out_features, list) and len(ruled_out_features) > MAX_RULED_OUT:
+        ex.append(f"[RULED-OUT] Skipped: {len(ruled_out_features)} features > {MAX_RULED_OUT} cap")
 
     # ── Step 5: GeoCoT cross-validation + adaptive weight ────────────────
     # When elevation sensors can't prune (low elevation → >80% of China),
@@ -1689,7 +1931,7 @@ def fuse_elements_v3(
         if cat == "elevation_estimate_m":
             elev_key = (cat, val)
             break
-    if elev_key and sensor_elevation_m is not None:
+    if elev_key and sensor_elevation_m is not None and dem is not None:
         elev_w = element_weights.get(elev_key, 0.70)
         if elev_w < 0.15:
             # VLM elevation is extremely inconsistent with sensor → veto it
@@ -1715,27 +1957,194 @@ def fuse_elements_v3(
                     # Also reduce geo_weight since sensors are more reliable
                     geo_weight *= 0.5
 
-    best_lat, best_lng, uncertainty, all_points = grid_search(
-        search_bboxes,
-        elements,
-        element_infos,
-        compound_matches if compound_matches else [],
-        sensor_elevation_m,
-        sensor_temperature_c,
-        sensor_humidity_pct,
-        dem,
-        climate,
-        geocot_prediction=geocot_prediction,
-        geo_weight=geo_weight,
-        element_weights=element_weights,
-    )
+    # ── Step 6.5: Province-level prior when compound is ambiguous ─────────
+    # When compound scenes are dispersed or contradict VLM provinces,
+    # likely_provinces provides a soft spatial prior via evidence discounting.
+    # More provinces listed → lower trust per province (discount = 1/N).
+    # Soft bonus only: adds score for locations inside province bboxes,
+    # never penalizes outside locations.
+    province_bonus_bboxes = None
+    province_bonus_weight = 0.0
+    if compound_dispersed or compound_xval_failed:
+        likely_val = elements.get("likely_provinces", [])
+        if isinstance(likely_val, list) and likely_val:
+            bonus_bboxes = []
+            for prov in likely_val:
+                pb = get_bboxes_for_element("likely_provinces", prov)
+                if pb:
+                    bonus_bboxes.extend(pb)
+            if bonus_bboxes:
+                province_bonus_bboxes = _dedup_bboxes(bonus_bboxes)
+                discount = 1.0 / len(likely_val)
+                province_bonus_weight = 0.20 * discount
+                ex.append(f"[PROVINCE-BONUS] compound dispersed/xval → province prior active "
+                          f"(discount={discount:.2f}, weight={province_bonus_weight:.3f})")
+
+    # ── Step 6.6: Cluster bonus zones (E+B hybrid, DISPERSE only) ──────────
+    # When compound scenes are geographically scattered (DISPERSE), DBSCAN
+    # cluster their bboxes and assign soft scoring bonuses: dense clusters
+    # get strong bonus, isolated bboxes get weak bonus. No area is ever
+    # hard-excluded. Only active in DISPERSE (not XVAL) — when compound
+    # scenes contradict VLM provinces, we don't trust compound clusters.
+    cluster_bonus_zones = None
+    if compound_dispersed and compound_matches:
+        clusters = cluster_compound_bboxes(compound_matches, eps_km=300, min_samples=2)
+        if clusters:
+            cluster_bonus_zones = cluster_zones_to_bonus_zones(clusters)
+            n_clusters = sum(1 for c in clusters if c[0] >= 0.3)
+            ex.append(f"[CLUSTER-BONUS] DISPERSE → {len(clusters)} cluster(s), "
+                      f"top weight={clusters[0][0]:.2f} → soft scoring zones active")
+
+    # ── Step 6.7: Grid search ────────────────────────────────────────────
+    # Multi-hypothesis for DISPERSE: independent search per geographic cluster.
+    # Within each cluster, compound scenes are concentrated → elevation gating
+    # works normally (compound_dispersed=False). Pick the globally best result.
+    if compound_dispersed and cluster_bonus_zones and len(cluster_bonus_zones) >= 2:
+        major_clusters = [(w, b) for (w, b) in cluster_bonus_zones if w >= 0.15]
+        if len(major_clusters) >= 2:
+            best_score = -float('inf')
+            best_lat, best_lng, uncertainty = 35.0, 105.0, 2500.0
+            all_points = []
+            n_searched = 0
+            hypotheses_log = []
+
+            for cluster_weight, cluster_bbox in major_clusters:
+                cluster_search = intersect_bbox_lists([[cluster_bbox], search_bboxes])
+                if not cluster_search:
+                    continue
+
+                c_lat, c_lng, c_uncertainty, c_points = grid_search(
+                    cluster_search,
+                    elements, element_infos,
+                    compound_matches if compound_matches else [],
+                    sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
+                    dem, climate,
+                    geocot_prediction=geocot_prediction,
+                    geo_weight=geo_weight,
+                    element_weights=element_weights,
+                    province_bboxes=province_bonus_bboxes,
+                    province_bonus_weight=province_bonus_weight,
+                    cluster_bonus_zones=None,
+                    compound_dispersed=False,
+                )
+
+                if c_points:
+                    n_searched += 1
+                    c_best_score = max(p[2] for p in c_points)
+                    hypotheses_log.append(
+                        f"cluster_w{cluster_weight:.2f}: ({c_lat:.3f},{c_lng:.3f}) "
+                        f"score={c_best_score:.3f} uncert={c_uncertainty:.0f}km "
+                        f"area={bbox_total_area_km2(cluster_search):,.0f}km²"
+                    )
+                    if c_best_score > best_score:
+                        best_score = c_best_score
+                        best_lat, best_lng, uncertainty = c_lat, c_lng, c_uncertainty
+                        all_points = c_points
+
+            if n_searched >= 2:
+                # Score margin check: if top 2 clusters are within 10%,
+                # the clusters are indistinguishable → fall back to single
+                # search with cluster_bonus_zones (V4 behavior). This avoids
+                # randomly picking between equally-plausible clusters.
+                cluster_scores = []
+                for h in hypotheses_log:
+                    # Parse score from log: "cluster_wX.XX: (lat,lng) score=Y.YYY ..."
+                    parts = h.split("score=")
+                    if len(parts) > 1:
+                        cluster_scores.append(float(parts[1].split()[0]))
+                cluster_scores.sort(reverse=True)
+                margin = (cluster_scores[0] - cluster_scores[1]) / max(cluster_scores[0], 0.001)
+
+                if margin < 0.10:
+                    ex.append(f"[MULTI-HYPOTHESIS] Top-2 clusters too close "
+                              f"(margin={margin:.1%}<10%), falling back to single search")
+                    for h in hypotheses_log:
+                        ex.append(f"  {h}")
+                    best_lat, best_lng, uncertainty, all_points = grid_search(
+                        search_bboxes, elements, element_infos,
+                        compound_matches if compound_matches else [],
+                        sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
+                        dem, climate,
+                        geocot_prediction=geocot_prediction,
+                        geo_weight=geo_weight, element_weights=element_weights,
+                        province_bboxes=province_bonus_bboxes,
+                        province_bonus_weight=province_bonus_weight,
+                        cluster_bonus_zones=cluster_bonus_zones,
+                        compound_dispersed=compound_dispersed,
+                    )
+                else:
+                    ex.append(f"[MULTI-HYPOTHESIS] DISPERSE → {n_searched} clusters, "
+                              f"margin={margin:.1%} → using best cluster")
+                    for h in hypotheses_log:
+                        ex.append(f"  {h}")
+            elif n_searched == 1:
+                ex.append(f"[MULTI-HYPOTHESIS] Only 1 valid cluster, using it directly")
+            else:
+                # Fallback: no valid cluster search areas
+                ex.append(f"[MULTI-HYPOTHESIS] No valid clusters, falling back to full search")
+                best_lat, best_lng, uncertainty, all_points = grid_search(
+                    search_bboxes, elements, element_infos,
+                    compound_matches if compound_matches else [],
+                    sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
+                    dem, climate,
+                    geocot_prediction=geocot_prediction,
+                    geo_weight=geo_weight, element_weights=element_weights,
+                    province_bboxes=province_bonus_bboxes,
+                    province_bonus_weight=province_bonus_weight,
+                    cluster_bonus_zones=cluster_bonus_zones,
+                    compound_dispersed=compound_dispersed,
+                )
+        else:
+            # Not enough major clusters → single search with cluster bonuses
+            best_lat, best_lng, uncertainty, all_points = grid_search(
+                search_bboxes, elements, element_infos,
+                compound_matches if compound_matches else [],
+                sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
+                dem, climate,
+                geocot_prediction=geocot_prediction,
+                geo_weight=geo_weight, element_weights=element_weights,
+                province_bboxes=province_bonus_bboxes,
+                province_bonus_weight=province_bonus_weight,
+                cluster_bonus_zones=cluster_bonus_zones,
+                compound_dispersed=compound_dispersed,
+            )
+    else:
+        # Normal mode: single grid search
+        best_lat, best_lng, uncertainty, all_points = grid_search(
+            search_bboxes, elements, element_infos,
+            compound_matches if compound_matches else [],
+            sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct,
+            dem, climate,
+            geocot_prediction=geocot_prediction,
+            geo_weight=geo_weight, element_weights=element_weights,
+            province_bboxes=province_bonus_bboxes,
+            province_bonus_weight=province_bonus_weight,
+            cluster_bonus_zones=cluster_bonus_zones,
+            compound_dispersed=compound_dispersed,
+        )
     ex.append(f"[GRID-SEARCH] {len(all_points)} cells scored, best=({best_lat:.4f}, {best_lng:.4f}) uncertainty={uncertainty:.0f}km")
 
     # ── Step 7: Confidence estimation ─────────────────────────────────────
-    n_elem = len(element_infos)
+    # Uses element quality (sensor consistency), not just count.
+    #  - avg_weight: mean per-element sensor-consistency score [0.05, 1.0]
+    #  - uncertainty: grid-search spread — larger = less confident
+    #  - compound matches: tight spatial anchors boost confidence
+    # Formula produces 0.15–0.85 instead of the old flat 0.80–0.85.
     n_comp = len(compound_matches)
     n_sensors = sum(1 for s in [sensor_elevation_m, sensor_temperature_c, sensor_humidity_pct] if s is not None)
-    confidence = min(0.15 + 0.05 * n_elem + 0.08 * n_comp + 0.05 * n_sensors, 0.85)
+    avg_weight = sum(element_weights.values()) / max(1, len(element_weights))
+    uncertainty_norm = max(0.0, min(1.0, (2000.0 - uncertainty) / 1900.0)) if uncertainty > 0 else 1.0
+    compound_bonus = 0.12 * min(n_comp, 4) / 4.0
+
+    confidence = (0.08
+                  + 0.42 * avg_weight
+                  + compound_bonus
+                  + 0.05 * (n_sensors / 3.0)
+                  + 0.15 * uncertainty_norm)
+    confidence = max(0.06, min(confidence, 0.92))
+
+    ex.append(f"[CONFIDENCE] avg_elem_wt={avg_weight:.3f} uncertainty={uncertainty:.0f}km "
+              f"compounds={n_comp} → confidence={confidence:.2f}")
 
     # ── Step 8: Build FusionResult ───────────────────────────────────────
     active_names = [f"{cat}={val}" for (cat, val) in element_infos.keys()]
