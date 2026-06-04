@@ -6,7 +6,7 @@ set -e
 
 echo "=== 安装 Python 依赖 ==="
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
-pip install transformers accelerate bitsandbytes modelscope Pillow peft
+pip install transformers accelerate bitsandbytes modelscope Pillow peft qwen-vl-utils
 
 echo ""
 echo "=== 下载 Teacher 模型 (Qwen3-VL-8B-Instruct) ==="
