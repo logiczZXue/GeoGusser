@@ -131,6 +131,9 @@ def main():
 
     out_f = open(OUTPUT, "a", encoding="utf-8")
     month = 7
+    total_time = 0.0
+    t_all_start = time.time()
+    COST_PER_HOUR = 3.6  # V100 machine-hours per wall-clock hour
 
     for i, sample in enumerate(images):
         name = sample["image"]
@@ -182,7 +185,15 @@ def main():
 
         quality_counts = Counter(labels["quality"].values())
         dt = time.time() - t_start
-        print(f"  Quality: {dict(quality_counts)} | {dt:.0f}s", flush=True)
+        total_time += dt
+        avg = total_time / (i + 1)
+        remaining = len(images) - (i + 1)
+        eta_wall = remaining * avg
+        elapsed_mh = total_time / 3600 * COST_PER_HOUR
+        total_mh_est = (total_time + remaining * avg) / 3600 * COST_PER_HOUR
+        print(f"  {dt:.0f}s | avg={avg:.0f}s | ETA={eta_wall//60:.0f}m{eta_wall%60:.0f}s "
+              f"| 机时:已{elapsed_mh:.1f}/估{total_mh_est:.1f}h | {dict(quality_counts)}",
+              flush=True)
 
         # Write JSONL record
         record = {
@@ -206,8 +217,12 @@ def main():
         torch.cuda.empty_cache()
 
     out_f.close()
-    print(f"\nLabels saved to: {OUTPUT}")
-    print(f"Total records: {len(completed) + len(images)}")
+    total_wall = time.time() - t_all_start
+    total_mh = total_wall / 3600 * COST_PER_HOUR
+    n_done = len(images)
+    print(f"\n{'='*50}")
+    print(f"Done: {n_done} images | 耗时 {total_wall//60:.0f}m{total_wall%60:.0f}s | 机时 {total_mh:.1f}h")
+    print(f"Labels saved to: {OUTPUT}")
 
 
 if __name__ == "__main__":
