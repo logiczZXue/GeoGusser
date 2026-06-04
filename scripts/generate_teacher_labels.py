@@ -46,7 +46,7 @@ def ensemble_vote(elements_list: list[dict]) -> dict:
     """Majority voting across 3 runs per field. Returns hard + soft labels."""
     fields = ["climate_zone", "terrain_type", "vegetation_zone",
               "urbanization", "architecture_style", "pavement_type",
-              "language_script"]
+              "language_script", "visible_text"]
     hard_labels = {}
     soft_labels = {}
     vote_quality = {}

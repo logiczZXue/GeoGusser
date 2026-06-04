@@ -29,7 +29,11 @@ FIELD_VOCABS = {
                            "shikumen", "traditional_official", "soviet_industrial", "none_visible"],
     "pavement_type": ["red_brick_tiles", "grey_concrete", "asphalt", "natural", "not_visible"],
     "language_script": ["simplified_chinese", "traditional_chinese", "tibetan", "uyghur_arabic",
-                        "mongolian", "bilingual_cn_en", "none_visible"],
+                        "mongolian", "dai", "thai", "korean", "japanese", "devanagari",
+                        "latin_only", "cyrillic", "arabic", "bilingual_cn_en", "none_visible"],
+    "visible_text": ["local_government", "local_phone_code", "local_license_plate",
+                     "local_street_sign", "cross_region_shop", "national_chain",
+                     "national_slogan", "none_visible"],
 }
 
 
@@ -48,7 +52,7 @@ class GeoVLMConfig:
 
 
 class PredictionHeads(nn.Module):
-    """8 independent prediction heads: 7 classification + 1 regression (elevation)."""
+    """9 independent prediction heads: 8 classification + 1 regression (elevation)."""
 
     def __init__(self, hidden_dim: int = 512, dropout: float = 0.1):
         super().__init__()
@@ -76,7 +80,7 @@ class PredictionHeads(nn.Module):
         )
 
         # Field-type shortcut: additive connection preserved from input
-        self.field_shortcut = nn.Parameter(torch.randn(8, hidden_dim) * 0.02)
+        self.field_shortcut = nn.Parameter(torch.randn(len(FIELD_VOCABS), hidden_dim) * 0.02)
 
     def forward(self, field_features: torch.Tensor) -> dict:
         """Args: field_features [B, 8, hidden_dim] from ConstraintGraphLayer

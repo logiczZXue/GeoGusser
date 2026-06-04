@@ -489,6 +489,10 @@ def extract_all_elements(macro_json: dict, regional_json: dict, local_json: dict
         val = regional_json.get(key)
         if _is_valid_element_value(val):
             elements[key] = val
+    # visible_text: none_visible is a valid answer (no text in image)
+    vt = regional_json.get('visible_text')
+    if vt is not None and vt != '' and vt != 'null' and vt != 'none' and vt != 'n/a':
+        elements['visible_text'] = vt
     if _is_valid_element_value(regional_json.get('rock_type')):
         elements['mountain_rock_type'] = regional_json['rock_type']
     for key in ['landform_detail', 'rock_color', 'soil_color',

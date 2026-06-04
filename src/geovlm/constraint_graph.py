@@ -26,11 +26,14 @@ _CONSTRAINT_EDGES = [
     (1, 2),  # terrain <-> vegetation
     (3, 5),  # urbanization <-> architecture
     (3, 6),  # urbanization <-> pavement
+    (7, 8),  # language_script <-> visible_text
+    (3, 8),  # urbanization <-> visible_text
 ]
 
 FIELD_NAMES = [
     "climate_zone", "terrain_type", "vegetation_zone", "urbanization",
     "elevation_estimate", "architecture_style", "pavement_type", "language_script",
+    "visible_text",
 ]
 
 

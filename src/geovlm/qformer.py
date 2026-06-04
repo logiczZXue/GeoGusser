@@ -22,6 +22,7 @@ class FieldAwareQFormer(nn.Module):
     FIELD_NAMES = [
         "climate_zone", "terrain_type", "vegetation_zone", "urbanization",
         "elevation_estimate", "architecture_style", "pavement_type", "language_script",
+        "visible_text",
     ]
 
     def __init__(self, hidden_dim: int = 512, num_blocks: int = 3, num_heads: int = 8):
