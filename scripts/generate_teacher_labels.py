@@ -58,7 +58,7 @@ def ensemble_vote(elements_list: list[dict]) -> dict:
 
         # Soft label: average distribution across runs
         all_values = set(v for e in elements_list for v in [e.get(field, "UNKNOWN")])
-        dist = {v: sum(1 for e in elements_list if e.get(field) == v) / len(elements_list)
+        dist = {v: sum(1 for e in elements_list if e.get(field, "UNKNOWN") == v) / len(elements_list)
                 for v in all_values}
         soft_labels[field] = dist
         hard_labels[field] = most_common
