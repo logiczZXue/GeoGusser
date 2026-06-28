@@ -63,11 +63,19 @@ __pycache__/
 
 # Personal / temp
 a few screenshot/
-*.html
-*.docx
 attempt.txt
 foooooot_*.html
 amap_staticmaps.html
 "困难和疑惑.docx"
-"项目书.txt"
 Project details/
+
+# Large generated files
+output/vlm_lora_8b/
+output/vlm_lora_8b.tar.gz
+output/lora_adapter.tar.gz
+data/mapillary_500/
+data/mapillary_500.tar.gz
+data/rasters_COP30/
+data/mapillary_50/
+data/tuxun/
+output/vlm_lora_test/

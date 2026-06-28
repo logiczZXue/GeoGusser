@@ -1,0 +1,98 @@
+Remaining images: 500
+  1. 239295257992175.jpg (39.91, 116.37)
+  2. 861988781021178.jpg (39.92, 116.35)
+  3. 2998977313672859.jpg (39.98, 116.51)
+  4. 197646005529491.jpg (39.86, 116.41)
+  5. 488528758959511.jpg (39.92, 116.36)
+  ... (500 total)
+
+Loading DEM + Climate...
+  DEM: OK, Climate: OK
+
+Loading VLM...
+  Model class: Qwen3VLForConditionalGeneration
+  4-bit quantization: enabled (nf4, double-quant)
+  Mode: 4-bit, GPU limit: auto
+Loading weights:   0%|          | 0/713 [00:00<?, ?it/s]Loading weights:   0%|          | 1/713 [00:00<07:01,  1.69it/s]Loading weights:   0%|          | 3/713 [00:00<02:34,  4.59it/s]Loading weights:   1%|¨‡         | 9/713 [00:00<00:45, 15.39it/s]Loading weights:   2%|¨‡         | 15/713 [00:00<00:27, 24.97it/s]Loading weights:   4%|¨†         | 25/713 [00:01<00:17, 39.84it/s]Loading weights:   4%|¨…         | 31/713 [00:01<00:15, 44.35it/s]Loading weights:   5%|¨„         | 37/713 [00:01<00:14, 46.49it/s]Loading weights:   7%|¨ƒ         | 47/713 [00:01<00:12, 54.80it/s]Loading weights:   8%|¨‚         | 54/713 [00:01<00:11, 58.17it/s]Loading weights:   9%|¨‚         | 61/713 [00:01<00:11, 54.55it/s]Loading weights:  10%|¨         | 70/713 [00:01<00:10, 60.02it/s]Loading weights:  11%|¨€         | 80/713 [00:01<00:09, 66.27it/s]Loading weights:  12%|¨€¨‡        | 87/713 [00:02<00:09, 65.39it/s]Loading weights:  13%|¨€¨†        | 94/713 [00:02<00:10, 59.69it/s]Loading weights:  14%|¨€¨…        | 103/713 [00:02<00:09, 62.68it/s]Loading weights:  16%|¨€¨„        | 113/713 [00:02<00:08, 67.39it/s]Loading weights:  17%|¨€¨ƒ        | 121/713 [00:02<00:08, 68.05it/s]Loading weights:  18%|¨€¨‚        | 128/713 [00:02<00:09, 64.71it/s]Loading weights:  19%|¨€¨        | 136/713 [00:02<00:08, 64.12it/s]Loading weights:  20%|¨€¨€        | 146/713 [00:02<00:08, 69.05it/s]Loading weights:  21%|¨€¨€¨‡       | 153/713 [00:03<00:08, 67.27it/s]Loading weights:  22%|¨€¨€¨‡       | 160/713 [00:03<00:09, 59.20it/s]Loading weights:  24%|¨€¨€¨†       | 169/713 [00:03<00:08, 61.20it/s]Loading weights:  25%|¨€¨€¨„       | 179/713 [00:03<00:08, 66.44it/s]Loading weights:  26%|¨€¨€¨„       | 186/713 [00:03<00:07, 66.66it/s]Loading weights:  27%|¨€¨€¨ƒ       | 193/713 [00:03<00:08, 60.61it/s]Loading weights:  28%|¨€¨€¨‚       | 202/713 [00:03<00:08, 63.79it/s]Loading weights:  30%|¨€¨€¨       | 212/713 [00:03<00:07, 67.62it/s]Loading weights:  31%|¨€¨€¨€       | 219/713 [00:04<00:07, 67.62it/s]Loading weights:  32%|¨€¨€¨€¨‡      | 226/713 [00:04<00:08, 59.95it/s]Loading weights:  33%|¨€¨€¨€¨†      | 235/713 [00:04<00:08, 59.31it/s]Loading weights:  34%|¨€¨€¨€¨…      | 245/713 [00:04<00:07, 63.68it/s]Loading weights:  35%|¨€¨€¨€¨„      | 252/713 [00:04<00:07, 64.26it/s]Loading weights:  36%|¨€¨€¨€¨ƒ      | 259/713 [00:04<00:08, 56.00it/s]Loading weights:  37%|¨€¨€¨€¨ƒ      | 267/713 [00:04<00:08, 51.70it/s]Loading weights:  38%|¨€¨€¨€¨‚      | 273/713 [00:05<00:09, 45.84it/s]Loading weights:  39%|¨€¨€¨€¨      | 279/713 [00:05<00:09, 47.53it/s]Loading weights:  41%|¨€¨€¨€¨€      | 289/713 [00:05<00:07, 55.30it/s]Loading weights:  41%|¨€¨€¨€¨€¨‡     | 295/713 [00:05<00:07, 56.26it/s]Loading weights:  42%|¨€¨€¨€¨€¨‡     | 302/713 [00:05<00:07, 54.46it/s]Loading weights:  44%|¨€¨€¨€¨€¨…     | 312/713 [00:05<00:06, 61.16it/s]Loading weights:  45%|¨€¨€¨€¨€¨„     | 322/713 [00:05<00:05, 66.82it/s]Loading weights:  46%|¨€¨€¨€¨€¨„     | 329/713 [00:06<00:05, 64.57it/s]Loading weights:  47%|¨€¨€¨€¨€¨ƒ     | 336/713 [00:06<00:07, 50.38it/s]Loading weights:  48%|¨€¨€¨€¨€¨‚     | 345/713 [00:06<00:06, 54.05it/s]Loading weights:  49%|¨€¨€¨€¨€¨     | 352/713 [00:06<00:06, 55.83it/s]Loading weights:  50%|¨€¨€¨€¨€¨€     | 358/713 [00:06<00:07, 48.51it/s]Loading weights:  51%|¨€¨€¨€¨€¨€¨‡    | 367/713 [00:06<00:06, 52.80it/s]Loading weights:  53%|¨€¨€¨€¨€¨€¨†    | 377/713 [00:06<00:05, 57.83it/s]Loading weights:  54%|¨€¨€¨€¨€¨€¨†    | 383/713 [00:07<00:06, 54.96it/s]Loading weights:  55%|¨€¨€¨€¨€¨€¨…    | 389/713 [00:07<00:06, 52.23it/s]Loading weights:  56%|¨€¨€¨€¨€¨€¨„    | 397/713 [00:07<00:05, 58.12it/s]Loading weights:  60%|¨€¨€¨€¨€¨€¨€    | 430/713 [00:07<00:02, 125.68it/s]Loading weights:  67%|¨€¨€¨€¨€¨€¨€¨ƒ   | 476/713 [00:07<00:01, 210.78it/s]Loading weights:  73%|¨€¨€¨€¨€¨€¨€¨€¨†  | 524/713 [00:07<00:00, 279.65it/s]Loading weights:  80%|¨€¨€¨€¨€¨€¨€¨€¨€  | 572/713 [00:07<00:00, 329.46it/s]Loading weights:  87%|¨€¨€¨€¨€¨€¨€¨€¨€¨ƒ | 618/713 [00:07<00:00, 363.70it/s]Loading weights:  92%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨‡| 658/713 [00:07<00:00, 364.69it/s]Loading weights:  98%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨‚| 696/713 [00:08<00:00, 314.52it/s]Loading weights: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 713/713 [00:08<00:00, 86.65it/s] 
+
+[  1/500] 239295257992175.jpg (39.91, 116.37)
+  Sensors: elev=78m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  54s  VLM_elev=[78, 93]  score=0.48  JSON:OK N=2
+  Fusion:(39.22,117.18) err=104km  8 region(s), 10,581,117 km^2
+  [ETA: 7h44m remaining]
+
+[  2/500] 861988781021178.jpg (39.92, 116.35)
+  Sensors: elev=69m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  52s  VLM_elev=[69, 84]  score=0.48  JSON:OK N=2
+  Fusion:(39.22,117.18) err=106km  9 region(s), 11,424,606 km^2
+  [ETA: 7h37m remaining]
+
+[  3/500] 2998977313672859.jpg (39.98, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.49<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.49  JSON:OK N=2
+  Fusion:(39.99,114.08) err=206km  10 region(s), 12,214,315 km^2
+  [ETA: 7h34m remaining]
+
+[  4/500] 197646005529491.jpg (39.86, 116.41)
+  Sensors: elev=63m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  53s  VLM_elev=[60, 70]  score=0.48  JSON:OK N=2
+  Fusion:(39.22,117.18) err=98km  9 region(s), 11,424,606 km^2
+  [ETA: 7h33m remaining]
+
+[  5/500] 488528758959511.jpg (39.92, 116.36)
+  Sensors: elev=69m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  51s  VLM_elev=[69, 84]  score=0.48  JSON:OK N=2
+  Fusion:(39.22,117.18) err=106km  9 region(s), 11,424,606 km^2
+  [ETA: 7h30m remaining]
+
+[  6/500] 1441895706175759.jpg (39.98, 116.49)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  54s  VLM_elev=[55, 65]  score=0.48  JSON:OK N=2
+  Fusion:(39.59,116.70) err=47km  3 region(s), 3,974,022 km^2
+  [ETA: 7h29m remaining]
+
+[  7/500] 320895332727735.jpg (39.91, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.49<0.80 -> 2nd inference...
+  52s  VLM_elev=[60, 75]  score=0.49  JSON:OK N=2
+  Fusion:(39.22,117.18) err=109km  9 region(s), 11,424,606 km^2
+  [ETA: 7h28m remaining]
+
+[  8/500] 491580255513512.jpg (40.00, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  52s  VLM_elev=[54, 66]  score=0.48  JSON:OK N=2
+  Fusion:(40.00,114.08) err=182km  8 region(s), 11,421,775 km^2
+  [ETA: 7h26m remaining]
+
+[  9/500] 308918247489426.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.49<0.80 -> 2nd inference...
+  51s  VLM_elev=[55, 65]  score=0.49  JSON:OK N=2
+  Fusion:(39.82,114.08) err=199km  8 region(s), 11,421,775 km^2
+  [ETA: 7h24m remaining]
+
+[ 10/500] 827708714520774.jpg (39.83, 116.30)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  59s  VLM_elev=[55, 65]  score=0.48  JSON:OK N=2
+  Fusion:(39.89,116.48) err=17km  9 region(s), 15,268,425 km^2
+  [ETA: 7h29m remaining]
+  [Checkpoint: 10/500] VRAM=2.7GB
+
+[ 11/500] 174123004488901.jpg (39.96, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...
+  51s  VLM_elev=[55, 65]  score=0.48  JSON:OK N=2
+  Fusion:(39.92,116.48) err=6km  7 region(s), 10,577,720 km^2
+  [ETA: 7h26m remaining]
+
+[ 12/500] 283681433398742.jpg (39.83, 116.35)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.48<0.80 -> 2nd inference...

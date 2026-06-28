@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图寻 — 离线地理定位系统</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #0a0e14;
+  color: #c8d6e5;
+  overflow-x: hidden;
+  line-height: 1.65;
+}
+
+/* ===== Canvas Background ===== */
+#bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.3; pointer-events: none; }
+.main-wrap { position: relative; z-index: 1; }
+
+/* ===== Navigation ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,14,20,0.84); backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid rgba(0,200,196,0.12);
+  padding: 0 3rem; display: flex; align-items: center; justify-content: space-between;
+  height: 54px; transition: all 0.3s;
+}
+.nav-logo { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.04em; }
+.nav-logo .tuxun { color: #00c8c4; }
+.nav-links { display: flex; gap: 2.2rem; list-style: none; }
+.nav-links a { color: #778899; text-decoration: none; font-size: 0.9rem; transition: color 0.25s; letter-spacing: 0.02em; }
+.nav-links a:hover, .nav-links a.active { color: #00c8c4; }
+
+/* ===== Sections ===== */
+.section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 5rem 3rem 4rem; position: relative; }
+.section-inner { max-width: 1100px; width: 100%; }
+
+/* ===== Section Headers ===== */
+.sec-label { font-size: 0.76rem; letter-spacing: 0.16em; color: #00c8c4; text-transform: uppercase; margin-bottom: 0.5rem; }
+.sec-title { font-size: 2.3rem; font-weight: 700; color: #e8f0f8; margin-bottom: 0.8rem; letter-spacing: 0.02em; }
+.sec-desc { font-size: 0.95rem; color: #667788; max-width: 620px; margin-bottom: 2.5rem; line-height: 1.7; }
+
+/* ===== Hero ===== */
+.hero { text-align: center; }
+.hero-badge {
+  display: inline-block; padding: 0.3rem 1.2rem; border-radius: 50px;
+  border: 1px solid rgba(0,200,196,0.3); font-size: 0.78rem; letter-spacing: 0.14em;
+  color: #00c8c4; margin-bottom: 1.8rem;
+}
+.hero h1 { font-size: 3.5rem; font-weight: 800; letter-spacing: 0.04em; line-height: 1.15; margin-bottom: 1rem; }
+.hero h1 .t1 { color: #e8f0f8; } .hero h1 .t2 { color: #00c8c4; }
+.hero-sub { font-size: 1.05rem; color: #667788; max-width: 620px; margin: 0 auto 3.5rem; }
+.hero-system {
+  display: flex; gap: 1.2rem; justify-content: center; align-items: center; flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+.sys-block {
+  background: rgba(18,24,32,0.88); border: 1px solid rgba(0,200,196,0.2);
+  border-radius: 14px; padding: 1.4rem 1.6rem; text-align: center; min-width: 115px;
+  transition: all 0.3s;
+}
+.sys-block .icon { font-size: 2rem; margin-bottom: 0.3rem; }
+.sys-block .name { font-size: 0.85rem; font-weight: 600; color: #c8d8e8; }
+.sys-block .spec { font-size: 0.7rem; color: #556677; margin-top: 0.2rem; }
+.sys-arrow { font-size: 1.3rem; color: #00c8c4; opacity: 0.5; }
+
+.hero-innovation {
+  margin-top: 1.5rem; padding: 1.2rem 2rem;
+  display: inline-flex; align-items: center; gap: 1.2rem;
+  background: rgba(255,160,60,0.04); border: 1px solid rgba(255,160,60,0.15);
+  border-radius: 12px; font-size: 0.85rem; color: #8899aa;
+}
+.hero-innovation .tag {
+  display: inline-block; padding: 0.15rem 0.6rem; border-radius: 4px;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+  background: rgba(255,160,60,0.12); color: #ffa03c; flex-shrink: 0;
+}
+
+/* ===== Pipeline Flow ===== */
+.pipeline-flow {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 0; margin: 1.5rem 0 2.5rem;
+}
+.flow-node {
+  background: rgba(18,24,32,0.9); border: 1px solid rgba(0,200,196,0.2);
+  border-radius: 12px; padding: 1.1rem 1.3rem; text-align: center;
+  min-width: 110px; transition: all 0.3s;
+}
+.flow-node:hover { border-color: #00c8c4; box-shadow: 0 0 28px rgba(0,200,196,0.12); }
+.flow-node .icon { font-size: 1.7rem; margin-bottom: 0.3rem; }
+.flow-node .label { font-size: 0.83rem; font-weight: 600; color: #d0dce8; }
+.flow-node .sub  { font-size: 0.68rem; color: #556677; margin-top: 0.15rem; }
+.flow-arrow {
+  font-size: 1.3rem; color: #00c8c4; margin: 0 0.4rem;
+  animation: arrowPulse 1.6s ease-in-out infinite;
+}
+@keyframes arrowPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+/* ===== Detail Cards ===== */
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.3rem; margin-top: 1.5rem; }
+.detail-grid.wide { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.detail-card {
+  background: rgba(18,24,32,0.8); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 14px; padding: 1.6rem; transition: all 0.3s;
+}
+.detail-card:hover { border-color: rgba(0,200,196,0.25); transform: translateY(-3px); }
+.detail-card .card-icon { font-size: 1.5rem; margin-bottom: 0.7rem; }
+.detail-card h4 { font-size: 1rem; color: #e0e8f0; margin-bottom: 0.4rem; }
+.detail-card p  { font-size: 0.83rem; color: #667788; line-height: 1.6; }
+.detail-card .tag-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.7rem; }
+.tag {
+  padding: 0.18rem 0.55rem; border-radius: 4px; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.tag-teal { background: rgba(0,200,196,0.1); color: #00c8c4; }
+.tag-amber { background: rgba(255,160,60,0.1); color: #ffa03c; }
+
+/* ===== Trajectory Canvas ===== */
+.map-container {
+  background: rgba(18,24,32,0.9); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px; padding: 0.8rem; margin-top: 1.8rem; overflow: hidden;
+}
+.map-container canvas { width: 100%; height: 300px; display: block; border-radius: 10px; }
+.map-legend { display: flex; gap: 1.8rem; justify-content: center; margin-top: 0.6rem; font-size: 0.75rem; color: #778899; }
+.map-legend span { display: flex; align-items: center; gap: 0.35rem; }
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.legend-dot.gps { background: #ffa03c; } .legend-dot.match { background: #00c8c4; } .legend-dot.vio { background: #5b8def; }
+
+/* ===== Engineering Highlights ===== */
+.engineering-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.3rem; margin: 1rem 0; }
+.eng-card {
+  background: rgba(18,24,32,0.8); border: 1px solid rgba(255,255,255,0.05);
+  border-left: 3px solid rgba(0,200,196,0.4); border-radius: 0 12px 12px 0;
+  padding: 1.3rem 1.5rem; transition: all 0.3s;
+}
+.eng-card:hover { border-left-color: #00c8c4; background: rgba(20,28,38,0.85); }
+.eng-card .eng-num { font-size: 1.8rem; font-weight: 800; color: rgba(0,200,196,0.2); float: right; margin-left: 1rem; }
+.eng-card h4 { font-size: 0.95rem; color: #d0d8e0; margin-bottom: 0.3rem; }
+.eng-card p  { font-size: 0.82rem; color: #667788; }
+
+/* ===== Innovation Extension Section ===== */
+.innovation-banner {
+  text-align: center; padding: 2rem; margin: 3rem 0 2rem;
+  background: linear-gradient(135deg, rgba(255,160,60,0.04) 0%, rgba(255,120,30,0.02) 100%);
+  border: 1px solid rgba(255,160,60,0.1); border-radius: 16px;
+}
+.innovation-banner .pre { font-size: 0.76rem; letter-spacing: 0.12em; color: #ffa03c; margin-bottom: 0.4rem; }
+.innovation-banner h3 { font-size: 1.6rem; color: #e0d8d0; font-weight: 600; margin-bottom: 0.4rem; }
+.innovation-banner p { font-size: 0.88rem; color: #778899; max-width: 560px; margin: 0 auto; }
+
+/* ===== GeoCoT Steps ===== */
+.geocot-flow { display: flex; flex-direction: column; gap: 0.8rem; margin: 1.5rem 0; }
+.geocot-step {
+  display: flex; align-items: center; gap: 1.3rem;
+  background: rgba(18,24,32,0.75); border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 10px; padding: 1.1rem 1.5rem; transition: all 0.4s;
+  opacity: 0.45; cursor: default;
+}
+.geocot-step.active { opacity: 1; border-color: rgba(255,160,60,0.35); box-shadow: 0 0 20px rgba(255,160,60,0.06); }
+.geocot-step .step-num {
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;
+  background: rgba(255,160,60,0.1); color: #ffa03c; border: 2px solid rgba(255,160,60,0.2);
+}
+.geocot-step.active .step-num { background: rgba(255,160,60,0.18); border-color: #ffa03c; }
+.geocot-step .step-content h5 { font-size: 0.9rem; color: #d0d8e0; margin-bottom: 0.15rem; }
+.geocot-step .step-content p  { font-size: 0.8rem; color: #667788; }
+.geocot-nav { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+.geocot-nav button {
+  background: rgba(18,24,32,0.85); border: 1px solid rgba(255,160,60,0.25);
+  color: #ffa03c; padding: 0.4rem 1rem; border-radius: 7px; cursor: pointer;
+  font-size: 0.82rem; transition: all 0.25s;
+}
+.geocot-nav button:hover { background: rgba(255,160,60,0.1); }
+.geocot-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== Arch Diagram (compact) ===== */
+.arch-diagram {
+  display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center;
+  align-items: center; margin: 1.2rem 0;
+}
+.arch-box {
+  background: rgba(18,24,32,0.8); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 9px; padding: 0.8rem 1.1rem; text-align: center; font-size: 0.78rem;
+  transition: all 0.3s;
+}
+.arch-box:hover { border-color: rgba(255,160,60,0.35); }
+.arch-box .name { color: #d0d8e0; font-weight: 600; }
+.arch-box .dim  { color: #556677; font-size: 0.68rem; margin-top: 0.15rem; }
+.arch-connector { color: #445566; font-size: 1rem; }
+
+/* ===== Future Section ===== */
+.future-section {
+  text-align: center; padding: 3rem 2rem;
+  background: rgba(18,24,32,0.6); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 18px; margin-top: 2.5rem;
+}
+.future-section .flow { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0 0.5rem; }
+.future-section .flow-box {
+  padding: 0.9rem 1.6rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+}
+.future-section .plus { font-size: 1.5rem; color: #445566; }
+
+/* ===== Stats Bar ===== */
+.stats-bar {
+  display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; margin: 3rem 0 1rem;
+}
+.stat-item { text-align: center; }
+.stat-item .num { font-size: 2.2rem; font-weight: 800; color: #e8f0f8; }
+.stat-item .lbl { font-size: 0.75rem; color: #556677; margin-top: 0.2rem; letter-spacing: 0.04em; }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; padding: 2.5rem; border-top: 1px solid rgba(255,255,255,0.04);
+  color: #445566; font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .nav-links { display: none; }
+  .section { padding: 4rem 1.2rem 2rem; }
+  .pipeline-flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); margin: 0.1rem 0; }
+  .hero-system { flex-direction: column; }
+  .sys-arrow { transform: rotate(90deg); }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="main-wrap">
+
+<!-- ===== Navigation ===== -->
+<nav class="nav">
+  <div class="nav-logo"><span class="tuxun">图寻</span> <span style="color:#556677;font-weight:400;">|</span> <span style="color:#889;font-weight:400;">离线地理定位</span></div>
+  <ul class="nav-links">
+    <li><a href="#hero" class="active">概览</a></li>
+    <li><a href="#system">系统架构</a></li>
+    <li><a href="#engineering">工程亮点</a></li>
+    <li><a href="#innovation">技术延伸</a></li>
+  </ul>
+</nav>
+
+<!-- ================================================ -->
+<!--  HERO — 以传感器定位系统为主角                      -->
+<!-- ================================================ -->
+<section class="section hero" id="hero">
+<div class="section-inner">
+  <div class="hero-badge">INTEL CUP · EMBEDDED AI · DK-2500</div>
+  <h1><span class="t1">户外离线</span><span class="t2">地理定位</span><span class="t1">系统</span></h1>
+  <p class="hero-sub">多传感器融合轨迹重建 + GPX 路径匹配，为户外场景提供亚米级实时定位能力</p>
+
+  <!-- Core System Overview -->
+  <div class="hero-system">
+    <div class="sys-block"><div class="icon">🛰️</div><div class="name">GPS/BDS</div><div class="spec">NMEA 定位</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-block"><div class="icon">📡</div><div class="name">BME280</div><div class="spec">气压海拔</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-block"><div class="icon">📷</div><div class="name">VINS-Fusion</div><div class="spec">VIO 里程计</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-block"><div class="icon">🗺️</div><div class="name">路径匹配</div><div class="spec">GPX 轨迹对齐</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-block"><div class="icon">📍</div><div class="name">精确定位</div><div class="spec">亚米级输出</div></div>
+  </div>
+
+  <!-- Innovation hint — subtle, not a peer card -->
+  <div class="hero-innovation">
+    <span class="tag">技术延伸</span>
+    探索纯视觉语义推理，在无预存路径的区域实现零先验地理定位
+    <span style="color:#ffa03c;font-size:0.8rem;">→</span>
+  </div>
+</div>
+</section>
+
+<!-- ================================================ -->
+<!--  SECTION 2 — 系统架构 (SL 全貌)                    -->
+<!-- ================================================ -->
+<section class="section" id="system">
+<div class="section-inner">
+  <div class="sec-label">系统架构</div>
+  <div class="sec-title">传感器定位流水线</div>
+  <div class="sec-desc">从底层嵌入式传感器到上层 ROS 路径匹配的完整硬件-软件闭环。所有模块独立可替换，已在真实户外场景验证端到端链路。</div>
+
+  <!-- Detail cards — all SL -->
+  <div class="detail-grid">
+    <div class="detail-card">
+      <div class="card-icon">🔧</div>
+      <h4>BME280 嵌入式固件</h4>
+      <p>STM32F103 通过 I2C 采集温度/气压/湿度，实时解算海拔高度，串口输出至 ROS 节点。Keil MDK 工程，可直接烧录。</p>
+      <div class="tag-list"><span class="tag tag-teal">STM32F103</span><span class="tag tag-teal">I2C</span><span class="tag tag-teal">C</span><span class="tag tag-teal">Keil MDK</span></div>
+    </div>
+    <div class="detail-card">
+      <div class="card-icon">🧭</div>
+      <h4>VINS-Fusion 里程计</h4>
+      <p>单/双目 + IMU 紧耦合视觉-惯性 SLAM。回环检测消除累积漂移，全局位姿图优化。支持在线实时 + 离线批量两种模式。</p>
+      <div class="tag-list"><span class="tag tag-teal">C++</span><span class="tag tag-teal">ROS</span><span class="tag tag-teal">Ceres Solver</span><span class="tag tag-teal">VIO</span></div>
+    </div>
+    <div class="detail-card">
+      <div class="card-icon">🗺️</div>
+      <h4>ROS 路径匹配引擎</h4>
+      <p>融合 GPS 轨迹 + BME280 海拔 + VIO 位姿估计，与预存 GPX 路径库实时匹配。输出当前位置坐标及匹配置信度，支持 RViz 可视化。</p>
+      <div class="tag-list"><span class="tag tag-teal">Python</span><span class="tag tag-teal">ROS</span><span class="tag tag-teal">GPX</span><span class="tag tag-teal">RViz</span></div>
+    </div>
+    <div class="detail-card">
+      <div class="card-icon">📐</div>
+      <h4>传感器标定体系</h4>
+      <p>相机内参 (pinhole/mei) + IMU 外参 (6-DoF 变换矩阵) 预标定。Pinhole/Equidistant/Cata 多模型支持，确保 VIO 初始化质量。</p>
+      <div class="tag-list"><span class="tag tag-teal">Kalibr</span><span class="tag tag-teal">YAML</span><span class="tag tag-teal">Multi-Cam</span></div>
+    </div>
+  </div>
+
+  <!-- Trajectory visualization -->
+  <div class="map-container">
+    <canvas id="trajCanvas"></canvas>
+    <div class="map-legend">
+      <span><span class="legend-dot vio"></span> VIO 轨迹重建</span>
+      <span><span class="legend-dot gps"></span> GPS 采样点</span>
+      <span><span class="legend-dot match"></span> 路径匹配段 (实时)</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================================================ -->
+<!--  SECTION 3 — 工程亮点 (突出 SL 的工程化能力)        -->
+<!-- ================================================ -->
+<section class="section" id="engineering">
+<div class="section-inner">
+  <div class="sec-label">工程化能力</div>
+  <div class="sec-title">可落地的系统设计</div>
+  <div class="sec-desc">不仅是算法原型，更是完整的嵌入式工程系统 — 从固件到上层应用的全栈实现。</div>
+
+  <div class="engineering-grid">
+    <div class="eng-card">
+      <div class="eng-num">01</div>
+      <h4>全链路闭环</h4>
+      <p>嵌入式固件 (C) → ROS 驱动 (Python) → SLAM 算法 (C++) → 上位机可视化，每一层都可独立调试和替换，链路完整可运行。</p>
+    </div>
+    <div class="eng-card">
+      <div class="eng-num">02</div>
+      <h4>多传感器紧耦合</h4>
+      <p>GPS 提供绝对位置锚点，BME280 提供海拔约束，VIO 提供 200Hz 高频位姿，三者融合弥补各自缺陷：GPS 遮挡恢复、VIO 累积漂移纠正。</p>
+    </div>
+    <div class="eng-card">
+      <div class="eng-num">03</div>
+      <h4>路径先验知识库</h4>
+      <p>预装载目标区域 GPX 轨迹库 (来自 OpenStreetMap/实地采集)，匹配引擎实时计算当前轨迹与库中路径的相似度，空间+时间双维度对齐。</p>
+    </div>
+    <div class="eng-card">
+      <div class="eng-num">04</div>
+      <h4>嵌入式就绪</h4>
+      <p>BME280 固件已适配 STM32F103；VINS-Fusion 支持 ARM 交叉编译；ROS 节点可部署于树莓派/DK-2500 Linux 环境。</p>
+    </div>
+    <div class="eng-card">
+      <div class="eng-num">05</div>
+      <h4>模块化可扩展</h4>
+      <p>GPS/BME280/VIO/匹配引擎各自独立 ROS node，通过 topic 松耦合通信。任一传感器失效不影响其他模块，系统可降级运行。</p>
+    </div>
+    <div class="eng-card">
+      <div class="eng-num">06</div>
+      <h4>仿真与实采双模式</h4>
+      <p>支持离线传感器数据回放 (demo_sensor_player) 与在线实时采集双模式。开发调试无需每次实地测试，大幅降低迭代成本。</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="num">63,000+</div><div class="lbl">行工程代码 (C++/Python/C)</div></div>
+    <div class="stat-item"><div class="num">4</div><div class="lbl">独立子系统模块</div></div>
+    <div class="stat-item"><div class="num">3</div><div class="lbl">编程语言覆盖</div></div>
+    <div class="stat-item"><div class="num">DK-2500</div><div class="lbl">目标嵌入式平台</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ================================================ -->
+<!--  SECTION 4 — 技术延伸 (VS 低调亮相)                -->
+<!-- ================================================ -->
+<section class="section" id="innovation">
+<div class="section-inner">
+
+  <!-- Banner — framed as extension, not competitor -->
+  <div class="innovation-banner">
+    <div class="pre">TECHNICAL EXTENSION · 技术延伸</div>
+    <h3>视觉语义推理定位</h3>
+    <p>在传感器定位系统之上，我们探索了一种互补的技术路线：仅凭单张图像，通过类人地理推理实现零先验定位。</p>
+  </div>
+
+  <!-- GeoCoT — the key concept -->
+  <h4 style="color:#c8d0d8;margin-bottom:0.8rem;font-size:0.95rem;text-align:center;">GeoCoT 地理思维链 — 从宏观到微观的逐步推理</h4>
+  <div class="geocot-flow" id="geocotFlow">
+    <div class="geocot-step active" data-step="0">
+      <div class="step-num">Ⅰ</div>
+      <div class="step-content">
+        <h5>宏观尺度 · 气候与植被</h5>
+        <p>分析植被类型、天空色调、日照角度 → 推断气候带与大致纬度范围，将搜索空间从全球缩小至洲际</p>
+      </div>
+    </div>
+    <div class="geocot-step" data-step="1">
+      <div class="step-num">Ⅱ</div>
+      <div class="step-content">
+        <h5>中观尺度 · 地形与建筑</h5>
+        <p>识别地形起伏、建筑风格、土壤颜色、城市化程度 → 进一步缩小至国家/地区级别</p>
+      </div>
+    </div>
+    <div class="geocot-step" data-step="2">
+      <div class="step-num">Ⅲ</div>
+      <div class="step-content">
+        <h5>微观尺度 · 语言与标识</h5>
+        <p>检测文字系统、车牌样式、交通标识、植被细节 → 最终定位至城市/区域级别</p>
+      </div>
+    </div>
+  </div>
+  <div class="geocot-nav">
+    <button id="geocotPrev" disabled>← 上一步</button>
+    <button id="geocotNext">下一步 →</button>
+    <button id="geocotAuto" style="border-color:rgba(255,160,60,0.45);">▶ 自动播放</button>
+  </div>
+
+  <!-- Model & Methods — compact layout -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2.5rem;">
+    <div style="background:rgba(18,24,32,0.7);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:1.4rem;">
+      <h5 style="color:#d0d8e0;font-size:0.9rem;margin-bottom:0.6rem;">GeoVLM 430M 轻量模型</h5>
+      <div class="arch-diagram" style="justify-content:flex-start;margin:0;">
+        <div class="arch-box"><div class="name">MultiScale<br>Encoder</div><div class="dim">224/448/672</div></div>
+        <div class="arch-connector">→</div>
+        <div class="arch-box"><div class="name">Q-Former</div><div class="dim">9 queries</div></div>
+        <div class="arch-connector">→</div>
+        <div class="arch-box"><div class="name">GNN</div><div class="dim">GraphSAGE</div></div>
+        <div class="arch-connector">→</div>
+        <div class="arch-box"><div class="name">Heads</div><div class="dim">8 cls + 1 reg</div></div>
+      </div>
+      <p style="font-size:0.78rem;color:#667788;margin-top:0.8rem;">9 维地理特征联合预测 (气候·地形·植被·城市化·土壤·建筑·语言·标识·海拔)，图神经网络约束地理一致性。</p>
+      <div class="tag-list"><span class="tag tag-amber">430M params</span><span class="tag tag-amber">INT8 → NPU</span><span class="tag tag-amber">&lt;500ms</span></div>
+    </div>
+    <div style="background:rgba(18,24,32,0.7);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:1.4rem;">
+      <h5 style="color:#d0d8e0;font-size:0.9rem;margin-bottom:0.6rem;">知识蒸馏 & 多源融合</h5>
+      <p style="font-size:0.82rem;color:#667788;line-height:1.6;">
+        Qwen3-VL-8B-Instruct (4-bit) 作为教师模型，3-seed 集成投票生成高质量地理标注。Fusion Engine v2.2 结合 GeoKB 知识库与传感器权重自适应，网格搜索输出最终坐标。
+      </p>
+      <div class="tag-list" style="margin-top:0.8rem;">
+        <span class="tag tag-amber">Teacher-Student</span><span class="tag tag-amber">3-seed Ensemble</span><span class="tag tag-amber">GeoKB</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Future integration -->
+  <div class="future-section">
+    <div style="font-size:0.76rem;letter-spacing:0.12em;color:#667788;margin-bottom:0.5rem;">与主体系统的关系</div>
+    <p style="font-size:0.9rem;color:#8899aa;max-width:600px;margin:0 auto;">
+      视觉推理模块作为传感器定位的<strong style="color:#ffa03c;">前置粗定位</strong>能力：在无 GPX 路径库的陌生区域，先用单张图像推理大致地理范围，再交由传感器流水线在缩小后的范围内精确匹配。
+    </p>
+    <div class="flow">
+      <div class="flow-box" style="border:1px solid rgba(255,160,60,0.25);color:#ffa03c;">单图视觉推理<br><small style="font-weight:400;opacity:0.7;">零先验 · 区域级</small></div>
+      <div class="plus">+</div>
+      <div class="flow-box" style="border:1px solid rgba(0,200,196,0.25);color:#00c8c4;">传感器轨迹匹配<br><small style="font-weight:400;opacity:0.7;">高精度 · 亚米级</small></div>
+      <div class="plus" style="color:#667788;">=</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.1);color:#e8f0f8;">陌生区域 · 快速精确定位</div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<footer class="footer">
+  图寻 · 离线地理定位系统 &nbsp;|&nbsp; Intel Cup Embedded AI Competition &nbsp;|&nbsp; DK-2500 Platform
+</footer>
+
+</div><!-- .main-wrap -->
+
+<script>
+// ===== Background Particles =====
+(function(){
+  const c=document.getElementById('bgCanvas'),ctx=c.getContext('2d');
+  let w,h,ps=[],N=70;
+  function R(){ w=c.width=innerWidth; h=c.height=innerHeight; }
+  R(); addEventListener('resize',R);
+  for(let i=0;i<N;i++) ps.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.2+.3,a:Math.random()*.45+.08});
+  function D(){
+    ctx.clearRect(0,0,w,h);
+    ps.forEach((p,i)=>{ p.x+=p.vx;p.y+=p.vy; if(p.x<0)p.x=w;if(p.x>w)p.x=0;if(p.y<0)p.y=h;if(p.y>h)p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,200,196,${p.a})`;ctx.fill();
+      for(let j=i+1;j<N;j++){let dx=p.x-ps[j].x,dy=p.y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(ps[j].x,ps[j].y);ctx.strokeStyle=`rgba(0,200,196,${.05*(1-d/110)})`;ctx.stroke();}}
+    });
+    requestAnimationFrame(D);
+  }
+  D();
+})();
+
+// ===== Trajectory Canvas =====
+(function(){
+  const cv=document.getElementById('trajCanvas'); if(!cv)return;
+  const ctx=cv.getContext('2d'),dpr=devicePixelRatio||1;
+  function R(){
+    let r=cv.parentElement.getBoundingClientRect();
+    cv.width=r.width*dpr;cv.height=300*dpr;
+    cv.style.width=r.width+'px';cv.style.height='300px';
+    ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);
+  }
+  R();addEventListener('resize',R);
+  let path=[],CX=cv.width/dpr/2,CY=150;
+  function rebuild(){ CX=cv.width/dpr/2; path=[]; for(let t=0;t<Math.PI*2.5;t+=.038){let r=125+28*Math.sin(t*2.2)+18*Math.cos(t*1.6);path.push({x:CX+r*Math.cos(t),y:CY+r*Math.sin(t*.82)});} }
+  rebuild();addEventListener('resize',()=>{R();rebuild();});
+  let gpsPts=path.filter((_,i)=>i%12===0).map(p=>({x:p.x+(Math.random()-.5)*16,y:p.y+(Math.random()-.5)*16}));
+  let at=0;
+  function D(){
+    let W=cv.width/dpr,H=300; ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,0.025)';ctx.lineWidth=1;
+    for(let gx=0;gx<W;gx+=38){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
+    for(let gy=0;gy<H;gy+=38){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
+    gpsPts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fillStyle='rgba(255,160,60,0.65)';ctx.fill();ctx.strokeStyle='rgba(255,160,60,0.25)';ctx.stroke();});
+    ctx.beginPath();ctx.moveTo(path[0].x,path[0].y);for(let i=1;i<path.length;i++)ctx.lineTo(path[i].x,path[i].y);
+    ctx.strokeStyle='rgba(91,141,239,0.4)';ctx.lineWidth=2.2;ctx.setLineDash([7,4]);ctx.stroke();ctx.setLineDash([]);
+    let sl=Math.floor(path.length*.22),st=Math.floor((at%1)*path.length),ed=Math.min(st+sl,path.length-1);
+    ctx.beginPath();ctx.moveTo(path[st].x,path[st].y);for(let i=st;i<=ed;i++)ctx.lineTo(path[i].x,path[i].y);
+    ctx.strokeStyle='rgba(0,200,196,0.85)';ctx.lineWidth=3.5;ctx.setLineDash([]);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(path[st].x,path[st].y);for(let i=st;i<=ed;i++)ctx.lineTo(path[i].x,path[i].y);
+    ctx.strokeStyle='rgba(0,200,196,0.2)';ctx.lineWidth=9;ctx.stroke();
+    let di=Math.floor(st+sl*(at%1)),dot=path[Math.min(di,path.length-1)],pulse=1+.35*Math.sin(at*7);
+    ctx.beginPath();ctx.arc(dot.x,dot.y,5,0,Math.PI*2);ctx.fillStyle='rgba(0,255,240,0.85)';ctx.fill();
+    ctx.beginPath();ctx.arc(dot.x,dot.y,12*pulse,0,Math.PI*2);ctx.fillStyle=`rgba(0,200,196,${.13*pulse})`;ctx.fill();
+    at+=.0035;requestAnimationFrame(D);
+  }
+  D();
+})();
+
+// ===== GeoCoT Stepper =====
+(function(){
+  let steps=document.querySelectorAll('.geocot-step'),prev=document.getElementById('geocotPrev'),next=document.getElementById('geocotNext'),auto=document.getElementById('geocotAuto'),cur=0,iv=null;
+  function show(i){steps.forEach((s,x)=>s.classList.toggle('active',x===i));cur=i;if(prev)prev.disabled=i===0;if(next)next.disabled=i===steps.length-1;}
+  prev&&prev.addEventListener('click',()=>{stop();if(cur>0)show(cur-1);});
+  next&&next.addEventListener('click',()=>{stop();if(cur<steps.length-1)show(cur+1);});
+  function stop(){if(iv){clearInterval(iv);iv=null;if(auto)auto.textContent='▶ 自动播放';}}
+  auto&&auto.addEventListener('click',()=>{if(iv){stop();return;}auto.textContent='⏸ 停止';show(0);iv=setInterval(()=>{if(cur<steps.length-1)show(cur+1);else stop();},2200);});
+})();
+
+// ===== Nav scroll highlight =====
+(function(){
+  let ss=document.querySelectorAll('.section'),ls=document.querySelectorAll('.nav-links a');
+  addEventListener('scroll',()=>{let cur='';ss.forEach(s=>{if(scrollY>=s.offsetTop-180)cur=s.getAttribute('id');});ls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+cur));});
+})();
+</script>
+
+</body>
+</html>

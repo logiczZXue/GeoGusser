@@ -1,0 +1,3531 @@
+Remaining images: 500
+  1. 239295257992175.jpg (39.91, 116.37)
+  2. 861988781021178.jpg (39.92, 116.35)
+  3. 2998977313672859.jpg (39.98, 116.51)
+  4. 197646005529491.jpg (39.86, 116.41)
+  5. 488528758959511.jpg (39.92, 116.36)
+  ... (500 total)
+
+Loading DEM + Climate...
+  DEM: OK, Climate: OK
+
+Loading VLM...
+  Model class: Qwen3VLForConditionalGeneration
+  4-bit quantization: enabled (nf4, double-quant)
+  Mode: 4-bit, GPU limit: auto
+Loading weights:   0%|          | 0/713 [00:00<?, ?it/s]Loading weights:   0%|          | 1/713 [00:00<06:45,  1.76it/s]Loading weights:   0%|          | 3/713 [00:00<02:28,  4.78it/s]Loading weights:   1%|¨‡         | 9/713 [00:00<00:44, 15.89it/s]Loading weights:   2%|¨‡         | 15/713 [00:00<00:27, 25.36it/s]Loading weights:   4%|¨†         | 25/713 [00:01<00:17, 40.27it/s]Loading weights:   4%|¨…         | 31/713 [00:01<00:15, 44.71it/s]Loading weights:   5%|¨„         | 37/713 [00:01<00:14, 48.09it/s]Loading weights:   7%|¨ƒ         | 47/713 [00:01<00:11, 58.75it/s]Loading weights:   8%|¨‚         | 55/713 [00:01<00:10, 62.19it/s]Loading weights:   9%|¨‚         | 62/713 [00:01<00:10, 60.92it/s]Loading weights:  10%|¨         | 70/713 [00:01<00:10, 62.96it/s]Loading weights:  11%|¨€         | 80/713 [00:01<00:09, 68.66it/s]Loading weights:  12%|¨€¨‡        | 88/713 [00:01<00:09, 67.98it/s]Loading weights:  13%|¨€¨†        | 95/713 [00:02<00:09, 65.01it/s]Loading weights:  14%|¨€¨…        | 103/713 [00:02<00:09, 64.53it/s]Loading weights:  16%|¨€¨„        | 113/713 [00:02<00:08, 68.57it/s]Loading weights:  17%|¨€¨ƒ        | 121/713 [00:02<00:08, 69.19it/s]Loading weights:  18%|¨€¨‚        | 128/713 [00:02<00:08, 66.46it/s]Loading weights:  19%|¨€¨        | 136/713 [00:02<00:08, 66.82it/s]Loading weights:  20%|¨€¨€        | 146/713 [00:02<00:07, 71.55it/s]Loading weights:  22%|¨€¨€¨‡       | 154/713 [00:02<00:07, 70.91it/s]Loading weights:  23%|¨€¨€¨†       | 162/713 [00:03<00:08, 68.56it/s]Loading weights:  24%|¨€¨€¨†       | 169/713 [00:03<00:08, 63.76it/s]Loading weights:  25%|¨€¨€¨„       | 179/713 [00:03<00:07, 68.33it/s]Loading weights:  26%|¨€¨€¨„       | 187/713 [00:03<00:07, 68.51it/s]Loading weights:  27%|¨€¨€¨ƒ       | 194/713 [00:03<00:07, 65.49it/s]Loading weights:  28%|¨€¨€¨‚       | 202/713 [00:03<00:07, 65.20it/s]Loading weights:  30%|¨€¨€¨       | 212/713 [00:03<00:07, 70.12it/s]Loading weights:  31%|¨€¨€¨€       | 220/713 [00:03<00:07, 69.40it/s]Loading weights:  32%|¨€¨€¨€¨‡      | 227/713 [00:04<00:07, 64.60it/s]Loading weights:  33%|¨€¨€¨€¨†      | 235/713 [00:04<00:07, 64.82it/s]Loading weights:  34%|¨€¨€¨€¨…      | 245/713 [00:04<00:06, 69.01it/s]Loading weights:  35%|¨€¨€¨€¨„      | 252/713 [00:04<00:06, 67.71it/s]Loading weights:  36%|¨€¨€¨€¨ƒ      | 259/713 [00:04<00:07, 61.09it/s]Loading weights:  38%|¨€¨€¨€¨‚      | 268/713 [00:04<00:06, 64.02it/s]Loading weights:  39%|¨€¨€¨€¨      | 278/713 [00:04<00:06, 69.58it/s]Loading weights:  40%|¨€¨€¨€¨€      | 286/713 [00:04<00:06, 69.71it/s]Loading weights:  41%|¨€¨€¨€¨€      | 294/713 [00:05<00:06, 67.60it/s]Loading weights:  42%|¨€¨€¨€¨€¨‡     | 301/713 [00:05<00:06, 65.52it/s]Loading weights:  44%|¨€¨€¨€¨€¨†     | 311/713 [00:05<00:05, 68.94it/s]Loading weights:  45%|¨€¨€¨€¨€¨…     | 318/713 [00:05<00:05, 67.65it/s]Loading weights:  46%|¨€¨€¨€¨€¨„     | 325/713 [00:05<00:06, 62.05it/s]Loading weights:  47%|¨€¨€¨€¨€¨ƒ     | 334/713 [00:05<00:05, 64.26it/s]Loading weights:  48%|¨€¨€¨€¨€¨‚     | 344/713 [00:05<00:05, 69.92it/s]Loading weights:  49%|¨€¨€¨€¨€¨     | 352/713 [00:05<00:05, 69.50it/s]Loading weights:  50%|¨€¨€¨€¨€¨€     | 359/713 [00:06<00:05, 64.66it/s]Loading weights:  51%|¨€¨€¨€¨€¨€¨‡    | 366/713 [00:06<00:05, 65.46it/s]Loading weights:  52%|¨€¨€¨€¨€¨€¨‡    | 373/713 [00:06<00:05, 63.30it/s]Loading weights:  53%|¨€¨€¨€¨€¨€¨†    | 380/713 [00:06<00:06, 50.79it/s]Loading weights:  54%|¨€¨€¨€¨€¨€¨…    | 388/713 [00:06<00:05, 56.43it/s]Loading weights:  55%|¨€¨€¨€¨€¨€¨„    | 395/713 [00:06<00:05, 56.18it/s]Loading weights:  60%|¨€¨€¨€¨€¨€¨€    | 428/713 [00:06<00:02, 122.90it/s]Loading weights:  66%|¨€¨€¨€¨€¨€¨€¨„   | 472/713 [00:06<00:01, 203.97it/s]Loading weights:  72%|¨€¨€¨€¨€¨€¨€¨€¨‡  | 514/713 [00:07<00:00, 260.76it/s]Loading weights:  79%|¨€¨€¨€¨€¨€¨€¨€¨‚  | 560/713 [00:07<00:00, 314.13it/s]Loading weights:  85%|¨€¨€¨€¨€¨€¨€¨€¨€¨… | 606/713 [00:07<00:00, 351.32it/s]Loading weights:  91%|¨€¨€¨€¨€¨€¨€¨€¨€¨€ | 646/713 [00:07<00:00, 364.16it/s]Loading weights:  96%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨ƒ| 688/713 [00:07<00:00, 348.12it/s]Loading weights: 100%|¨€¨€¨€¨€¨€¨€¨€¨€¨€¨€| 713/713 [00:07<00:00, 92.98it/s] 
+
+[  1/500] 239295257992175.jpg (39.91, 116.37)
+  Sensors: elev=78m T=25C RH=65%
+  26s  VLM_elev=[78, 93]  score=0.80  JSON:OK
+  Fusion:(39.92,116.39) err=2km  8 region(s), 10,581,117 km^2
+  [ETA: 3h54m remaining]
+
+[  2/500] 861988781021178.jpg (39.92, 116.35)
+  Sensors: elev=69m T=25C RH=65%
+  25s  VLM_elev=[69, 84]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=11km  9 region(s), 15,268,425 km^2
+  [ETA: 3h53m remaining]
+
+[  3/500] 2998977313672859.jpg (39.98, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=354km  10 region(s), 12,214,315 km^2
+  [ETA: 3h50m remaining]
+
+[  4/500] 197646005529491.jpg (39.86, 116.41)
+  Sensors: elev=63m T=25C RH=65%
+  25s  VLM_elev=[60, 70]  score=0.80  JSON:OK
+  Fusion:(39.90,116.50) err=9km  9 region(s), 11,424,606 km^2
+  [ETA: 3h49m remaining]
+
+[  5/500] 488528758959511.jpg (39.92, 116.36)
+  Sensors: elev=69m T=25C RH=65%
+  26s  VLM_elev=[69, 84]  score=0.80  JSON:OK
+  Fusion:(39.92,116.48) err=11km  9 region(s), 11,424,606 km^2
+  [ETA: 3h50m remaining]
+
+[  6/500] 1441895706175759.jpg (39.98, 116.49)
+  Sensors: elev=60m T=25C RH=65%
+  28s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=354km  3 region(s), 3,974,022 km^2
+  [ETA: 3h50m remaining]
+
+[  7/500] 320895332727735.jpg (39.91, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.91,116.48) err=17km  9 region(s), 11,424,606 km^2
+  [ETA: 3h50m remaining]
+
+[  8/500] 491580255513512.jpg (40.00, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[60, 75]  score=0.80  JSON:OK
+  Fusion:(40.00,114.08) err=182km  8 region(s), 11,421,775 km^2
+  [ETA: 3h49m remaining]
+
+[  9/500] 308918247489426.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=199km  8 region(s), 11,421,775 km^2
+  [ETA: 3h47m remaining]
+
+[ 10/500] 827708714520774.jpg (39.83, 116.30)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=17km  9 region(s), 15,268,425 km^2
+  [ETA: 3h47m remaining]
+  [Checkpoint: 10/500] VRAM=2.7GB
+
+[ 11/500] 174123004488901.jpg (39.96, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.92,116.48) err=6km  7 region(s), 10,577,720 km^2
+  [ETA: 3h45m remaining]
+
+[ 12/500] 283681433398742.jpg (39.83, 116.35)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(34.39,114.00) err=641km  3 region(s), 3,974,022 km^2
+  [ETA: 3h44m remaining]
+
+[ 13/500] 3048890548721325.jpg (39.91, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(36.72,117.08) err=358km  7 region(s), 12,112,417 km^2
+  [ETA: 3h43m remaining]
+
+[ 14/500] 1450828931937269.jpg (39.89, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=347km  7 region(s), 12,112,417 km^2
+  [ETA: 3h42m remaining]
+
+[ 15/500] 108126928011778.jpg (39.91, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.91,116.48) err=5km  8 region(s), 10,581,117 km^2
+  [ETA: 3h42m remaining]
+
+[ 16/500] 829972494565746.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.82,116.08) err=13km  7 region(s), 10,577,720 km^2
+  [ETA: 3h41m remaining]
+
+[ 17/500] 135939838515329.jpg (39.97, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=352km  10 region(s), 12,214,315 km^2
+  [ETA: 3h40m remaining]
+
+[ 18/500] 243247237546542.jpg (39.90, 116.38)
+  Sensors: elev=80m T=25C RH=65%
+  26s  VLM_elev=[70, 90]  score=0.81  JSON:OK
+  Fusion:(31.80,108.63) err=1138km  2 region(s), 62,271 km^2
+  [ETA: 3h39m remaining]
+
+[ 19/500] 1207263566369792.jpg (39.98, 116.33)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(31.50,111.50) err=1039km  3 region(s), 124,542 km^2
+  [ETA: 3h38m remaining]
+
+[ 20/500] 1490567331284349.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[50, 70]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=22km  9 region(s), 11,424,606 km^2
+  [ETA: 3h37m remaining]
+  [Checkpoint: 20/500] VRAM=2.7GB
+
+[ 21/500] 2860282144213097.jpg (39.97, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=658km  3 region(s), 3,974,022 km^2
+  [ETA: 3h36m remaining]
+
+[ 22/500] 1180317769084381.jpg (39.89, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=39km  9 region(s), 15,268,425 km^2
+  [ETA: 3h36m remaining]
+
+[ 23/500] 248786906997762.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[50, 80]  score=0.81  JSON:OK
+  Fusion:(34.39,114.00) err=642km  3 region(s), 3,974,022 km^2
+  [ETA: 3h36m remaining]
+
+[ 24/500] 107081181446571.jpg (39.86, 116.38)
+  Sensors: elev=63m T=25C RH=65%
+  25s  VLM_elev=[60, 70]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=10km  9 region(s), 11,424,606 km^2
+  [ETA: 3h35m remaining]
+
+[ 25/500] 1664308093779232.jpg (39.89, 116.35)
+  Sensors: elev=71m T=25C RH=65%
+  26s  VLM_elev=[60, 80]  score=0.81  JSON:OK
+  Fusion:(40.02,116.38) err=14km  8 region(s), 10,581,117 km^2
+  [ETA: 3h35m remaining]
+
+[ 26/500] 866703243884622.jpg (39.93, 116.44)
+  Sensors: elev=63m T=25C RH=65%
+  25s  VLM_elev=[60, 70]  score=0.81  JSON:OK
+  Fusion:(39.99,116.08) err=31km  8 region(s), 11,056,641 km^2
+  [ETA: 3h34m remaining]
+
+[ 27/500] 291839635878431.jpg (39.93, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 75]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=655km  3 region(s), 3,974,022 km^2
+  [ETA: 3h33m remaining]
+
+[ 28/500] 1795134987333124.jpg (39.89, 116.20)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=347km  7 region(s), 12,112,417 km^2
+  [ETA: 3h33m remaining]
+
+[ 29/500] 3338873829672187.jpg (39.90, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=348km  7 region(s), 12,112,417 km^2
+  [ETA: 3h32m remaining]
+
+[ 30/500] 189351579673134.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[50, 75]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=340km  10 region(s), 12,214,315 km^2
+  [ETA: 3h31m remaining]
+  [Checkpoint: 30/500] VRAM=2.7GB
+
+[ 31/500] 274082041112891.jpg (39.86, 116.49)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.80  JSON:OK N=2
+  Fusion:(39.89,116.48) err=3km  9 region(s), 15,268,425 km^2
+  [ETA: 3h38m remaining]
+
+[ 32/500] 2743898282588218.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=8km  9 region(s), 11,424,606 km^2
+  [ETA: 3h37m remaining]
+
+[ 33/500] 1816073538572666.jpg (39.89, 116.34)
+  Sensors: elev=70m T=25C RH=65%
+  27s  VLM_elev=[60, 80]  score=0.81  JSON:OK
+  Fusion:(34.42,114.00) err=643km  7 region(s), 12,112,417 km^2
+  [ETA: 3h37m remaining]
+
+[ 34/500] 300481525025912.jpg (39.86, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=344km  7 region(s), 12,112,417 km^2
+  [ETA: 3h36m remaining]
+
+[ 35/500] 948693675890222.jpg (39.98, 116.33)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(39.99,116.38) err=4km  8 region(s), 11,056,641 km^2
+  [ETA: 3h42m remaining]
+
+[ 36/500] 452999935761322.jpg (39.86, 116.38)
+  Sensors: elev=62m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  49s  VLM_elev=[62, 77]  score=0.80  JSON:OK N=2
+  Fusion:(39.90,116.48) err=10km  9 region(s), 11,424,606 km^2
+  [ETA: 3h46m remaining]
+
+[ 37/500] 2276167729187463.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.82,116.08) err=28km  9 region(s), 11,424,606 km^2
+  [ETA: 3h45m remaining]
+
+[ 38/500] 2774530036179372.jpg (40.00, 116.38)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(34.40,114.00) err=657km  5 region(s), 3,974,022 km^2
+  [ETA: 3h50m remaining]
+
+[ 39/500] 3997426103680807.jpg (39.84, 116.53)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=209km  5 region(s), 10,566,964 km^2
+  [ETA: 3h48m remaining]
+
+[ 40/500] 157666966291673.jpg (39.86, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.89,116.48) err=6km  9 region(s), 11,424,606 km^2
+  [ETA: 3h47m remaining]
+  [Checkpoint: 40/500] VRAM=2.7GB
+
+[ 41/500] 506120590425382.jpg (39.96, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.99,114.08) err=208km  8 region(s), 11,421,775 km^2
+  [ETA: 3h46m remaining]
+
+[ 42/500] 1724834607716829.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=23km  9 region(s), 11,424,606 km^2
+  [ETA: 3h45m remaining]
+
+[ 43/500] 256868516136864.jpg (39.87, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.89,114.08) err=212km  5 region(s), 11,268,928 km^2
+  [ETA: 3h44m remaining]
+
+[ 44/500] 467715771163335.jpg (39.82, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[55, 75]  score=0.80  JSON:OK N=2
+  Fusion:(39.82,114.08) err=206km  6 region(s), 10,568,323 km^2
+  [ETA: 3h48m remaining]
+
+[ 45/500] 466889237911774.jpg (39.92, 116.44)
+  Sensors: elev=62m T=25C RH=65%
+  26s  VLM_elev=[60, 70]  score=0.80  JSON:OK
+  Fusion:(39.92,116.48) err=4km  9 region(s), 11,424,606 km^2
+  [ETA: 3h47m remaining]
+
+[ 46/500] 208047347541400.jpg (39.86, 116.38)
+  Sensors: elev=62m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  71s  VLM_elev=[62, 77]  score=0.79  JSON:OK N=2
+  Fusion:(39.90,116.48) err=10km  9 region(s), 11,424,606 km^2
+  [ETA: 3h53m remaining]
+
+[ 47/500] 1183975445372333.jpg (39.92, 116.30)
+  Sensors: elev=61m T=25C RH=65%
+  28s  VLM_elev=[61, 76]  score=0.80  JSON:OK
+  Fusion:(39.92,116.48) err=15km  9 region(s), 11,424,606 km^2
+  [ETA: 3h53m remaining]
+
+[ 48/500] 298483685110304.jpg (39.86, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.89,114.08) err=204km  6 region(s), 10,568,323 km^2
+  [ETA: 3h51m remaining]
+
+[ 49/500] 308625914208444.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=17km  7 region(s), 10,577,720 km^2
+  [ETA: 3h50m remaining]
+
+[ 50/500] 886076708613973.jpg (40.00, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(40.00,114.08) err=182km  9 region(s), 15,268,425 km^2
+  [ETA: 3h49m remaining]
+  [Checkpoint: 50/500] VRAM=2.7GB
+
+[ 51/500] 219041973144112.jpg (40.00, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(28.92,116.01) err=1232km  10 region(s), 12,214,315 km^2
+  [ETA: 3h48m remaining]
+
+[ 52/500] 143622887729774.jpg (39.86, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.89,116.48) err=3km  9 region(s), 11,424,606 km^2
+  [ETA: 3h47m remaining]
+
+[ 53/500] 181888203843615.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=17km  7 region(s), 10,577,720 km^2
+  [ETA: 3h46m remaining]
+
+[ 54/500] 3910500172332801.jpg (39.87, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[60, 75]  score=0.80  JSON:OK
+  Fusion:(39.89,114.08) err=212km  8 region(s), 11,421,775 km^2
+  [ETA: 3h45m remaining]
+
+[ 55/500] 515801196242015.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=347km  7 region(s), 12,112,417 km^2
+  [ETA: 3h44m remaining]
+
+[ 56/500] 294120739009877.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.82,116.08) err=29km  7 region(s), 10,577,720 km^2
+  [ETA: 3h43m remaining]
+
+[ 57/500] 314798493452644.jpg (39.92, 116.30)
+  Sensors: elev=61m T=25C RH=65%
+  26s  VLM_elev=[61, 76]  score=0.80  JSON:OK
+  Fusion:(39.92,116.48) err=15km  8 region(s), 11,056,641 km^2
+  [ETA: 3h42m remaining]
+
+[ 58/500] 1133618453802020.jpg (39.89, 116.35)
+  Sensors: elev=71m T=25C RH=65%
+  24s  VLM_elev=[65, 87]  score=0.81  JSON:OK
+  Fusion:(40.02,116.38) err=14km  8 region(s), 10,581,117 km^2
+  [ETA: 3h41m remaining]
+
+[ 59/500] 2904802136465795.jpg (39.99, 116.38)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.00,116.38) err=0km  9 region(s), 11,424,606 km^2
+  [ETA: 3h41m remaining]
+
+[ 60/500] 245133667413609.jpg (39.83, 116.24)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=22km  9 region(s), 15,268,425 km^2
+  [ETA: 3h40m remaining]
+  [Checkpoint: 60/500] VRAM=2.7GB
+
+[ 61/500] 386672392571789.jpg (39.86, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=344km  7 region(s), 12,112,417 km^2
+  [ETA: 3h39m remaining]
+
+[ 62/500] 862745517640424.jpg (39.86, 116.38)
+  Sensors: elev=63m T=25C RH=65%
+  26s  VLM_elev=[63, 78]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=10km  8 region(s), 10,581,117 km^2
+  [ETA: 3h38m remaining]
+
+[ 63/500] 198852058743933.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=340km  7 region(s), 12,112,417 km^2
+  [ETA: 3h37m remaining]
+
+[ 64/500] 371687377537205.jpg (39.96, 116.45)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.99,116.38) err=6km  9 region(s), 11,424,606 km^2
+  [ETA: 3h37m remaining]
+
+[ 65/500] 283251356797038.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=17km  7 region(s), 11,280,250 km^2
+  [ETA: 3h36m remaining]
+
+[ 66/500] 520559665622555.jpg (39.82, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.82,114.08) err=207km  9 region(s), 11,423,134 km^2
+  [ETA: 3h35m remaining]
+
+[ 67/500] 506367667073492.jpg (39.86, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[54, 66]  score=0.79  JSON:OK N=2
+  Fusion:(34.39,114.00) err=649km  3 region(s), 3,974,022 km^2
+  [ETA: 3h37m remaining]
+
+[ 68/500] 301164051494824.jpg (39.90, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=11km  9 region(s), 11,424,606 km^2
+  [ETA: 3h36m remaining]
+
+[ 69/500] 1162311427545634.jpg (39.87, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[60, 75]  score=0.81  JSON:OK
+  Fusion:(39.89,114.08) err=213km  8 region(s), 11,421,775 km^2
+  [ETA: 3h35m remaining]
+
+[ 70/500] 492431565289247.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=183km  5 region(s), 10,566,964 km^2
+  [ETA: 3h34m remaining]
+  [Checkpoint: 70/500] VRAM=2.7GB
+
+[ 71/500] 1134299947083754.jpg (39.89, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[60, 75]  score=0.81  JSON:OK
+  Fusion:(39.89,116.08) err=10km  8 region(s), 10,581,117 km^2
+  [ETA: 3h33m remaining]
+
+[ 72/500] 756560211722949.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.78<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.78  JSON:OK N=2
+  Fusion:(39.89,116.48) err=18km  7 region(s), 11,280,250 km^2
+  [ETA: 3h35m remaining]
+
+[ 73/500] 518687829564145.jpg (39.89, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.89,116.48) err=24km  8 region(s), 10,581,117 km^2
+  [ETA: 3h34m remaining]
+
+[ 74/500] 257929419411328.jpg (39.98, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.80<0.80 -> 2nd inference...
+  48s  VLM_elev=[50, 70]  score=0.80  JSON:OK N=2
+  Fusion:(33.00,117.10) err=780km  7 region(s), 12,061,468 km^2
+  [ETA: 3h36m remaining]
+
+[ 75/500] 382427332914858.jpg (39.82, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=336km  7 region(s), 12,112,417 km^2
+  [ETA: 3h35m remaining]
+
+[ 76/500] 4051651038232060.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=8km  8 region(s), 10,581,117 km^2
+  [ETA: 3h34m remaining]
+
+[ 77/500] 783162069066994.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=22km  7 region(s), 11,280,250 km^2
+  [ETA: 3h33m remaining]
+
+[ 78/500] 1384987158569815.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h33m remaining]
+
+[ 79/500] 369629257746049.jpg (39.82, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=336km  7 region(s), 12,112,417 km^2
+  [ETA: 3h32m remaining]
+
+[ 80/500] 217384700220142.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=22km  9 region(s), 11,424,606 km^2
+  [ETA: 3h31m remaining]
+  [Checkpoint: 80/500] VRAM=2.7GB
+
+[ 81/500] 2879813588926951.jpg (39.90, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=39km  7 region(s), 10,577,720 km^2
+  [ETA: 3h30m remaining]
+
+[ 82/500] 176530214336499.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h29m remaining]
+
+[ 83/500] 496246858493950.jpg (39.92, 116.35)
+  Sensors: elev=69m T=25C RH=65%
+  26s  VLM_elev=[69, 84]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=11km  9 region(s), 15,268,425 km^2
+  [ETA: 3h29m remaining]
+
+[ 84/500] 486076702738127.jpg (39.99, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.99,116.08) err=36km  9 region(s), 11,424,606 km^2
+  [ETA: 3h28m remaining]
+
+[ 85/500] 582591876477326.jpg (39.86, 116.41)
+  Sensors: elev=63m T=25C RH=65%
+  26s  VLM_elev=[60, 75]  score=0.80  JSON:OK
+  Fusion:(39.90,116.50) err=9km  9 region(s), 11,424,606 km^2
+  [ETA: 3h27m remaining]
+
+[ 86/500] 130395029107791.jpg (39.94, 116.53)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=656km  3 region(s), 3,974,022 km^2
+  [ETA: 3h26m remaining]
+
+[ 87/500] 854717605255218.jpg (39.89, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[54, 66]  score=0.79  JSON:OK N=2
+  Fusion:(41.00,124.52) err=686km  2 region(s), 345,321 km^2
+  [ETA: 3h28m remaining]
+
+[ 88/500] 956737795143423.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.39,114.00) err=642km  3 region(s), 3,974,022 km^2
+  [ETA: 3h27m remaining]
+
+[ 89/500] 3787917417983791.jpg (39.86, 116.41)
+  Sensors: elev=63m T=25C RH=65%
+    JSON parse failed, retry 1/1...
+  Score=0.70<0.80 -> 2nd inference...
+  Elements disagree (5/6) -> 3rd inference...
+    JSON parse failed, retry 1/1...
+  416s  VLM_elev=N/A  score=0.70  JSON:MISSING (retry=2) N=3
+  Fusion:(39.90,114.10) err=197km  4 region(s), 9,842,356 km^2
+  [ETA: 3h56m remaining]
+
+[ 90/500] 435085467559231.jpg (39.90, 116.22)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[60, 60]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=347km  7 region(s), 12,112,417 km^2
+  [ETA: 3h55m remaining]
+  [Checkpoint: 90/500] VRAM=2.7GB
+
+[ 91/500] 512209343303833.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h54m remaining]
+
+[ 92/500] 155261069869800.jpg (39.82, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=336km  7 region(s), 12,112,417 km^2
+  [ETA: 3h53m remaining]
+
+[ 93/500] 1818689634978284.jpg (39.92, 116.37)
+  Sensors: elev=71m T=25C RH=65%
+  27s  VLM_elev=[60, 80]  score=0.80  JSON:OK
+  Fusion:(31.49,121.80) err=1058km  1 region(s), 17,662 km^2
+  [ETA: 3h52m remaining]
+
+[ 94/500] 1180486522399317.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=183km  5 region(s), 10,566,964 km^2
+  [ETA: 3h50m remaining]
+
+[ 95/500] 142317364536874.jpg (39.86, 116.21)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=344km  7 region(s), 12,112,417 km^2
+  [ETA: 3h49m remaining]
+
+[ 96/500] 1510916636786018.jpg (39.99, 116.32)
+  Sensors: elev=60m T=25C RH=65%
+  28s  VLM_elev=[50, 70]  score=0.81  JSON:OK
+  Fusion:(39.99,116.38) err=6km  9 region(s), 11,424,606 km^2
+  [ETA: 3h49m remaining]
+
+[ 97/500] 748341133169825.jpg (40.00, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[50, 75]  score=0.80  JSON:OK
+  Fusion:(28.92,117.20) err=1235km  9 region(s), 12,004,858 km^2
+  [ETA: 3h48m remaining]
+
+[ 98/500] 1200144653835875.jpg (40.00, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.00,114.08) err=183km  8 region(s), 11,421,775 km^2
+  [ETA: 3h47m remaining]
+
+[ 99/500] 831323520809415.jpg (39.86, 116.49)
+  Sensors: elev=60m T=25C RH=65%
+  30s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=3km  9 region(s), 11,424,606 km^2
+  [ETA: 3h46m remaining]
+
+[100/500] 3926484954099204.jpg (39.92, 116.35)
+  Sensors: elev=69m T=25C RH=65%
+  26s  VLM_elev=[69, 84]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=11km  9 region(s), 11,424,606 km^2
+  [ETA: 3h45m remaining]
+  [Checkpoint: 100/500] VRAM=2.7GB
+
+[101/500] 159850416063927.jpg (39.82, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=206km  8 region(s), 11,421,775 km^2
+  [ETA: 3h44m remaining]
+
+[102/500] 119175090220573.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h43m remaining]
+
+[103/500] 751829512153359.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=17km  9 region(s), 15,268,425 km^2
+  [ETA: 3h42m remaining]
+
+[104/500] 938397700306140.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h41m remaining]
+
+[105/500] 490600155417408.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 3h42m remaining]
+
+[106/500] 261737439029803.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 15,268,425 km^2
+  [ETA: 3h41m remaining]
+
+[107/500] 799787730957864.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[60, 60]  score=0.81  JSON:OK
+  Fusion:(39.82,114.08) err=183km  8 region(s), 11,421,775 km^2
+  [ETA: 3h40m remaining]
+
+[108/500] 300646624894101.jpg (39.93, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=348km  7 region(s), 12,112,417 km^2
+  [ETA: 3h39m remaining]
+
+[109/500] 236825904891615.jpg (39.86, 116.38)
+  Sensors: elev=63m T=25C RH=65%
+  25s  VLM_elev=[60, 70]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=10km  8 region(s), 10,581,117 km^2
+  [ETA: 3h39m remaining]
+
+[110/500] 890384381518721.jpg (39.92, 116.59)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(31.50,111.00) err=1063km  7 region(s), 11,053,810 km^2
+  [ETA: 3h38m remaining]
+  [Checkpoint: 110/500] VRAM=2.7GB
+
+[111/500] 462666458321029.jpg (39.86, 116.38)
+  Sensors: elev=62m T=25C RH=65%
+  25s  VLM_elev=[62, 77]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=10km  9 region(s), 11,424,606 km^2
+  [ETA: 3h37m remaining]
+
+[112/500] 229349595196674.jpg (39.89, 116.35)
+  Sensors: elev=71m T=25C RH=65%
+  26s  VLM_elev=[71, 86]  score=0.81  JSON:OK
+  Fusion:(40.02,116.38) err=14km  8 region(s), 10,581,117 km^2
+  [ETA: 3h36m remaining]
+
+[113/500] 1434036250311228.jpg (39.87, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(34.39,114.00) err=650km  3 region(s), 3,974,022 km^2
+  [ETA: 3h35m remaining]
+
+[114/500] 661800451289540.jpg (39.98, 116.51)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=660km  3 region(s), 3,974,022 km^2
+  [ETA: 3h34m remaining]
+
+[115/500] 281587030323314.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(39.89,116.48) err=18km  9 region(s), 15,268,425 km^2
+  [ETA: 3h35m remaining]
+
+[116/500] 537457294097202.jpg (39.83, 116.23)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=22km  9 region(s), 11,424,606 km^2
+  [ETA: 3h34m remaining]
+
+[117/500] 824435945153956.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.90,116.48) err=17km  9 region(s), 11,424,606 km^2
+  [ETA: 3h33m remaining]
+
+[118/500] 139480631554289.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  29s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.82,116.08) err=28km  8 region(s), 10,581,117 km^2
+  [ETA: 3h32m remaining]
+
+[119/500] 4167795893333069.jpg (39.90, 116.38)
+  Sensors: elev=80m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[70, 90]  score=0.79  JSON:OK N=2
+  Fusion:(38.22,114.28) err=260km  9 region(s), 15,268,425 km^2
+  [ETA: 3h33m remaining]
+
+[120/500] 758615231518163.jpg (39.87, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.89,114.08) err=212km  8 region(s), 11,421,775 km^2
+  [ETA: 3h32m remaining]
+  [Checkpoint: 120/500] VRAM=2.7GB
+
+[121/500] 802882207325220.jpg (40.01, 116.35)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.01,116.38) err=3km  9 region(s), 11,424,606 km^2
+  [ETA: 3h31m remaining]
+
+[122/500] 803076421049218.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=365km  7 region(s), 12,112,417 km^2
+  [ETA: 3h30m remaining]
+
+[123/500] 176717487700645.jpg (40.00, 116.26)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=654km  3 region(s), 3,974,022 km^2
+  [ETA: 3h30m remaining]
+
+[124/500] 827123364879884.jpg (40.06, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.09,116.08) err=33km  9 region(s), 11,424,606 km^2
+  [ETA: 3h29m remaining]
+
+[125/500] 299041428607501.jpg (40.02, 116.38)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(40.20,116.48) err=22km  3 region(s), 3,974,022 km^2
+  [ETA: 3h28m remaining]
+
+[126/500] 634336332077902.jpg (40.10, 116.37)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=193km  9 region(s), 11,423,134 km^2
+  [ETA: 3h28m remaining]
+
+[127/500] 915408599258157.jpg (40.04, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=212km  9 region(s), 15,268,425 km^2
+  [ETA: 3h28m remaining]
+
+[128/500] 1696663120517542.jpg (40.02, 116.53)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.40,114.00) err=664km  5 region(s), 3,974,022 km^2
+  [ETA: 3h27m remaining]
+
+[129/500] 1425311604974462.jpg (40.06, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=362km  7 region(s), 12,112,417 km^2
+  [ETA: 3h26m remaining]
+
+[130/500] 1010359293679923.jpg (40.10, 116.31)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.41,114.00) err=665km  3 region(s), 3,974,022 km^2
+  [ETA: 3h25m remaining]
+  [Checkpoint: 130/500] VRAM=2.7GB
+
+[131/500] 1259670231097640.jpg (40.03, 116.56)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=211km  8 region(s), 11,421,775 km^2
+  [ETA: 3h24m remaining]
+
+[132/500] 1191209738724030.jpg (40.10, 116.55)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  57s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(34.41,114.00) err=672km  3 region(s), 3,974,022 km^2
+  [ETA: 3h25m remaining]
+
+[133/500] 883587958889352.jpg (40.04, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(39.59,116.70) err=51km  3 region(s), 1,511,487 km^2
+  [ETA: 3h24m remaining]
+
+[134/500] 474710123612229.jpg (40.03, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[50, 70]  score=0.81  JSON:OK
+  Fusion:(31.50,111.00) err=1073km  7 region(s), 11,053,810 km^2
+  [ETA: 3h23m remaining]
+
+[135/500] 246217320588128.jpg (40.07, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.09,116.08) err=42km  9 region(s), 11,424,606 km^2
+  [ETA: 3h22m remaining]
+
+[136/500] 513815806327644.jpg (40.00, 116.39)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[55, 65]  score=0.80  JSON:OK N=2
+  Fusion:(39.92,116.48) err=12km  7 region(s), 10,577,720 km^2
+  [ETA: 3h22m remaining]
+
+[137/500] 1010216917005677.jpg (40.10, 116.31)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(34.42,114.00) err=664km  3 region(s), 3,974,022 km^2
+  [ETA: 3h22m remaining]
+
+[138/500] 850161395572811.jpg (40.07, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(40.09,114.08) err=212km  6 region(s), 10,568,323 km^2
+  [ETA: 3h21m remaining]
+
+[139/500] 2308858659258523.jpg (40.10, 116.25)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=369km  7 region(s), 12,112,417 km^2
+  [ETA: 3h20m remaining]
+
+[140/500] 811944426090958.jpg (40.03, 116.56)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.02,114.08) err=211km  8 region(s), 11,421,775 km^2
+  [ETA: 3h19m remaining]
+  [Checkpoint: 140/500] VRAM=2.7GB
+
+[141/500] 466053834486126.jpg (40.00, 116.40)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  67s  VLM_elev=[60, 75]  score=0.79  JSON:OK N=2
+  Fusion:(40.00,116.40) err=0km  8 region(s), 10,581,117 km^2
+  [ETA: 3h20m remaining]
+
+[142/500] 231445166306542.jpg (40.10, 116.36)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=193km  9 region(s), 11,423,134 km^2
+  [ETA: 3h20m remaining]
+
+[143/500] 3769963749941087.jpg (40.10, 116.55)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(34.41,114.00) err=672km  3 region(s), 3,974,022 km^2
+  [ETA: 3h21m remaining]
+
+[144/500] 1632137140509968.jpg (40.10, 116.25)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=369km  7 region(s), 12,112,417 km^2
+  [ETA: 3h20m remaining]
+
+[145/500] 242854197591666.jpg (40.08, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=364km  7 region(s), 12,112,417 km^2
+  [ETA: 3h19m remaining]
+
+[146/500] 1252387238814427.jpg (40.04, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  29s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(31.50,111.00) err=1070km  7 region(s), 11,053,810 km^2
+  [ETA: 3h18m remaining]
+
+[147/500] 987085042663385.jpg (40.10, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(31.50,111.00) err=1076km  7 region(s), 11,053,810 km^2
+  [ETA: 3h17m remaining]
+
+[148/500] 239350161277577.jpg (40.08, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(31.50,111.00) err=1074km  7 region(s), 11,053,810 km^2
+  [ETA: 3h17m remaining]
+
+[149/500] 1441670819964751.jpg (40.10, 116.37)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=193km  6 region(s), 10,568,323 km^2
+  [ETA: 3h17m remaining]
+
+[150/500] 408223943952545.jpg (43.87, 88.10)
+  Sensors: elev=2699m T=6C RH=32%
+  Score=0.78<0.80 -> 2nd inference...
+  55s  VLM_elev=[2699, 2714]  score=0.78  JSON:OK N=2
+  Fusion:(28.66,98.57) err=1930km  1 region(s), 475,524 km^2
+  [ETA: 3h17m remaining]
+  [Checkpoint: 150/500] VRAM=2.7GB
+
+[151/500] 2900552050232756.jpg (40.03, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=212km  8 region(s), 11,421,775 km^2
+  [ETA: 3h16m remaining]
+
+[152/500] 936103020841215.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=365km  1 region(s), 866,133 km^2
+  [ETA: 3h15m remaining]
+
+[153/500] 1312673476022686.jpg (40.04, 116.48)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(31.50,111.00) err=1070km  7 region(s), 11,053,810 km^2
+  [ETA: 3h15m remaining]
+
+[154/500] 297281732120757.jpg (40.02, 116.39)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(34.42,114.00) err=658km  3 region(s), 3,974,022 km^2
+  [ETA: 3h14m remaining]
+
+[155/500] 270912391405411.jpg (40.07, 116.58)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(36.82,116.88) err=363km  7 region(s), 12,112,417 km^2
+  [ETA: 3h14m remaining]
+
+[156/500] 264234372109089.jpg (40.07, 116.33)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(31.80,108.63) err=1150km  2 region(s), 62,271 km^2
+  [ETA: 3h13m remaining]
+
+[157/500] 342000170673701.jpg (40.08, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.80  JSON:OK N=2
+  Fusion:(36.72,117.08) err=378km  10 region(s), 12,214,315 km^2
+  [ETA: 3h13m remaining]
+
+[158/500] 478690433361060.jpg (40.00, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.00,114.10) err=204km  9 region(s), 15,268,425 km^2
+  [ETA: 3h13m remaining]
+
+[159/500] 1194384244651064.jpg (40.02, 116.26)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(33.00,114.00) err=806km  9 region(s), 15,268,425 km^2
+  [ETA: 3h12m remaining]
+
+[160/500] 200788572854802.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  30s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=7km  9 region(s), 11,424,606 km^2
+  [ETA: 3h11m remaining]
+  [Checkpoint: 160/500] VRAM=2.7GB
+
+[161/500] 158233233892513.jpg (40.10, 116.36)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=193km  9 region(s), 11,423,134 km^2
+  [ETA: 3h11m remaining]
+
+[162/500] 1006838997338790.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=7km  9 region(s), 11,424,606 km^2
+  [ETA: 3h11m remaining]
+
+[163/500] 329058358603194.jpg (40.03, 116.57)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(31.50,111.00) err=1073km  7 region(s), 11,053,810 km^2
+  [ETA: 3h10m remaining]
+
+[164/500] 1268353863567769.jpg (40.08, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[54, 66]  score=0.79  JSON:OK N=2
+  Fusion:(40.02,116.38) err=14km  11 region(s), 14,082,445 km^2
+  [ETA: 3h10m remaining]
+
+[165/500] 1193097817828131.jpg (40.00, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  27s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(40.01,114.08) err=206km  9 region(s), 15,268,425 km^2
+  [ETA: 3h9m remaining]
+
+[166/500] 487639195796001.jpg (40.03, 116.59)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=213km  8 region(s), 11,421,775 km^2
+  [ETA: 3h8m remaining]
+
+[167/500] 934553245114012.jpg (40.10, 116.55)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  58s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=208km  9 region(s), 15,268,425 km^2
+  [ETA: 3h9m remaining]
+
+[168/500] 194851325790526.jpg (40.00, 116.27)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[58, 64]  score=0.79  JSON:OK N=2
+  Fusion:(40.00,114.10) err=185km  8 region(s), 11,421,775 km^2
+  [ETA: 3h9m remaining]
+
+[169/500] 902051433703562.jpg (40.02, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(28.92,116.01) err=1236km  7 region(s), 12,112,417 km^2
+  [ETA: 3h8m remaining]
+
+[170/500] 571698218441780.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=7km  9 region(s), 11,424,606 km^2
+  [ETA: 3h7m remaining]
+  [Checkpoint: 170/500] VRAM=2.7GB
+
+[171/500] 634737465190417.jpg (40.10, 116.31)
+  Sensors: elev=60m T=25C RH=65%
+  29s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(34.42,114.00) err=664km  3 region(s), 3,974,022 km^2
+  [ETA: 3h7m remaining]
+
+[172/500] 1250876858706473.jpg (43.86, 88.10)
+  Sensors: elev=2714m T=6C RH=32%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[2600, 2800]  score=0.79  JSON:OK N=2
+  Fusion:(28.59,99.59) err=1982km  4 region(s), 237,762 km^2
+  [ETA: 3h7m remaining]
+
+[173/500] 214086538156438.jpg (40.10, 116.32)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(36.82,116.88) err=368km  3 region(s), 1,511,487 km^2
+  [ETA: 3h6m remaining]
+
+[174/500] 497883701629267.jpg (40.03, 116.59)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[55, 65]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=213km  8 region(s), 11,421,775 km^2
+  [ETA: 3h5m remaining]
+
+[175/500] 1377805369459529.jpg (40.10, 116.37)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.10,114.10) err=193km  9 region(s), 11,423,134 km^2
+  [ETA: 3h5m remaining]
+
+[176/500] 601534680818728.jpg (40.08, 116.26)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=367km  11 region(s), 12,293,569 km^2
+  [ETA: 3h4m remaining]
+
+[177/500] 240828758558572.jpg (40.10, 116.32)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(36.82,116.88) err=368km  7 region(s), 12,112,417 km^2
+  [ETA: 3h4m remaining]
+
+[178/500] 349630509922240.jpg (40.08, 116.52)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(36.72,117.08) err=378km  8 region(s), 13,980,547 km^2
+  [ETA: 3h3m remaining]
+
+[179/500] 527058752036720.jpg (40.01, 116.37)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(34.40,114.00) err=658km  3 region(s), 3,974,022 km^2
+  [ETA: 3h2m remaining]
+
+[180/500] 3102186116707176.jpg (40.02, 116.26)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[50, 75]  score=0.81  JSON:OK
+  Fusion:(40.02,114.08) err=185km  9 region(s), 15,268,425 km^2
+  [ETA: 3h1m remaining]
+  [Checkpoint: 180/500] VRAM=2.7GB
+
+[181/500] 1533267100400214.jpg (30.67, 104.16)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(30.69,104.00) err=15km  4 region(s), 25,185,081 km^2
+  [ETA: 3h1m remaining]
+
+[182/500] 603412802084465.jpg (30.23, 120.14)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[13, 17]  score=0.75  JSON:OK N=2
+  Fusion:(23.21,113.20) err=1041km  15 region(s), 13,099,554 km^2
+  [ETA: 3h1m remaining]
+
+[183/500] 839872189936160.jpg (31.20, 121.42)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[5, 5]  score=0.79  JSON:OK N=2
+  Fusion:(32.41,119.15) err=253km  6 region(s), 292,108 km^2
+  [ETA: 3h1m remaining]
+
+[184/500] 1243979060453989.jpg (30.13, 118.16)
+  Sensors: elev=1613m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  104s  VLM_elev=[1613, 1684]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,738,665 km^2
+  [ETA: 3h2m remaining]
+
+[185/500] 2187086105081689.jpg (30.13, 118.18)
+  Sensors: elev=1598m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[1598, 1758]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,597,140 km^2
+  [ETA: 3h2m remaining]
+
+[186/500] 1168559886900489.jpg (31.14, 121.51)
+  Sensors: elev=5m T=29C RH=83%
+  26s  VLM_elev=[5, 5]  score=0.81  JSON:OK
+  Fusion:(32.42,119.18) err=261km  3 region(s), 3,133,364 km^2
+  [ETA: 3h1m remaining]
+
+[187/500] 870659141466712.jpg (34.22, 108.87)
+  Sensors: elev=2161m T=13C RH=75%
+  Score=0.72<0.80 -> 2nd inference...
+  52s  VLM_elev=[2146, 2176]  score=0.72  JSON:OK N=2
+  Fusion:(34.21,109.01) err=14km  1 region(s), 1,783,215 km^2
+  [ETA: 3h1m remaining]
+
+[188/500] 4222762497811600.jpg (31.20, 121.69)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=273km  18 region(s), 12,579,280 km^2
+  [ETA: 3h1m remaining]
+
+[189/500] 903252510223070.jpg (31.22, 121.42)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(32.42,119.18) err=249km  4 region(s), 3,294,702 km^2
+  [ETA: 3h1m remaining]
+
+[190/500] 1109640549441635.jpg (30.68, 104.07)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(30.29,104.00) err=44km  3 region(s), 498,281 km^2
+  [ETA: 3h0m remaining]
+  [Checkpoint: 190/500] VRAM=2.7GB
+
+[191/500] 896349502053890.jpg (30.18, 120.20)
+  Sensors: elev=15m T=29C RH=83%
+  26s  VLM_elev=[13, 17]  score=0.80  JSON:OK
+  Fusion:(32.11,118.85) err=250km  3 region(s), 153,526 km^2
+  [ETA: 2h59m remaining]
+
+[192/500] 467578831005712.jpg (31.18, 121.43)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  54s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(37.93,116.70) err=867km  2 region(s), 347,699 km^2
+  [ETA: 2h59m remaining]
+
+[193/500] 130850933066918.jpg (30.55, 104.08)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.59,104.00) err=8km  4 region(s), 25,185,081 km^2
+  [ETA: 2h59m remaining]
+
+[194/500] 401564504138541.jpg (30.30, 120.05)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=249km  21 region(s), 12,681,178 km^2
+  [ETA: 2h59m remaining]
+
+[195/500] 4253776657986019.jpg (31.40, 121.48)
+  Sensors: elev=5m T=28C RH=83%
+  25s  VLM_elev=[5, 5]  score=0.81  JSON:OK
+  Fusion:(22.92,113.20) err=1248km  10 region(s), 12,127,985 km^2
+  [ETA: 2h58m remaining]
+
+[196/500] 518328545835259.jpg (31.16, 121.30)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(31.19,120.00) err=124km  18 region(s), 12,579,280 km^2
+  [ETA: 2h58m remaining]
+
+[197/500] 3136786336496051.jpg (30.09, 118.18)
+  Sensors: elev=1427m T=20C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[1427, 1480]  score=0.76  JSON:OK N=2
+  Fusion:(30.10,118.19) err=1km  18 region(s), 8,576,358 km^2
+  [ETA: 2h58m remaining]
+
+[198/500] 1498148531481692.jpg (34.19, 108.86)
+  Sensors: elev=2138m T=13C RH=75%
+  Score=0.73<0.80 -> 2nd inference...
+  54s  VLM_elev=[2138, 2138]  score=0.73  JSON:OK N=2
+  Fusion:(34.20,109.01) err=14km  15 region(s), 4,820,087 km^2
+  [ETA: 2h58m remaining]
+
+[199/500] 144881684260694.jpg (34.29, 109.03)
+  Sensors: elev=1807m T=16C RH=75%
+  Score=0.77<0.80 -> 2nd inference...
+  51s  VLM_elev=[1750, 1860]  score=0.77  JSON:OK N=2
+  Fusion:(34.29,109.01) err=2km  21 region(s), 5,416,445 km^2
+  [ETA: 2h57m remaining]
+
+[200/500] 1370878249965308.jpg (31.20, 121.65)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  74s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=3
+  Fusion:(31.20,120.00) err=157km  16 region(s), 12,575,204 km^2
+  [ETA: 2h58m remaining]
+  [Checkpoint: 200/500] VRAM=2.7GB
+
+[201/500] 463694508735275.jpg (30.61, 103.97)
+  Sensors: elev=543m T=25C RH=75%
+  26s  VLM_elev=[528, 558]  score=0.80  JSON:OK
+  Fusion:(28.00,117.30) err=1324km  4 region(s), 25,185,081 km^2
+  [ETA: 2h57m remaining]
+
+[202/500] 390824776977246.jpg (31.97, 118.71)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(31.99,118.68) err=3km  13 region(s), 12,731,589 km^2
+  [ETA: 2h57m remaining]
+
+[203/500] 142789924523568.jpg (31.36, 121.49)
+  Sensors: elev=5m T=28C RH=83%
+  26s  VLM_elev=[5, 5]  score=0.80  JSON:OK
+  Fusion:(31.25,121.40) err=15km  1 region(s), 17,662 km^2
+  [ETA: 2h56m remaining]
+
+[204/500] 3567705209996026.jpg (31.12, 121.57)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[5, 5]  score=0.79  JSON:OK N=2
+  Fusion:(32.42,119.18) err=268km  3 region(s), 3,133,364 km^2
+  [ETA: 2h56m remaining]
+
+[205/500] 4290225417735786.jpg (31.16, 121.31)
+  Sensors: elev=5m T=29C RH=83%
+  26s  VLM_elev=[5, 5]  score=0.80  JSON:OK
+  Fusion:(31.19,120.00) err=124km  16 region(s), 12,575,204 km^2
+  [ETA: 2h55m remaining]
+
+[206/500] 3068141356739481.jpg (31.38, 121.49)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  54s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(37.50,116.70) err=810km  3 region(s), 438,275 km^2
+  [ETA: 2h55m remaining]
+
+[207/500] 331681491710174.jpg (30.30, 120.04)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[13, 17]  score=0.75  JSON:OK N=2
+  Fusion:(31.50,115.08) err=491km  4 region(s), 974,088 km^2
+  [ETA: 2h55m remaining]
+
+[208/500] 1434833476854320.jpg (31.14, 121.51)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[0, 15]  score=0.76  JSON:OK N=2
+  Fusion:(31.12,120.00) err=144km  16 region(s), 14,455,364 km^2
+  [ETA: 2h55m remaining]
+
+[209/500] 1361403174245474.jpg (34.29, 109.03)
+  Sensors: elev=1804m T=16C RH=75%
+  Score=0.78<0.80 -> 2nd inference...
+  51s  VLM_elev=[1789, 1819]  score=0.78  JSON:OK N=2
+  Fusion:(37.92,112.38) err=503km  19 region(s), 5,415,850 km^2
+  [ETA: 2h55m remaining]
+
+[210/500] 1133167867161416.jpg (31.36, 121.49)
+  Sensors: elev=5m T=28C RH=83%
+  30s  VLM_elev=[5, 5]  score=0.80  JSON:OK
+  Fusion:(31.32,121.38) err=12km  13 region(s), 10,810,387 km^2
+  [ETA: 2h54m remaining]
+  [Checkpoint: 210/500] VRAM=2.7GB
+
+[211/500] 155298923732454.jpg (30.70, 104.19)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(31.00,108.58) err=421km  3 region(s), 3,314,516 km^2
+  [ETA: 2h53m remaining]
+
+[212/500] 1602612987105045.jpg (30.13, 118.16)
+  Sensors: elev=1615m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  103s  VLM_elev=[1600, 1630]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  22 region(s), 12,817,919 km^2
+  [ETA: 2h54m remaining]
+
+[213/500] 1607851949416441.jpg (30.30, 120.10)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  48s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(31.19,121.38) err=157km  14 region(s), 10,813,218 km^2
+  [ETA: 2h54m remaining]
+
+[214/500] 265880272300656.jpg (31.32, 121.54)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  47s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(32.00,120.00) err=165km  3 region(s), 3,314,516 km^2
+  [ETA: 2h53m remaining]
+
+[215/500] 3881694231922134.jpg (30.66, 104.07)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(31.00,108.08) err=386km  4 region(s), 3,294,702 km^2
+  [ETA: 2h53m remaining]
+
+[216/500] 4014958828761358.jpg (30.14, 118.18)
+  Sensors: elev=1616m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  55s  VLM_elev=[1600, 1630]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  22 region(s), 11,914,282 km^2
+  [ETA: 2h53m remaining]
+
+[217/500] 763762281704096.jpg (30.61, 103.96)
+  Sensors: elev=551m T=25C RH=75%
+  25s  VLM_elev=[536, 566]  score=0.81  JSON:OK
+  Fusion:(32.00,104.08) err=155km  4 region(s), 25,185,081 km^2
+  [ETA: 2h52m remaining]
+
+[218/500] 192836655994400.jpg (31.19, 121.64)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  49s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(23.20,113.20) err=1218km  13 region(s), 10,810,387 km^2
+  [ETA: 2h51m remaining]
+
+[219/500] 304967167898884.jpg (31.13, 121.46)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  74s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=3
+  Fusion:(31.12,121.18) err=26km  13 region(s), 10,810,387 km^2
+  [ETA: 2h52m remaining]
+
+[220/500] 133452462423810.jpg (30.56, 104.15)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(32.92,113.50) err=922km  3 region(s), 1,198,320 km^2
+  [ETA: 2h51m remaining]
+  [Checkpoint: 220/500] VRAM=2.7GB
+
+[221/500] 318267469662648.jpg (31.13, 121.39)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(31.12,121.18) err=20km  13 region(s), 12,731,589 km^2
+  [ETA: 2h51m remaining]
+
+[222/500] 188396636484068.jpg (31.18, 121.43)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  61s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(31.25,121.40) err=8km  1 region(s), 17,662 km^2
+  [ETA: 2h50m remaining]
+
+[223/500] 108690567963799.jpg (31.20, 121.42)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  54s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(31.22,121.40) err=2km  14 region(s), 10,813,218 km^2
+  [ETA: 2h50m remaining]
+
+[224/500] 173845355157148.jpg (30.58, 104.19)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.64,106.63) err=257km  2 region(s), 214,552 km^2
+  [ETA: 2h49m remaining]
+
+[225/500] 1116713333457944.jpg (30.22, 120.14)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[15, 15]  score=0.76  JSON:OK N=2
+  Fusion:(32.42,119.18) err=260km  4 region(s), 3,294,702 km^2
+  [ETA: 2h49m remaining]
+
+[226/500] 1150242373003802.jpg (31.96, 118.78)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=63km  3 region(s), 3,314,516 km^2
+  [ETA: 2h49m remaining]
+
+[227/500] 3292257384395078.jpg (30.65, 104.21)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(29.52,110.95) err=661km  2 region(s), 49,590 km^2
+  [ETA: 2h48m remaining]
+
+[228/500] 2280283145738303.jpg (30.09, 118.18)
+  Sensors: elev=1423m T=20C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  73s  VLM_elev=[1408, 1438]  score=0.75  JSON:OK N=3
+  Fusion:(26.00,100.60) err=1782km  22 region(s), 9,719,880 km^2
+  [ETA: 2h48m remaining]
+
+[229/500] 955890791680808.jpg (30.76, 104.06)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(30.79,104.00) err=7km  4 region(s), 25,185,081 km^2
+  [ETA: 2h47m remaining]
+
+[230/500] 1019876989636113.jpg (30.12, 118.17)
+  Sensors: elev=1591m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[1591, 1591]  score=0.75  JSON:OK N=2
+  Fusion:(34.70,115.26) err=578km  1 region(s), 793 km^2
+  [ETA: 2h47m remaining]
+  [Checkpoint: 230/500] VRAM=2.7GB
+
+[231/500] 2074122953420244.jpg (30.13, 118.16)
+  Sensors: elev=1615m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  48s  VLM_elev=[1600, 1630]  score=0.75  JSON:OK N=2
+  Fusion:(27.00,100.60) err=1748km  11 region(s), 6,698,378 km^2
+  [ETA: 2h47m remaining]
+
+[232/500] 331026378419881.jpg (31.22, 121.57)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  52s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=172km  4 region(s), 3,294,702 km^2
+  [ETA: 2h46m remaining]
+
+[233/500] 132487582787508.jpg (30.79, 104.10)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.79,106.08) err=189km  4 region(s), 25,185,081 km^2
+  [ETA: 2h46m remaining]
+
+[234/500] 4018188238227093.jpg (30.30, 120.05)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  49s  VLM_elev=[13, 17]  score=0.76  JSON:OK N=2
+  Fusion:(34.30,114.00) err=722km  4 region(s), 974,088 km^2
+  [ETA: 2h45m remaining]
+
+[235/500] 1218319093428459.jpg (30.14, 118.17)
+  Sensors: elev=1627m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  112s  VLM_elev=[1627, 1700]  score=0.75  JSON:OK N=2
+  Fusion:(27.69,117.71) err=276km  22 region(s), 11,914,282 km^2
+  [ETA: 2h46m remaining]
+
+[236/500] 2368108783542900.jpg (30.56, 104.14)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(23.81,113.03) err=1155km  1 region(s), 30,569 km^2
+  [ETA: 2h45m remaining]
+
+[237/500] 2850315175221668.jpg (31.37, 121.49)
+  Sensors: elev=5m T=28C RH=83%
+  33s  VLM_elev=[5, 5]  score=0.80  JSON:OK
+  Fusion:(32.45,119.16) err=250km  4 region(s), 154,545 km^2
+  [ETA: 2h45m remaining]
+
+[238/500] 297639571954612.jpg (34.29, 108.99)
+  Sensors: elev=1660m T=16C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[1600, 1700]  score=0.79  JSON:OK N=2
+  Fusion:(34.30,109.01) err=2km  16 region(s), 7,702,498 km^2
+  [ETA: 2h44m remaining]
+
+[239/500] 428575772373969.jpg (30.68, 103.95)
+  Sensors: elev=595m T=25C RH=75%
+  25s  VLM_elev=[580, 610]  score=0.80  JSON:OK
+  Fusion:(32.00,103.49) err=153km  2 region(s), 30,129,965 km^2
+  [ETA: 2h43m remaining]
+
+[240/500] 986691248741577.jpg (31.16, 121.31)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  49s  VLM_elev=[0, 15]  score=0.76  JSON:OK N=2
+  Fusion:(31.19,120.00) err=125km  16 region(s), 12,575,204 km^2
+  [ETA: 2h43m remaining]
+  [Checkpoint: 240/500] VRAM=2.7GB
+
+[241/500] 323306839140221.jpg (31.21, 121.34)
+  Sensors: elev=5m T=28C RH=83%
+  26s  VLM_elev=[5, 5]  score=0.81  JSON:OK
+  Fusion:(23.00,108.20) err=1587km  5 region(s), 727,438 km^2
+  [ETA: 2h42m remaining]
+
+[242/500] 1669615269896359.jpg (31.14, 121.56)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  53s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=176km  4 region(s), 3,133,364 km^2
+  [ETA: 2h42m remaining]
+
+[243/500] 1761878680945205.jpg (31.98, 118.78)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.76  JSON:OK N=2
+  Fusion:(32.00,119.10) err=30km  23 region(s), 11,648,753 km^2
+  [ETA: 2h42m remaining]
+
+[244/500] 240095721239881.jpg (30.30, 120.04)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[15, 15]  score=0.76  JSON:OK N=2
+  Fusion:(32.45,119.15) err=253km  4 region(s), 219,760 km^2
+  [ETA: 2h41m remaining]
+
+[245/500] 158964622900512.jpg (30.28, 120.13)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[15, 15]  score=0.79  JSON:OK N=2
+  Fusion:(32.42,119.18) err=253km  3 region(s), 3,133,364 km^2
+  [ETA: 2h41m remaining]
+
+[246/500] 1225076242212942.jpg (30.74, 104.13)
+  Sensors: elev=420m T=26C RH=75%
+  27s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(41.00,120.10) err=1831km  4 region(s), 25,185,081 km^2
+  [ETA: 2h40m remaining]
+
+[247/500] 922135406027650.jpg (31.98, 118.78)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  50s  VLM_elev=[15, 15]  score=0.76  JSON:OK N=2
+  Fusion:(31.99,118.50) err=26km  16 region(s), 12,575,204 km^2
+  [ETA: 2h40m remaining]
+
+[248/500] 652002457664685.jpg (31.20, 121.54)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  48s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(31.20,120.00) err=146km  16 region(s), 12,575,204 km^2
+  [ETA: 2h39m remaining]
+
+[249/500] 1028953722494285.jpg (30.12, 118.17)
+  Sensors: elev=1588m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  82s  VLM_elev=[1588, 1603]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  24 region(s), 13,010,393 km^2
+  [ETA: 2h39m remaining]
+
+[250/500] 380724089749866.jpg (34.29, 109.03)
+  Sensors: elev=1814m T=15C RH=75%
+  Score=0.78<0.80 -> 2nd inference...
+  53s  VLM_elev=[1800, 1830]  score=0.78  JSON:OK N=2
+  Fusion:(34.99,100.00) err=829km  18 region(s), 4,893,934 km^2
+  [ETA: 2h39m remaining]
+  [Checkpoint: 250/500] VRAM=2.7GB
+
+[251/500] 1024343076292617.jpg (30.12, 118.17)
+  Sensors: elev=1592m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  108s  VLM_elev=[1592, 1607]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  28 region(s), 13,137,653 km^2
+  [ETA: 2h40m remaining]
+
+[252/500] 490543265548163.jpg (31.14, 121.51)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(32.00,120.00) err=172km  3 region(s), 3,133,364 km^2
+  [ETA: 2h39m remaining]
+
+[253/500] 1554519154900926.jpg (30.75, 104.06)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(41.50,123.10) err=2079km  3 region(s), 3,974,022 km^2
+  [ETA: 2h38m remaining]
+
+[254/500] 1364116181061320.jpg (30.55, 104.08)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.30,104.03) err=28km  2 region(s), 445,974 km^2
+  [ETA: 2h37m remaining]
+
+[255/500] 160384856029371.jpg (32.06, 118.85)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=51km  4 region(s), 1,197,302 km^2
+  [ETA: 2h37m remaining]
+
+[256/500] 667006629392251.jpg (30.13, 118.16)
+  Sensors: elev=1616m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  107s  VLM_elev=[1601, 1631]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  22 region(s), 12,055,807 km^2
+  [ETA: 2h38m remaining]
+
+[257/500] 1396710137353403.jpg (31.21, 121.65)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  58s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(31.22,121.40) err=24km  14 region(s), 12,734,420 km^2
+  [ETA: 2h37m remaining]
+
+[258/500] 1014301859101708.jpg (34.29, 109.03)
+  Sensors: elev=1802m T=16C RH=75%
+  Score=0.78<0.80 -> 2nd inference...
+  51s  VLM_elev=[1750, 1850]  score=0.78  JSON:OK N=2
+  Fusion:(37.92,112.38) err=503km  19 region(s), 5,415,850 km^2
+  [ETA: 2h37m remaining]
+
+[259/500] 5469903626431157.jpg (30.61, 104.07)
+  Sensors: elev=420m T=26C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(29.72,106.80) err=281km  4 region(s), 25,185,081 km^2
+  [ETA: 2h37m remaining]
+
+[260/500] 319260476306581.jpg (31.16, 121.30)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=244km  3 region(s), 3,133,364 km^2
+  [ETA: 2h36m remaining]
+  [Checkpoint: 260/500] VRAM=2.7GB
+
+[261/500] 167941625217710.jpg (30.19, 120.17)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.80<0.80 -> 2nd inference...
+  56s  VLM_elev=[15, 15]  score=0.80  JSON:OK N=2
+  Fusion:(32.05,118.75) err=246km  4 region(s), 219,760 km^2
+  [ETA: 2h36m remaining]
+
+[262/500] 312160473642764.jpg (34.25, 108.94)
+  Sensors: elev=2283m T=12C RH=75%
+  Score=0.70<0.80 -> 2nd inference...
+  50s  VLM_elev=[2283, 2311]  score=0.70  JSON:OK N=2
+  Fusion:(34.19,108.80) err=15km  5 region(s), 3,974,022 km^2
+  [ETA: 2h35m remaining]
+
+[263/500] 664873053073293.jpg (30.13, 118.16)
+  Sensors: elev=1615m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  53s  VLM_elev=[1600, 1630]  score=0.75  JSON:OK N=2
+  Fusion:(33.89,107.90) err=1054km  20 region(s), 11,662,368 km^2
+  [ETA: 2h35m remaining]
+
+[264/500] 1022033509429169.jpg (30.13, 118.18)
+  Sensors: elev=1605m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  55s  VLM_elev=[1550, 1660]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,597,140 km^2
+  [ETA: 2h34m remaining]
+
+[265/500] 1406796443652254.jpg (31.22, 121.46)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[5, 5]  score=0.79  JSON:OK N=2
+  Fusion:(31.22,121.40) err=6km  14 region(s), 12,734,420 km^2
+  [ETA: 2h34m remaining]
+
+[266/500] 639962925523056.jpg (30.13, 118.18)
+  Sensors: elev=1614m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  55s  VLM_elev=[1614, 1685]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,597,140 km^2
+  [ETA: 2h34m remaining]
+
+[267/500] 1363640754757367.jpg (30.13, 118.17)
+  Sensors: elev=1603m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  53s  VLM_elev=[1590, 1615]  score=0.75  JSON:OK N=2
+  Fusion:(34.97,111.06) err=857km  1 region(s), 288,711 km^2
+  [ETA: 2h33m remaining]
+
+[268/500] 576716933576376.jpg (30.65, 104.21)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(31.00,108.08) err=372km  3 region(s), 3,133,364 km^2
+  [ETA: 2h32m remaining]
+
+[269/500] 461338128456436.jpg (30.67, 104.07)
+  Sensors: elev=420m T=26C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  49s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(30.69,104.00) err=7km  4 region(s), 25,185,081 km^2
+  [ETA: 2h32m remaining]
+
+[270/500] 284812933359318.jpg (31.22, 121.42)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[5, 5]  score=0.76  JSON:OK N=2
+  Fusion:(32.00,120.00) err=160km  4 region(s), 3,133,364 km^2
+  [ETA: 2h31m remaining]
+  [Checkpoint: 270/500] VRAM=2.7GB
+
+[271/500] 1232881644659765.jpg (30.37, 120.03)
+  Sensors: elev=15m T=29C RH=83%
+  25s  VLM_elev=[13, 17]  score=0.81  JSON:OK
+  Fusion:(32.42,119.18) err=241km  4 region(s), 3,133,364 km^2
+  [ETA: 2h31m remaining]
+
+[272/500] 1624802504562149.jpg (30.79, 104.11)
+  Sensors: elev=420m T=26C RH=75%
+  24s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.79,106.08) err=189km  4 region(s), 25,185,081 km^2
+  [ETA: 2h30m remaining]
+
+[273/500] 467682091217638.jpg (30.19, 120.17)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  53s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(31.23,121.44) err=168km  1 region(s), 17,662 km^2
+  [ETA: 2h29m remaining]
+
+[274/500] 874186121147374.jpg (32.04, 118.76)
+  Sensors: elev=15m T=28C RH=83%
+  26s  VLM_elev=[15, 15]  score=0.80  JSON:OK
+  Fusion:(32.45,118.95) err=49km  4 region(s), 219,760 km^2
+  [ETA: 2h28m remaining]
+
+[275/500] 1122925265902334.jpg (30.22, 120.14)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.76  JSON:OK N=2
+  Fusion:(32.45,119.15) err=265km  4 region(s), 219,760 km^2
+  [ETA: 2h28m remaining]
+
+[276/500] 901009941570414.jpg (34.22, 108.87)
+  Sensors: elev=2149m T=13C RH=75%
+  Score=0.72<0.80 -> 2nd inference...
+  51s  VLM_elev=[2149, 2149]  score=0.72  JSON:OK N=2
+  Fusion:(34.20,109.01) err=13km  20 region(s), 4,537,354 km^2
+  [ETA: 2h27m remaining]
+
+[277/500] 312839693565744.jpg (30.19, 120.17)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.79  JSON:OK N=2
+  Fusion:(30.19,119.98) err=18km  13 region(s), 12,731,589 km^2
+  [ETA: 2h27m remaining]
+
+[278/500] 605870132366559.jpg (31.96, 118.78)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  52s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.05,118.80) err=10km  3 region(s), 153,526 km^2
+  [ETA: 2h26m remaining]
+
+[279/500] 748439656543966.jpg (34.30, 108.89)
+  Sensors: elev=928m T=21C RH=75%
+  25s  VLM_elev=[913, 943]  score=0.80  JSON:OK
+  Fusion:(34.19,109.20) err=31km  20 region(s), 8,288,072 km^2
+  [ETA: 2h26m remaining]
+
+[280/500] 554447109040277.jpg (30.61, 104.22)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(32.92,113.50) err=914km  3 region(s), 1,198,320 km^2
+  [ETA: 2h25m remaining]
+  [Checkpoint: 280/500] VRAM=2.7GB
+
+[281/500] 156173290405400.jpg (27.17, 100.06)
+  Sensors: elev=3181m T=9C RH=77%
+  Score=0.62<0.80 -> 2nd inference...
+  51s  VLM_elev=[3181, 3300]  score=0.62  JSON:OK N=2
+  Fusion:(26.99,100.11) err=21km  18 region(s), 5,704,816 km^2
+  [ETA: 2h24m remaining]
+
+[282/500] 1334341965079503.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.58) err=245km  3 region(s), 3,314,516 km^2
+  [ETA: 2h23m remaining]
+
+[283/500] 1605484570476205.jpg (29.64, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(23.01,104.08) err=779km  3 region(s), 2,172,692 km^2
+  [ETA: 2h23m remaining]
+
+[284/500] 1656629021191947.jpg (27.13, 100.24)
+  Sensors: elev=6152m T=-10C RH=77%
+  Score=0.64<0.80 -> 2nd inference...
+  55s  VLM_elev=[6152, 6213]  score=0.64  JSON:OK N=2
+  Fusion:(27.71,100.59) err=73km  14 region(s), 17,700,532 km^2
+  [ETA: 2h22m remaining]
+
+[285/500] 1569297300997606.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  24s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.10) err=209km  3 region(s), 3,314,516 km^2
+  [ETA: 2h21m remaining]
+
+[286/500] 242365967674321.jpg (25.04, 102.73)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  49s  VLM_elev=[1800, 1950]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1183km  21 region(s), 4,028,571 km^2
+  [ETA: 2h21m remaining]
+
+[287/500] 572239151250625.jpg (27.20, 100.05)
+  Sensors: elev=2501m T=13C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[2486, 2516]  score=0.79  JSON:OK N=2
+  Fusion:(27.70,117.70) err=1741km  23 region(s), 5,807,903 km^2
+  [ETA: 2h20m remaining]
+
+[288/500] 462814138816429.jpg (27.19, 100.05)
+  Sensors: elev=2596m T=13C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  54s  VLM_elev=[2596, 2616]  score=0.77  JSON:OK N=2
+  Fusion:(27.30,100.00) err=12km  24 region(s), 6,276,351 km^2
+  [ETA: 2h20m remaining]
+
+[289/500] 474414787011957.jpg (25.06, 110.45)
+  Sensors: elev=500m T=27C RH=77%
+  Score=0.78<0.80 -> 2nd inference...
+  58s  VLM_elev=[485, 515]  score=0.78  JSON:OK N=2
+  Fusion:(25.09,109.58) err=87km  4 region(s), 25,185,081 km^2
+  [ETA: 2h20m remaining]
+
+[290/500] 324362522448792.jpg (25.05, 110.45)
+  Sensors: elev=500m T=27C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  59s  VLM_elev=[485, 515]  score=0.77  JSON:OK N=2
+  Fusion:(28.42,103.08) err=821km  5 region(s), 26,770,161 km^2
+  [ETA: 2h19m remaining]
+  [Checkpoint: 290/500] VRAM=2.7GB
+
+[291/500] 533739147803635.jpg (29.51, 106.56)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.01,118.00) err=1111km  4 region(s), 274,559 km^2
+  [ETA: 2h19m remaining]
+
+[292/500] 1265356555460709.jpg (29.61, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(27.92,120.50) err=1366km  3 region(s), 1,197,302 km^2
+  [ETA: 2h18m remaining]
+
+[293/500] 1225948946156531.jpg (29.60, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(29.60,106.48) err=0km  4 region(s), 25,185,081 km^2
+  [ETA: 2h17m remaining]
+
+[294/500] 4249855125250798.jpg (29.67, 106.52)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  53s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.69,106.28) err=23km  4 region(s), 25,185,081 km^2
+  [ETA: 2h17m remaining]
+
+[295/500] 314636196717513.jpg (29.52, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.92,116.38) err=977km  3 region(s), 1,198,320 km^2
+  [ETA: 2h17m remaining]
+
+[296/500] 900597235690359.jpg (29.56, 106.60)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.59,106.48) err=11km  4 region(s), 25,185,081 km^2
+  [ETA: 2h16m remaining]
+
+[297/500] 615157422893352.jpg (25.04, 102.69)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  55s  VLM_elev=[1800, 1950]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1185km  21 region(s), 4,028,571 km^2
+  [ETA: 2h15m remaining]
+
+[298/500] 2095829881171543.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  53s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(37.94,114.94) err=1201km  3 region(s), 349,963 km^2
+  [ETA: 2h15m remaining]
+
+[299/500] 206565051021432.jpg (29.51, 106.55)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.59,104.00) err=273km  4 region(s), 25,185,081 km^2
+  [ETA: 2h14m remaining]
+
+[300/500] 33812450951703280.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  24s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.10) err=209km  3 region(s), 3,314,516 km^2
+  [ETA: 2h13m remaining]
+  [Checkpoint: 300/500] VRAM=2.7GB
+
+[301/500] 1232696402153151.jpg (29.54, 106.59)
+  Sensors: elev=420m T=26C RH=77%
+  24s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.92,116.08) err=917km  4 region(s), 25,185,081 km^2
+  [ETA: 2h12m remaining]
+
+[302/500] 235633128588286.jpg (25.05, 102.66)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  50s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.29,109.01) err=1196km  20 region(s), 6,501,262 km^2
+  [ETA: 2h12m remaining]
+
+[303/500] 741449472369954.jpg (29.63, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.01,118.00) err=1115km  5 region(s), 276,370 km^2
+  [ETA: 2h11m remaining]
+
+[304/500] 1439168176436084.jpg (25.04, 102.73)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1182km  21 region(s), 4,028,571 km^2
+  [ETA: 2h11m remaining]
+
+[305/500] 776385861594388.jpg (29.60, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  54s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.97,104.05) err=250km  3 region(s), 463,636 km^2
+  [ETA: 2h10m remaining]
+
+[306/500] 745885688580056.jpg (29.59, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.59,106.48) err=0km  4 region(s), 25,185,081 km^2
+  [ETA: 2h10m remaining]
+
+[307/500] 3308363542773319.jpg (27.17, 100.06)
+  Sensors: elev=3239m T=9C RH=77%
+  Score=0.66<0.80 -> 2nd inference...
+  52s  VLM_elev=[3239, 3317]  score=0.66  JSON:OK N=2
+  Fusion:(33.91,107.80) err=1054km  20 region(s), 9,136,146 km^2
+  [ETA: 2h9m remaining]
+
+[308/500] 219437837019547.jpg (25.05, 102.66)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1185km  21 region(s), 4,028,571 km^2
+  [ETA: 2h8m remaining]
+
+[309/500] 875585163115308.jpg (25.07, 102.63)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[1850, 1950]  score=0.76  JSON:OK N=2
+  Fusion:(26.00,101.88) err=127km  11 region(s), 2,810,686 km^2
+  [ETA: 2h8m remaining]
+
+[310/500] 296109319008619.jpg (25.07, 102.64)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  54s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.29,109.01) err=1195km  20 region(s), 7,535,046 km^2
+  [ETA: 2h7m remaining]
+  [Checkpoint: 310/500] VRAM=2.7GB
+
+[311/500] 930600372694260.jpg (29.52, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  24s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.52,106.48) err=5km  4 region(s), 25,185,081 km^2
+  [ETA: 2h7m remaining]
+
+[312/500] 1425162425891477.jpg (29.67, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  51s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(28.10,112.98) err=657km  4 region(s), 25,185,081 km^2
+  [ETA: 2h6m remaining]
+
+[313/500] 3024704274456801.jpg (25.07, 102.64)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.78<0.80 -> 2nd inference...
+  57s  VLM_elev=[1800, 1900]  score=0.78  JSON:OK N=2
+  Fusion:(25.20,101.85) err=81km  1 region(s), 458,541 km^2
+  [ETA: 2h6m remaining]
+
+[314/500] 135051085892943.jpg (27.18, 100.06)
+  Sensors: elev=2943m T=10C RH=77%
+  Score=0.68<0.80 -> 2nd inference...
+  52s  VLM_elev=[2893, 3000]  score=0.68  JSON:OK N=2
+  Fusion:(34.01,107.71) err=1055km  11 region(s), 9,790,700 km^2
+  [ETA: 2h5m remaining]
+
+[315/500] 367305332269766.jpg (27.19, 100.05)
+  Sensors: elev=2586m T=13C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  49s  VLM_elev=[2586, 2611]  score=0.77  JSON:OK N=2
+  Fusion:(27.70,117.70) err=1741km  23 region(s), 6,140,487 km^2
+  [ETA: 2h4m remaining]
+
+[316/500] 191764616107033.jpg (29.61, 106.55)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(30.59,104.00) err=268km  4 region(s), 25,185,081 km^2
+  [ETA: 2h4m remaining]
+
+[317/500] 156844206683642.jpg (25.04, 102.69)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  53s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(39.90,116.40) err=2088km  1 region(s), 3,397 km^2
+  [ETA: 2h3m remaining]
+
+[318/500] 2222508318158779.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  58s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(30.30,104.00) err=255km  1 region(s), 7,925 km^2
+  [ETA: 2h3m remaining]
+
+[319/500] 1379704686805952.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.59,104.00) err=267km  4 region(s), 25,185,081 km^2
+  [ETA: 2h2m remaining]
+
+[320/500] 886960013931350.jpg (29.55, 106.60)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.82  JSON:OK
+  Fusion:(23.01,104.08) err=769km  2 region(s), 1,860,205 km^2
+  [ETA: 2h1m remaining]
+  [Checkpoint: 320/500] VRAM=2.7GB
+
+[321/500] 299292095061319.jpg (25.01, 110.46)
+  Sensors: elev=294m T=28C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[279, 309]  score=0.79  JSON:OK N=2
+  Fusion:(25.01,109.58) err=88km  20 region(s), 7,766,184 km^2
+  [ETA: 2h1m remaining]
+
+[322/500] 618223306324201.jpg (27.11, 100.25)
+  Sensors: elev=5207m T=-4C RH=77%
+  Score=0.56<0.80 -> 2nd inference...
+  52s  VLM_elev=[5207, 5290]  score=0.56  JSON:OK N=2
+  Fusion:(27.39,100.09) err=34km  11 region(s), 6,597,839 km^2
+  [ETA: 2h0m remaining]
+
+[323/500] 584374493235721.jpg (27.19, 100.05)
+  Sensors: elev=2576m T=13C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[2576, 2601]  score=0.76  JSON:OK N=2
+  Fusion:(27.70,117.70) err=1741km  10 region(s), 9,794,945 km^2
+  [ETA: 1h59m remaining]
+
+[324/500] 574281253542294.jpg (25.02, 102.72)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  56s  VLM_elev=[1850, 1950]  score=0.76  JSON:OK N=2
+  Fusion:(39.30,117.10) err=2081km  1 region(s), 2,378 km^2
+  [ETA: 1h59m remaining]
+
+[325/500] 169752265579326.jpg (27.11, 100.25)
+  Sensors: elev=5207m T=-4C RH=77%
+  Score=0.52<0.80 -> 2nd inference...
+  49s  VLM_elev=[5207, 5290]  score=0.54  JSON:OK N=2
+  Fusion:(27.39,100.09) err=34km  8 region(s), 10,044,029 km^2
+  [ETA: 1h58m remaining]
+
+[326/500] 614410986192295.jpg (25.04, 102.69)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  50s  VLM_elev=[1800, 1950]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1185km  21 region(s), 4,028,571 km^2
+  [ETA: 1h58m remaining]
+
+[327/500] 520708689314207.jpg (27.13, 100.23)
+  Sensors: elev=6267m T=-11C RH=77%
+  Score=0.55<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  77s  VLM_elev=[6267, 6323]  score=0.55  JSON:OK N=3
+  Fusion:(27.71,100.60) err=73km  10 region(s), 20,307,422 km^2
+  [ETA: 1h57m remaining]
+
+[328/500] 219776512820706.jpg (27.13, 100.25)
+  Sensors: elev=6019m T=-10C RH=77%
+  Score=0.63<0.80 -> 2nd inference...
+  58s  VLM_elev=[6019, 6019]  score=0.63  JSON:OK N=2
+  Fusion:(29.71,101.90) err=330km  8 region(s), 23,234,159 km^2
+  [ETA: 1h57m remaining]
+
+[329/500] 1475968130710665.jpg (29.60, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  27s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.58) err=245km  3 region(s), 3,314,516 km^2
+  [ETA: 1h56m remaining]
+
+[330/500] 2390744618031947.jpg (29.65, 106.62)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.58) err=241km  3 region(s), 3,133,364 km^2
+  [ETA: 1h55m remaining]
+  [Checkpoint: 330/500] VRAM=2.7GB
+
+[331/500] 916187214297849.jpg (29.54, 106.59)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.92,116.38) err=973km  3 region(s), 1,198,320 km^2
+  [ETA: 1h55m remaining]
+
+[332/500] 1782614502415024.jpg (29.65, 106.62)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.52,110.95) err=419km  2 region(s), 49,590 km^2
+  [ETA: 1h54m remaining]
+
+[333/500] 2574272892873994.jpg (29.62, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(29.62,106.48) err=1km  4 region(s), 25,185,081 km^2
+  [ETA: 1h53m remaining]
+
+[334/500] 152512356811975.jpg (25.04, 102.73)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  69s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.29,109.00) err=1192km  22 region(s), 4,030,547 km^2
+  [ETA: 1h53m remaining]
+
+[335/500] 2933139476986642.jpg (27.19, 100.05)
+  Sensors: elev=2551m T=13C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  50s  VLM_elev=[2551, 2601]  score=0.77  JSON:OK N=2
+  Fusion:(27.29,100.00) err=12km  23 region(s), 6,119,258 km^2
+  [ETA: 1h52m remaining]
+
+[336/500] 1544047840144883.jpg (29.65, 106.62)
+  Sensors: elev=420m T=26C RH=77%
+  28s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(27.92,120.50) err=1366km  3 region(s), 1,197,302 km^2
+  [ETA: 1h51m remaining]
+
+[337/500] 3767540996720247.jpg (29.63, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  84s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=3
+  Fusion:(29.62,106.28) err=31km  4 region(s), 25,185,081 km^2
+  [ETA: 1h51m remaining]
+
+[338/500] 3170415253275753.jpg (27.11, 100.25)
+  Sensors: elev=5203m T=-4C RH=77%
+  Score=0.56<0.80 -> 2nd inference...
+  53s  VLM_elev=[5203, 5288]  score=0.56  JSON:OK N=2
+  Fusion:(27.39,100.09) err=34km  17 region(s), 6,614,029 km^2
+  [ETA: 1h50m remaining]
+
+[339/500] 605262577205932.jpg (25.05, 102.66)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  52s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1185km  21 region(s), 4,028,571 km^2
+  [ETA: 1h50m remaining]
+
+[340/500] 769471713935451.jpg (25.03, 102.73)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  64s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1184km  21 region(s), 4,028,571 km^2
+  [ETA: 1h49m remaining]
+  [Checkpoint: 340/500] VRAM=2.7GB
+
+[341/500] 183286734189918.jpg (27.19, 100.05)
+  Sensors: elev=2709m T=12C RH=77%
+  Score=0.74<0.80 -> 2nd inference...
+  51s  VLM_elev=[2709, 2724]  score=0.74  JSON:OK N=2
+  Fusion:(27.02,100.31) err=32km  24 region(s), 6,036,466 km^2
+  [ETA: 1h49m remaining]
+
+[342/500] 1174452772987483.jpg (29.61, 106.55)
+  Sensors: elev=420m T=26C RH=77%
+  27s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.61,106.28) err=26km  4 region(s), 25,185,081 km^2
+  [ETA: 1h48m remaining]
+
+[343/500] 393424889595518.jpg (27.20, 100.04)
+  Sensors: elev=2426m T=14C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[2426, 2481]  score=0.79  JSON:OK N=2
+  Fusion:(27.70,117.70) err=1742km  21 region(s), 5,265,862 km^2
+  [ETA: 1h47m remaining]
+
+[344/500] 1321796359707279.jpg (29.52, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.52,106.48) err=5km  4 region(s), 25,185,081 km^2
+  [ETA: 1h47m remaining]
+
+[345/500] 1444490357210204.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.52,106.28) err=20km  4 region(s), 25,185,081 km^2
+  [ETA: 1h46m remaining]
+
+[346/500] 343356990940740.jpg (25.05, 102.66)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  52s  VLM_elev=[1800, 1950]  score=0.77  JSON:OK N=2
+  Fusion:(34.29,109.01) err=1196km  22 region(s), 4,030,547 km^2
+  [ETA: 1h46m remaining]
+
+[347/500] 24179981298260453.jpg (29.51, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(30.59,104.00) err=267km  4 region(s), 25,185,081 km^2
+  [ETA: 1h45m remaining]
+
+[348/500] 697684311699638.jpg (27.07, 100.26)
+  Sensors: elev=4465m T=1C RH=77%
+  Score=0.62<0.80 -> 2nd inference...
+  99s  VLM_elev=[4465, 4500]  score=0.62  JSON:OK N=2
+  Fusion:(27.12,100.09) err=17km  14 region(s), 10,961,111 km^2
+  [ETA: 1h45m remaining]
+
+[349/500] 960457794724520.jpg (29.62, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(30.55,104.05) err=255km  1 region(s), 249,084 km^2
+  [ETA: 1h44m remaining]
+
+[350/500] 25393031560396423.jpg (29.55, 106.60)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.58) err=250km  3 region(s), 3,314,516 km^2
+  [ETA: 1h43m remaining]
+  [Checkpoint: 350/500] VRAM=2.7GB
+
+[351/500] 8310800385604722.jpg (27.17, 100.06)
+  Sensors: elev=3171m T=9C RH=77%
+  Score=0.62<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  79s  VLM_elev=[3171, 3286]  score=0.68  JSON:OK N=3
+  Fusion:(29.42,101.69) err=296km  28 region(s), 9,671,111 km^2
+  [ETA: 1h43m remaining]
+
+[352/500] 674367892364194.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.92,116.38) err=972km  3 region(s), 1,198,320 km^2
+  [ETA: 1h42m remaining]
+
+[353/500] 2078912349613989.jpg (29.63, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(29.62,106.48) err=12km  4 region(s), 25,185,081 km^2
+  [ETA: 1h42m remaining]
+
+[354/500] 1265779745606282.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.01,118.00) err=1118km  3 region(s), 153,526 km^2
+  [ETA: 1h41m remaining]
+
+[355/500] 3954673244580556.jpg (29.51, 106.56)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  57s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.00,108.10) err=222km  4 region(s), 3,133,364 km^2
+  [ETA: 1h40m remaining]
+
+[356/500] 657811385536084.jpg (25.03, 102.64)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  50s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(26.00,101.50) err=157km  10 region(s), 2,765,398 km^2
+  [ETA: 1h40m remaining]
+
+[357/500] 1268609665330026.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  55s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(31.00,108.08) err=208km  3 region(s), 3,314,516 km^2
+  [ETA: 1h39m remaining]
+
+[358/500] 950189361513847.jpg (29.60, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  56s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.61,106.28) err=20km  4 region(s), 25,185,081 km^2
+  [ETA: 1h39m remaining]
+
+[359/500] 298340651825437.jpg (29.62, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(29.62,106.48) err=1km  4 region(s), 25,185,081 km^2
+  [ETA: 1h38m remaining]
+
+[360/500] 2069341757164613.jpg (29.60, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  57s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(29.60,106.48) err=0km  4 region(s), 25,185,081 km^2
+  [ETA: 1h37m remaining]
+  [Checkpoint: 360/500] VRAM=2.7GB
+
+[361/500] 5446790685342995.jpg (27.18, 100.08)
+  Sensors: elev=3457m T=7C RH=77%
+  Score=0.74<0.80 -> 2nd inference...
+  49s  VLM_elev=[3457, 3500]  score=0.75  JSON:OK N=2
+  Fusion:(28.19,100.99) err=143km  4 region(s), 2,884,280 km^2
+  [ETA: 1h37m remaining]
+
+[362/500] 1142192439646431.jpg (25.07, 102.64)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  51s  VLM_elev=[1800, 1950]  score=0.77  JSON:OK N=2
+  Fusion:(29.61,103.40) err=510km  16 region(s), 3,481,515 km^2
+  [ETA: 1h36m remaining]
+
+[363/500] 289159866009046.jpg (25.04, 102.73)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.19,108.99) err=1182km  21 region(s), 4,028,571 km^2
+  [ETA: 1h35m remaining]
+
+[364/500] 637270451439178.jpg (27.18, 100.06)
+  Sensors: elev=2933m T=11C RH=77%
+  Score=0.68<0.80 -> 2nd inference...
+  51s  VLM_elev=[2880, 3000]  score=0.68  JSON:OK N=2
+  Fusion:(27.70,100.49) err=72km  24 region(s), 6,115,012 km^2
+  [ETA: 1h35m remaining]
+
+[365/500] 876468275015095.jpg (29.69, 106.54)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  52s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(31.00,108.80) err=261km  3 region(s), 3,314,516 km^2
+  [ETA: 1h34m remaining]
+
+[366/500] 1081818146042582.jpg (27.18, 100.05)
+  Sensors: elev=2896m T=11C RH=77%
+  Score=0.69<0.80 -> 2nd inference...
+  51s  VLM_elev=[2896, 3015]  score=0.69  JSON:OK N=2
+  Fusion:(34.02,107.71) err=1055km  11 region(s), 9,790,700 km^2
+  [ETA: 1h34m remaining]
+
+[367/500] 1566416364648743.jpg (29.61, 106.61)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(29.61,106.48) err=12km  4 region(s), 25,185,081 km^2
+  [ETA: 1h33m remaining]
+
+[368/500] 810615542065801.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(29.52,106.48) err=1km  4 region(s), 25,185,081 km^2
+  [ETA: 1h32m remaining]
+
+[369/500] 253478986467140.jpg (27.13, 100.24)
+  Sensors: elev=6207m T=-11C RH=77%
+  Score=0.60<0.80 -> 2nd inference...
+  53s  VLM_elev=[6207, 6287]  score=0.61  JSON:OK N=2
+  Fusion:(29.61,102.01) err=325km  3 region(s), 959,540 km^2
+  [ETA: 1h32m remaining]
+
+[370/500] 2675156322827129.jpg (25.06, 110.45)
+  Sensors: elev=500m T=27C RH=77%
+  Score=0.78<0.80 -> 2nd inference...
+  53s  VLM_elev=[485, 515]  score=0.78  JSON:OK N=2
+  Fusion:(24.92,104.08) err=641km  4 region(s), 25,185,081 km^2
+  [ETA: 1h31m remaining]
+  [Checkpoint: 370/500] VRAM=2.7GB
+
+[371/500] 1875224576242085.jpg (22.69, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.52,114.08) err=22km  13 region(s), 12,731,589 km^2
+  [ETA: 1h30m remaining]
+
+[372/500] 241373428929458.jpg (22.69, 114.23)
+  Sensors: elev=34m T=30C RH=83%
+  25s  VLM_elev=[30, 50]  score=0.81  JSON:OK
+  Fusion:(32.00,119.10) err=1141km  3 region(s), 3,133,364 km^2
+  [ETA: 1h29m remaining]
+
+[373/500] 2511081179070931.jpg (22.59, 113.99)
+  Sensors: elev=10m T=30C RH=83%
+  28s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.84,113.56) err=52km  1 region(s), 45,288 km^2
+  [ETA: 1h29m remaining]
+
+[374/500] 761738272116529.jpg (22.67, 114.12)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1189km  3 region(s), 3,133,364 km^2
+  [ETA: 1h28m remaining]
+
+[375/500] 1148396769667605.jpg (22.61, 114.07)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(29.50,119.10) err=916km  3 region(s), 1,197,302 km^2
+  [ETA: 1h27m remaining]
+
+[376/500] 285213279940251.jpg (23.24, 113.35)
+  Sensors: elev=43m T=30C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  50s  VLM_elev=[43, 58]  score=0.76  JSON:OK N=2
+  Fusion:(23.02,112.50) err=91km  3 region(s), 993,506 km^2
+  [ETA: 1h26m remaining]
+
+[377/500] 757640229618288.jpg (22.68, 114.21)
+  Sensors: elev=15m T=30C RH=83%
+  25s  VLM_elev=[15, 15]  score=0.81  JSON:OK
+  Fusion:(22.79,113.19) err=104km  16 region(s), 12,575,204 km^2
+  [ETA: 1h26m remaining]
+
+[378/500] 1420973649278484.jpg (23.08, 113.35)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(23.09,113.20) err=15km  15 region(s), 10,588,900 km^2
+  [ETA: 1h25m remaining]
+
+[379/500] 934946581696777.jpg (22.69, 114.05)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1190km  3 region(s), 3,133,364 km^2
+  [ETA: 1h24m remaining]
+
+[380/500] 1785885444947542.jpg (24.97, 102.65)
+  Sensors: elev=1900m T=18C RH=77%
+  Score=0.76<0.80 -> 2nd inference...
+  53s  VLM_elev=[1800, 1900]  score=0.76  JSON:OK N=2
+  Fusion:(34.00,108.00) err=1129km  2 region(s), 84,915 km^2
+  [ETA: 1h24m remaining]
+  [Checkpoint: 380/500] VRAM=2.7GB
+
+[381/500] 896581338439947.jpg (22.57, 114.01)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  76s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=3
+  Fusion:(32.00,120.00) err=1203km  17 region(s), 10,592,976 km^2
+  [ETA: 1h23m remaining]
+
+[382/500] 383958490969421.jpg (22.59, 114.24)
+  Sensors: elev=41m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[41, 56]  score=0.79  JSON:OK N=2
+  Fusion:(23.14,113.30) err=113km  1 region(s), 45,288 km^2
+  [ETA: 1h22m remaining]
+
+[383/500] 262698740185474.jpg (22.68, 114.22)
+  Sensors: elev=28m T=30C RH=83%
+  26s  VLM_elev=[28, 33]  score=0.80  JSON:OK
+  Fusion:(31.99,118.68) err=1124km  13 region(s), 12,731,589 km^2
+  [ETA: 1h22m remaining]
+
+[384/500] 193282615976553.jpg (22.53, 114.21)
+  Sensors: elev=22m T=30C RH=83%
+  26s  VLM_elev=[20, 24]  score=0.80  JSON:OK
+  Fusion:(21.50,109.11) err=539km  2 region(s), 164,877 km^2
+  [ETA: 1h21m remaining]
+
+[385/500] 145628800910485.jpg (22.46, 113.97)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.49,113.88) err=9km  13 region(s), 10,810,387 km^2
+  [ETA: 1h20m remaining]
+
+[386/500] 679791707605554.jpg (22.66, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  27s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(30.19,119.98) err=1027km  13 region(s), 12,731,589 km^2
+  [ETA: 1h19m remaining]
+
+[387/500] 350308957916887.jpg (22.61, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.61,113.88) err=28km  13 region(s), 12,731,589 km^2
+  [ETA: 1h19m remaining]
+
+[388/500] 427318909630828.jpg (22.61, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.61,113.88) err=28km  13 region(s), 12,731,589 km^2
+  [ETA: 1h18m remaining]
+
+[389/500] 209623354261498.jpg (23.04, 113.31)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(19.95,111.27) err=403km  1 region(s), 84,915 km^2
+  [ETA: 1h17m remaining]
+
+[390/500] 2040544006320293.jpg (22.60, 113.90)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(19.95,111.27) err=401km  1 region(s), 84,915 km^2
+  [ETA: 1h16m remaining]
+  [Checkpoint: 390/500] VRAM=2.7GB
+
+[391/500] 498795701243154.jpg (23.15, 113.27)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1186km  3 region(s), 3,133,364 km^2
+  [ETA: 1h16m remaining]
+
+[392/500] 349958977911772.jpg (22.63, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.74  JSON:OK N=2
+  Fusion:(22.62,113.20) err=98km  16 region(s), 12,737,024 km^2
+  [ETA: 1h15m remaining]
+
+[393/500] 275093015590491.jpg (22.67, 113.88)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(28.30,116.20) err=668km  3 region(s), 3,133,364 km^2
+  [ETA: 1h14m remaining]
+
+[394/500] 917058729669716.jpg (22.69, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  49s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1192km  3 region(s), 3,133,364 km^2
+  [ETA: 1h14m remaining]
+
+[395/500] 6825025690939012.jpg (22.56, 114.14)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.80  JSON:OK N=2
+  Fusion:(22.56,113.92) err=22km  1 region(s), 45,288 km^2
+  [ETA: 1h13m remaining]
+
+[396/500] 280210108401790.jpg (22.56, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.56,113.92) err=23km  1 region(s), 45,288 km^2
+  [ETA: 1h12m remaining]
+
+[397/500] 1571913383644727.jpg (22.69, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  49s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=22km  13 region(s), 12,731,589 km^2
+  [ETA: 1h12m remaining]
+
+[398/500] 131308742372304.jpg (23.05, 113.37)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  53s  VLM_elev=[10, 10]  score=0.74  JSON:OK N=2
+  Fusion:(23.05,113.40) err=3km  1 region(s), 30,569 km^2
+  [ETA: 1h11m remaining]
+
+[399/500] 1147674577424136.jpg (23.08, 113.35)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1188km  17 region(s), 10,592,976 km^2
+  [ETA: 1h10m remaining]
+
+[400/500] 1570363040408440.jpg (22.69, 114.05)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(19.90,110.15) err=509km  16 region(s), 12,137,609 km^2
+  [ETA: 1h9m remaining]
+  [Checkpoint: 400/500] VRAM=2.7GB
+
+[401/500] 935114869215809.jpg (23.08, 113.35)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  49s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(23.09,113.20) err=15km  15 region(s), 10,588,900 km^2
+  [ETA: 1h9m remaining]
+
+[402/500] 6820482498029696.jpg (22.66, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.62,113.88) err=13km  13 region(s), 12,731,589 km^2
+  [ETA: 1h8m remaining]
+
+[403/500] 915105346005495.jpg (22.50, 113.95)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  75s  VLM_elev=[10, 10]  score=0.81  JSON:OK N=3
+  Fusion:(30.00,120.52) err=1060km  5 region(s), 291,089 km^2
+  [ETA: 1h8m remaining]
+
+[404/500] 3015928628537787.jpg (22.70, 113.96)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(32.00,120.00) err=1193km  3 region(s), 3,133,364 km^2
+  [ETA: 1h7m remaining]
+
+[405/500] 2225402261140668.jpg (23.11, 113.24)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=109km  13 region(s), 12,731,589 km^2
+  [ETA: 1h6m remaining]
+
+[406/500] 1006045704483743.jpg (22.70, 113.99)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.62,113.88) err=14km  14 region(s), 13,229,757 km^2
+  [ETA: 1h6m remaining]
+
+[407/500] 214729390087262.jpg (24.99, 110.45)
+  Sensors: elev=250m T=28C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[235, 265]  score=0.79  JSON:OK N=2
+  Fusion:(29.50,105.15) err=725km  1 region(s), 82,792 km^2
+  [ETA: 1h5m remaining]
+
+[408/500] 169697275052806.jpg (23.18, 113.27)
+  Sensors: elev=10m T=30C RH=83%
+  27s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1183km  3 region(s), 3,133,364 km^2
+  [ETA: 1h4m remaining]
+
+[409/500] 720848296909600.jpg (22.61, 114.07)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(22.50,109.00) err=521km  2 region(s), 71,470 km^2
+  [ETA: 1h3m remaining]
+
+[410/500] 826703258196547.jpg (23.13, 113.33)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=103km  13 region(s), 12,731,589 km^2
+  [ETA: 1h3m remaining]
+  [Checkpoint: 410/500] VRAM=2.7GB
+
+[411/500] 1395463148022125.jpg (22.59, 114.25)
+  Sensors: elev=50m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[45, 65]  score=0.80  JSON:OK N=2
+  Fusion:(22.52,114.08) err=19km  10 region(s), 12,127,985 km^2
+  [ETA: 1h2m remaining]
+
+[412/500] 1258764636396383.jpg (23.08, 113.35)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  Elements disagree (3/6) -> 3rd inference...
+  75s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=3
+  Fusion:(32.00,120.00) err=1188km  3 region(s), 3,133,364 km^2
+  [ETA: 1h1m remaining]
+
+[413/500] 304879107916671.jpg (23.24, 113.35)
+  Sensors: elev=45m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  52s  VLM_elev=[40, 60]  score=0.75  JSON:OK N=2
+  Fusion:(24.92,108.08) err=566km  3 region(s), 2,172,692 km^2
+  [ETA: 1h1m remaining]
+
+[414/500] 829283684359098.jpg (23.18, 113.27)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1183km  3 region(s), 3,133,364 km^2
+  [ETA: 1h0m remaining]
+
+[415/500] 306782620806138.jpg (22.47, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  24s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(21.50,109.11) err=531km  2 region(s), 164,877 km^2
+  [ETA: 0h59m remaining]
+
+[416/500] 293728538883570.jpg (23.06, 113.19)
+  Sensors: elev=18m T=30C RH=83%
+  25s  VLM_elev=[15, 21]  score=0.80  JSON:OK
+  Fusion:(29.50,112.51) err=720km  1 region(s), 52,308 km^2
+  [ETA: 0h59m remaining]
+
+[417/500] 404725278874760.jpg (22.66, 113.89)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  50s  VLM_elev=[10, 10]  score=0.74  JSON:OK N=2
+  Fusion:(37.50,116.70) err=1672km  2 region(s), 347,699 km^2
+  [ETA: 0h58m remaining]
+
+[418/500] 1213021896299615.jpg (22.53, 113.99)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1209km  4 region(s), 3,294,702 km^2
+  [ETA: 0h57m remaining]
+
+[419/500] 335976036165561.jpg (22.70, 114.10)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  77s  VLM_elev=[10, 10]  score=0.81  JSON:OK N=3
+  Fusion:(28.30,116.20) err=658km  3 region(s), 3,133,364 km^2
+  [ETA: 0h57m remaining]
+
+[420/500] 1172380227016693.jpg (22.66, 114.03)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=18km  13 region(s), 12,731,589 km^2
+  [ETA: 0h56m remaining]
+  [Checkpoint: 420/500] VRAM=2.7GB
+
+[421/500] 321585512692502.jpg (22.53, 114.21)
+  Sensors: elev=18m T=30C RH=83%
+  27s  VLM_elev=[15, 21]  score=0.80  JSON:OK
+  Fusion:(29.50,120.50) err=998km  16 region(s), 15,460,191 km^2
+  [ETA: 0h55m remaining]
+
+[422/500] 1619036555585253.jpg (22.60, 114.01)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.60,113.90) err=11km  13 region(s), 12,731,589 km^2
+  [ETA: 0h54m remaining]
+
+[423/500] 2151022068564829.jpg (22.59, 114.25)
+  Sensors: elev=48m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[40, 55]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=19km  14 region(s), 12,748,572 km^2
+  [ETA: 0h54m remaining]
+
+[424/500] 467533044516319.jpg (22.47, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  24s  VLM_elev=[5, 25]  score=0.81  JSON:OK
+  Fusion:(21.50,109.11) err=531km  2 region(s), 164,877 km^2
+  [ETA: 0h53m remaining]
+
+[425/500] 330753971717719.jpg (22.49, 113.95)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  54s  VLM_elev=[10, 10]  score=0.74  JSON:OK N=2
+  Fusion:(22.49,113.88) err=6km  11 region(s), 11,285,204 km^2
+  [ETA: 0h52m remaining]
+
+[426/500] 510481500145906.jpg (23.11, 113.26)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(32.00,120.00) err=1190km  12 region(s), 12,132,061 km^2
+  [ETA: 0h52m remaining]
+
+[427/500] 722973253102332.jpg (22.57, 113.94)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(22.59,113.88) err=6km  8 region(s), 12,343,810 km^2
+  [ETA: 0h51m remaining]
+
+[428/500] 289206869412220.jpg (22.47, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  24s  VLM_elev=[10, 10]  score=0.82  JSON:OK
+  Fusion:(21.50,109.11) err=531km  2 region(s), 164,877 km^2
+  [ETA: 0h50m remaining]
+
+[429/500] 654559295413883.jpg (22.53, 114.21)
+  Sensors: elev=19m T=30C RH=83%
+  25s  VLM_elev=[17, 21]  score=0.81  JSON:OK
+  Fusion:(29.50,120.50) err=998km  3 region(s), 1,197,302 km^2
+  [ETA: 0h49m remaining]
+
+[430/500] 423803246667469.jpg (22.69, 114.24)
+  Sensors: elev=41m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[41, 56]  score=0.80  JSON:OK N=2
+  Fusion:(30.19,120.30) err=1028km  18 region(s), 12,579,280 km^2
+  [ETA: 0h49m remaining]
+  [Checkpoint: 430/500] VRAM=2.7GB
+
+[431/500] 330657653279743.jpg (22.56, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.59,113.88) err=27km  18 region(s), 12,837,563 km^2
+  [ETA: 0h48m remaining]
+
+[432/500] 1455506076282333.jpg (22.49, 114.24)
+  Sensors: elev=44m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[40, 50]  score=0.75  JSON:OK N=2
+  Fusion:(22.50,109.00) err=539km  2 region(s), 71,470 km^2
+  [ETA: 0h47m remaining]
+
+[433/500] 766973997353614.jpg (23.05, 113.37)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.78<0.80 -> 2nd inference...
+  Elements disagree (2/6) -> 3rd inference...
+  76s  VLM_elev=[10, 10]  score=0.78  JSON:OK N=3
+  Fusion:(29.50,112.51) err=723km  1 region(s), 52,308 km^2
+  [ETA: 0h47m remaining]
+
+[434/500] 532971301196512.jpg (22.47, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  24s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(21.50,109.11) err=531km  2 region(s), 164,877 km^2
+  [ETA: 0h46m remaining]
+
+[435/500] 872849316907914.jpg (22.45, 114.03)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[5, 15]  score=0.79  JSON:OK N=2
+  Fusion:(22.49,113.20) err=85km  16 region(s), 12,737,024 km^2
+  [ETA: 0h45m remaining]
+
+[436/500] 756928502964480.jpg (22.62, 114.03)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.56,114.00) err=7km  1 region(s), 20,380 km^2
+  [ETA: 0h45m remaining]
+
+[437/500] 269616874814077.jpg (23.23, 113.36)
+  Sensors: elev=32m T=30C RH=83%
+  Score=0.80<0.80 -> 2nd inference...
+  56s  VLM_elev=[32, 32]  score=0.80  JSON:OK N=2
+  Fusion:(23.00,104.08) err=948km  2 region(s), 1,860,205 km^2
+  [ETA: 0h44m remaining]
+
+[438/500] 1901076156991207.jpg (22.54, 114.07)
+  Sensors: elev=10m T=30C RH=83%
+  24s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(22.52,114.08) err=3km  10 region(s), 12,127,985 km^2
+  [ETA: 0h43m remaining]
+
+[439/500] 807581533221556.jpg (23.05, 113.37)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(23.09,113.20) err=18km  15 region(s), 10,588,900 km^2
+  [ETA: 0h42m remaining]
+
+[440/500] 500004234462862.jpg (23.05, 113.37)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(23.05,113.40) err=3km  1 region(s), 30,569 km^2
+  [ETA: 0h42m remaining]
+  [Checkpoint: 440/500] VRAM=2.7GB
+
+[441/500] 908235687751052.jpg (22.56, 114.14)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.56,113.92) err=23km  1 region(s), 45,288 km^2
+  [ETA: 0h41m remaining]
+
+[442/500] 2308386319573191.jpg (29.66, 106.48)
+  Sensors: elev=420m T=26C RH=77%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,108.08) err=214km  3 region(s), 3,314,516 km^2
+  [ETA: 0h40m remaining]
+
+[443/500] 1655659001906709.jpg (22.67, 114.12)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1189km  3 region(s), 3,133,364 km^2
+  [ETA: 0h40m remaining]
+
+[444/500] 1721785285441234.jpg (30.13, 118.18)
+  Sensors: elev=1610m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  55s  VLM_elev=[1550, 1670]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,597,140 km^2
+  [ETA: 0h39m remaining]
+
+[445/500] 943343314085806.jpg (32.09, 118.79)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(37.93,116.70) err=677km  2 region(s), 347,699 km^2
+  [ETA: 0h38m remaining]
+
+[446/500] 689523573561555.jpg (30.13, 118.16)
+  Sensors: elev=1613m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  108s  VLM_elev=[1613, 1650]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  22 region(s), 12,817,919 km^2
+  [ETA: 0h38m remaining]
+
+[447/500] 569854579469491.jpg (30.10, 118.17)
+  Sensors: elev=1554m T=19C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[1500, 1600]  score=0.76  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  19 region(s), 7,862,365 km^2
+  [ETA: 0h37m remaining]
+
+[448/500] 557093960347278.jpg (30.10, 118.17)
+  Sensors: elev=1555m T=19C RH=83%
+  Score=0.76<0.80 -> 2nd inference...
+  51s  VLM_elev=[1500, 1600]  score=0.76  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  19 region(s), 7,862,365 km^2
+  [ETA: 0h36m remaining]
+
+[449/500] 2918463175139811.jpg (39.83, 116.29)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=18km  9 region(s), 11,424,606 km^2
+  [ETA: 0h36m remaining]
+
+[450/500] 492780638743559.jpg (39.92, 116.35)
+  Sensors: elev=69m T=25C RH=65%
+  26s  VLM_elev=[60, 80]  score=0.80  JSON:OK
+  Fusion:(40.02,116.38) err=11km  9 region(s), 11,424,606 km^2
+  [ETA: 0h35m remaining]
+  [Checkpoint: 450/500] VRAM=2.7GB
+
+[451/500] 1074923943367726.jpg (30.65, 104.01)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(30.59,104.00) err=7km  4 region(s), 25,185,081 km^2
+  [ETA: 0h34m remaining]
+
+[452/500] 826689327942207.jpg (30.19, 120.17)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  55s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=264km  18 region(s), 12,579,280 km^2
+  [ETA: 0h33m remaining]
+
+[453/500] 2995966310693637.jpg (30.78, 104.00)
+  Sensors: elev=435m T=26C RH=75%
+  27s  VLM_elev=[420, 450]  score=0.80  JSON:OK
+  Fusion:(36.22,117.20) err=1363km  5 region(s), 26,416,349 km^2
+  [ETA: 0h33m remaining]
+
+[454/500] 790509192945320.jpg (31.97, 118.71)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  49s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(31.32,121.38) err=263km  13 region(s), 10,810,387 km^2
+  [ETA: 0h32m remaining]
+
+[455/500] 3079816062258796.jpg (30.79, 104.11)
+  Sensors: elev=420m T=26C RH=75%
+  24s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(31.50,105.60) err=163km  4 region(s), 25,185,081 km^2
+  [ETA: 0h31m remaining]
+
+[456/500] 1151217969589738.jpg (22.58, 114.12)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.80  JSON:OK N=2
+  Fusion:(22.56,113.92) err=20km  1 region(s), 45,288 km^2
+  [ETA: 0h31m remaining]
+
+[457/500] 7041647535927061.jpg (22.60, 114.01)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(22.61,113.20) err=83km  10 region(s), 12,127,985 km^2
+  [ETA: 0h30m remaining]
+
+[458/500] 546219617256973.jpg (27.18, 100.08)
+  Sensors: elev=3491m T=7C RH=77%
+  Score=0.66<0.80 -> 2nd inference...
+  54s  VLM_elev=[3491, 3506]  score=0.66  JSON:OK N=2
+  Fusion:(29.13,101.55) err=260km  3 region(s), 300,033 km^2
+  [ETA: 0h29m remaining]
+
+[459/500] 1980642052146829.jpg (39.83, 116.50)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 75]  score=0.80  JSON:OK
+  Fusion:(39.82,114.08) err=206km  6 region(s), 10,568,323 km^2
+  [ETA: 0h28m remaining]
+
+[460/500] 1425487111136777.jpg (22.46, 114.00)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(23.00,108.20) err=598km  5 region(s), 727,438 km^2
+  [ETA: 0h28m remaining]
+  [Checkpoint: 460/500] VRAM=2.7GB
+
+[461/500] 1400929840287312.jpg (39.83, 116.42)
+  Sensors: elev=60m T=25C RH=65%
+  24s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.89,116.48) err=8km  8 region(s), 10,581,117 km^2
+  [ETA: 0h27m remaining]
+
+[462/500] 24043096428629297.jpg (30.13, 118.18)
+  Sensors: elev=1595m T=19C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[1595, 1754]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=2km  21 region(s), 12,597,140 km^2
+  [ETA: 0h26m remaining]
+
+[463/500] 289576953817048.jpg (22.64, 114.15)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1190km  3 region(s), 3,133,364 km^2
+  [ETA: 0h26m remaining]
+
+[464/500] 724782655242618.jpg (30.79, 104.10)
+  Sensors: elev=420m T=26C RH=75%
+  25s  VLM_elev=[405, 435]  score=0.80  JSON:OK
+  Fusion:(31.00,103.10) err=99km  4 region(s), 25,185,081 km^2
+  [ETA: 0h25m remaining]
+
+[465/500] 191231809512056.jpg (39.86, 116.41)
+  Sensors: elev=63m T=25C RH=65%
+  26s  VLM_elev=[60, 70]  score=0.80  JSON:OK
+  Fusion:(39.90,116.50) err=9km  9 region(s), 11,424,606 km^2
+  [ETA: 0h24m remaining]
+
+[466/500] 159084056784756.jpg (27.19, 100.05)
+  Sensors: elev=2566m T=13C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  50s  VLM_elev=[2566, 2621]  score=0.77  JSON:OK N=2
+  Fusion:(27.70,117.70) err=1741km  23 region(s), 6,119,258 km^2
+  [ETA: 0h23m remaining]
+
+[467/500] 1271948470429072.jpg (22.70, 113.99)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(22.62,113.88) err=14km  13 region(s), 12,731,589 km^2
+  [ETA: 0h23m remaining]
+
+[468/500] 1052077326000737.jpg (22.67, 114.12)
+  Sensors: elev=10m T=30C RH=83%
+  26s  VLM_elev=[10, 10]  score=0.80  JSON:OK
+  Fusion:(32.00,120.00) err=1189km  3 region(s), 3,133,364 km^2
+  [ETA: 0h22m remaining]
+
+[469/500] 766855993142028.jpg (29.53, 106.49)
+  Sensors: elev=420m T=26C RH=77%
+  Score=0.80<0.80 -> 2nd inference...
+  53s  VLM_elev=[405, 435]  score=0.80  JSON:OK N=2
+  Fusion:(30.30,104.00) err=255km  5 region(s), 586,480 km^2
+  [ETA: 0h21m remaining]
+
+[470/500] 111782124305080.jpg (40.00, 116.27)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(38.22,114.28) err=262km  9 region(s), 11,424,606 km^2
+  [ETA: 0h21m remaining]
+  [Checkpoint: 470/500] VRAM=2.7GB
+
+[471/500] 328115751993630.jpg (31.18, 121.43)
+  Sensors: elev=5m T=28C RH=83%
+  26s  VLM_elev=[5, 5]  score=0.81  JSON:OK
+  Fusion:(31.25,121.40) err=8km  1 region(s), 3,397 km^2
+  [ETA: 0h20m remaining]
+
+[472/500] 391781459995781.jpg (22.60, 114.01)
+  Sensors: elev=10m T=30C RH=83%
+  25s  VLM_elev=[10, 10]  score=0.81  JSON:OK
+  Fusion:(29.50,120.50) err=1004km  3 region(s), 1,197,302 km^2
+  [ETA: 0h19m remaining]
+
+[473/500] 300924394816872.jpg (30.14, 118.16)
+  Sensors: elev=1646m T=18C RH=83%
+  Score=0.72<0.80 -> 2nd inference...
+  107s  VLM_elev=[1646, 1710]  score=0.72  JSON:OK N=2
+  Fusion:(30.15,118.15) err=2km  1 region(s), 282,031 km^2
+  [ETA: 0h19m remaining]
+
+[474/500] 559327786354704.jpg (40.08, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  Score=0.79<0.80 -> 2nd inference...
+  55s  VLM_elev=[55, 65]  score=0.79  JSON:OK N=2
+  Fusion:(40.02,116.38) err=7km  9 region(s), 11,424,606 km^2
+  [ETA: 0h18m remaining]
+
+[475/500] 822936961671326.jpg (30.29, 120.21)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(23.09,113.41) err=1047km  14 region(s), 10,813,218 km^2
+  [ETA: 0h17m remaining]
+
+[476/500] 2493274454203279.jpg (32.03, 118.78)
+  Sensors: elev=15m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=58km  3 region(s), 3,314,516 km^2
+  [ETA: 0h17m remaining]
+
+[477/500] 1369184986841988.jpg (30.64, 104.01)
+  Sensors: elev=420m T=26C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  53s  VLM_elev=[405, 435]  score=0.79  JSON:OK N=2
+  Fusion:(31.00,108.58) err=439km  3 region(s), 3,314,516 km^2
+  [ETA: 0h16m remaining]
+
+[478/500] 572634078615074.jpg (30.14, 118.17)
+  Sensors: elev=1626m T=18C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  107s  VLM_elev=[1626, 1698]  score=0.75  JSON:OK N=2
+  Fusion:(30.12,118.18) err=3km  29 region(s), 12,454,794 km^2
+  [ETA: 0h15m remaining]
+
+[479/500] 468891394431109.jpg (39.83, 116.41)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.82,116.08) err=28km  9 region(s), 11,424,606 km^2
+  [ETA: 0h14m remaining]
+
+[480/500] 1804989349992767.jpg (22.57, 114.09)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[10, 10]  score=0.79  JSON:OK N=2
+  Fusion:(32.00,120.00) err=1199km  3 region(s), 3,133,364 km^2
+  [ETA: 0h14m remaining]
+  [Checkpoint: 480/500] VRAM=2.7GB
+
+[481/500] 1606501896754358.jpg (22.70, 114.24)
+  Sensors: elev=42m T=30C RH=83%
+  Score=0.74<0.80 -> 2nd inference...
+  52s  VLM_elev=[42, 57]  score=0.80  JSON:OK N=2
+  Fusion:(22.87,113.56) err=72km  1 region(s), 45,288 km^2
+  [ETA: 0h13m remaining]
+
+[482/500] 884861042392983.jpg (30.78, 104.11)
+  Sensors: elev=420m T=26C RH=75%
+  26s  VLM_elev=[405, 435]  score=0.81  JSON:OK
+  Fusion:(36.21,117.20) err=1354km  5 region(s), 26,416,349 km^2
+  [ETA: 0h12m remaining]
+
+[483/500] 288853359555293.jpg (31.12, 121.57)
+  Sensors: elev=5m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  56s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(32.42,119.18) err=268km  3 region(s), 3,133,364 km^2
+  [ETA: 0h12m remaining]
+
+[484/500] 1311385625933611.jpg (34.29, 108.89)
+  Sensors: elev=957m T=21C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[942, 972]  score=0.79  JSON:OK N=2
+  Fusion:(34.30,108.89) err=0km  21 region(s), 8,261,890 km^2
+  [ETA: 0h11m remaining]
+
+[485/500] 312812580502717.jpg (22.49, 114.06)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  48s  VLM_elev=[10, 10]  score=0.75  JSON:OK N=2
+  Fusion:(22.49,113.20) err=89km  16 region(s), 12,575,204 km^2
+  [ETA: 0h10m remaining]
+
+[486/500] 472593308514213.jpg (23.10, 113.24)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  51s  VLM_elev=[10, 15]  score=0.79  JSON:OK N=2
+  Fusion:(22.52,114.08) err=109km  11 region(s), 12,807,305 km^2
+  [ETA: 0h9m remaining]
+
+[487/500] 1234355400794348.jpg (22.53, 113.99)
+  Sensors: elev=10m T=30C RH=83%
+  Score=0.79<0.80 -> 2nd inference...
+  54s  VLM_elev=[10, 10]  score=0.80  JSON:OK N=2
+  Fusion:(19.90,110.15) err=493km  19 region(s), 12,142,137 km^2
+  [ETA: 0h9m remaining]
+
+[488/500] 969682400515814.jpg (39.89, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  26s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(39.90,116.08) err=39km  7 region(s), 10,577,720 km^2
+  [ETA: 0h8m remaining]
+
+[489/500] 499979018024381.jpg (34.36, 109.15)
+  Sensors: elev=985m T=21C RH=75%
+  Score=0.79<0.80 -> 2nd inference...
+  52s  VLM_elev=[970, 1000]  score=0.79  JSON:OK N=2
+  Fusion:(34.50,113.50) err=399km  17 region(s), 11,906,498 km^2
+  [ETA: 0h7m remaining]
+
+[490/500] 1486233011728893.jpg (30.30, 120.04)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  53s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(34.30,114.00) err=721km  4 region(s), 974,088 km^2
+  [ETA: 0h7m remaining]
+  [Checkpoint: 490/500] VRAM=2.7GB
+
+[491/500] 432556335326049.jpg (27.19, 100.05)
+  Sensors: elev=2555m T=13C RH=77%
+  Score=0.77<0.80 -> 2nd inference...
+  53s  VLM_elev=[2555, 2555]  score=0.77  JSON:OK N=2
+  Fusion:(27.29,100.00) err=12km  23 region(s), 6,119,258 km^2
+  [ETA: 0h6m remaining]
+
+[492/500] 1036669231956808.jpg (31.28, 121.50)
+  Sensors: elev=5m T=28C RH=83%
+  25s  VLM_elev=[5, 5]  score=0.80  JSON:OK
+  Fusion:(32.42,119.18) err=252km  3 region(s), 3,133,364 km^2
+  [ETA: 0h5m remaining]
+
+[493/500] 514215913286636.jpg (34.29, 109.03)
+  Sensors: elev=1815m T=15C RH=75%
+  Score=0.78<0.80 -> 2nd inference...
+  52s  VLM_elev=[1800, 1830]  score=0.78  JSON:OK N=2
+  Fusion:(34.32,109.10) err=7km  21 region(s), 4,903,196 km^2
+  [ETA: 0h4m remaining]
+
+[494/500] 1322675734838267.jpg (31.31, 121.54)
+  Sensors: elev=5m T=28C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  50s  VLM_elev=[5, 5]  score=0.75  JSON:OK N=2
+  Fusion:(23.20,113.20) err=1221km  18 region(s), 10,594,335 km^2
+  [ETA: 0h4m remaining]
+
+[495/500] 1059891882244491.jpg (30.37, 120.03)
+  Sensors: elev=15m T=29C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  51s  VLM_elev=[15, 15]  score=0.75  JSON:OK N=2
+  Fusion:(37.93,116.70) err=895km  2 region(s), 347,699 km^2
+  [ETA: 0h3m remaining]
+
+[496/500] 466846434378368.jpg (23.25, 113.36)
+  Sensors: elev=48m T=30C RH=83%
+  Score=0.75<0.80 -> 2nd inference...
+  52s  VLM_elev=[48, 63]  score=0.75  JSON:OK N=2
+  Fusion:(23.19,113.08) err=29km  16 region(s), 12,575,204 km^2
+  [ETA: 0h2m remaining]
+
+[497/500] 753526055362052.jpg (25.06, 110.44)
+  Sensors: elev=500m T=27C RH=77%
+  Score=0.79<0.80 -> 2nd inference...
+  56s  VLM_elev=[485, 515]  score=0.79  JSON:OK N=2
+  Fusion:(24.80,102.50) err=801km  1 region(s), 2,264 km^2
+  [ETA: 0h2m remaining]
+
+[498/500] 508129746875116.jpg (39.91, 116.54)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[55, 65]  score=0.80  JSON:OK
+  Fusion:(39.91,116.48) err=5km  8 region(s), 10,581,117 km^2
+  [ETA: 0h1m remaining]
+
+[499/500] 332069818436988.jpg (40.01, 116.37)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.80  JSON:OK
+  Fusion:(36.72,117.08) err=372km  7 region(s), 12,112,417 km^2
+  [ETA: 0h0m remaining]
+
+[500/500] 468564504229343.jpg (39.90, 116.28)
+  Sensors: elev=60m T=25C RH=65%
+  25s  VLM_elev=[54, 66]  score=0.81  JSON:OK
+  Fusion:(39.90,116.08) err=17km  7 region(s), 10,577,720 km^2
+  [ETA: 0h0m remaining]
+  [Checkpoint: 500/500] VRAM=2.7GB
+
+============================================================
+Total time: 20446s (41s/image)
+Wall clock: 21409s
+JSON valid: 499/500
+Errors (km):
+  Mean:  392
+  Median:208
+  Best:  0
+  Worst: 2088
+  <=20km:  138/500
+  <=50km:  183/500
+  <=100km: 201/500
+  <=200km: 242/500
+======================================================================
+  500-Image Distillation Pool ¡ª Catastrophic Failure Analysis
+  Pipeline: version2.2 (Adaptive N=2 + competition mirrors + sensor weighting)
+======================================================================
+
+Total tested: 500
+Valid results: 500
+JSON parse failures: 1
+
+©¤©¤ Error Distribution ©¤©¤
+  Mean:   392 km
+  Median: 208 km
+  Best:   0 km
+  Worst:  2088 km
+
+        0-20km:  138 (27.6%)
+       20-50km:   45 (9.0%)
+      50-100km:   18 (3.6%)
+     100-200km:   41 (8.2%)
+     200-500km:  108 (21.6%)
+    500-1000km:   67 (13.4%)
+   1000-2000km:   80 (16.0%)
+      >=2000km:    3 (0.6%)
+
+©¤©¤ Adaptive N=2 ©¤©¤
+  2nd inference triggered: 240/500 (48.0%)
+  Avg sensor score (single): 0.80
+  Avg sensor score (double): 0.76
+
+©¤©¤ JSON Reliability ©¤©¤
+  All 3 stages OK: 499/500
+  Needed retry: 1/500
+
+======================================================================
+  CATASTROPHIC FAILURES (>200km): 258/500
+======================================================================
+
+©¤©¤ Root Cause Categories ©¤©¤
+  SENSOR_INCONSISTENCY: 7 occurrences
+
+©¤©¤ Top 20 Worst Failures ©¤©¤
+
+  156844206683642.jpg
+    True: (25.04, 102.69)  Pred: (39.89924180609826, 116.39886270914738)  Error: 2088km
+    Sensor elev: 1900.0m  VLM elev: [1800, 1900]
+    Sensor score: 0.76  N elements: 16  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  574281253542294.jpg
+    True: (25.02, 102.72)  Pred: (39.2960000000001, 117.1)  Error: 2081km
+    Sensor elev: 1900.0m  VLM elev: [1850, 1950]
+    Sensor score: 0.76  N elements: 16  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  1554519154900926.jpg
+    True: (30.75, 104.06)  Pred: (41.50000000000012, 123.09999999999897)  Error: 2079km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 14  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  1250876858706473.jpg
+    True: (43.86, 88.10)  Pred: (28.587519191611626, 99.59251919161171)  Error: 1982km
+    Sensor elev: 2713.526123046875m  VLM elev: [2600, 2800]
+    Sensor score: 0.79  N elements: 14  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  408223943952545.jpg
+    True: (43.87, 88.10)  Pred: (28.65714344726387, 98.57164056134161)  Error: 1930km
+    Sensor elev: 2698.590087890625m  VLM elev: [2699, 2714]
+    Sensor score: 0.78  N elements: 15  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  1225076242212942.jpg
+    True: (30.74, 104.13)  Pred: (41.000000000000135, 120.09999999999732)  Error: 1831km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.81  N elements: 12  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  2280283145738303.jpg
+    True: (30.09, 118.18)  Pred: (26.000000000000043, 100.59999999999982)  Error: 1782km
+    Sensor elev: 1423.0174560546875m  VLM elev: [1408, 1438]
+    Sensor score: 0.75  N elements: 12  N samples: 3
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  2074122953420244.jpg
+    True: (30.13, 118.16)  Pred: (27.000000000000057, 100.59999999999982)  Error: 1748km
+    Sensor elev: 1614.86328125m  VLM elev: [1600, 1630]
+    Sensor score: 0.75  N elements: 12  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  393424889595518.jpg
+    True: (27.20, 100.04)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1742km
+    Sensor elev: 2425.500244140625m  VLM elev: [2426, 2481]
+    Sensor score: 0.79  N elements: 13  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  572239151250625.jpg
+    True: (27.20, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2500.8828125m  VLM elev: [2486, 2516]
+    Sensor score: 0.79  N elements: 12  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  159084056784756.jpg
+    True: (27.19, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2565.611328125m  VLM elev: [2566, 2621]
+    Sensor score: 0.77  N elements: 13  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  584374493235721.jpg
+    True: (27.19, 100.05)  Pred: (27.70000000000008, 117.69999999999922)  Error: 1741km
+    Sensor elev: 2575.79931640625m  VLM elev: [2576, 2601]
+    Sensor score: 0.76  N elements: 14  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  367305332269766.jpg
+    True: (27.19, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2586.4267578125m  VLM elev: [2586, 2611]
+    Sensor score: 0.77  N elements: 12  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  404725278874760.jpg
+    True: (22.66, 113.89)  Pred: (37.5, 116.69780951706049)  Error: 1672km
+    Sensor elev: 10.0m  VLM elev: [10, 10]
+    Sensor score: 0.74  N elements: 14  N samples: 2
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  323306839140221.jpg
+    True: (31.21, 121.34)  Pred: (23.0, 108.19999999999993)  Error: 1587km
+    Sensor elev: 5.000000476837158m  VLM elev: [5, 5]
+    Sensor score: 0.81  N elements: 13  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  1265356555460709.jpg
+    True: (29.61, 106.61)  Pred: (27.915000000000056, 120.4999999999996)  Error: 1366km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 12  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  1544047840144883.jpg
+    True: (29.65, 106.62)  Pred: (27.915000000000056, 120.4999999999996)  Error: 1366km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 14  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  2995966310693637.jpg
+    True: (30.78, 104.00)  Pred: (36.21500000000007, 117.19999999999749)  Error: 1363km
+    Sensor elev: 435.1239318847656m  VLM elev: [420, 450]
+    Sensor score: 0.80  N elements: 15  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  884861042392983.jpg
+    True: (30.78, 104.11)  Pred: (36.210000000000065, 117.19999999999749)  Error: 1354km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.81  N elements: 14  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+  463694508735275.jpg
+    True: (30.61, 103.97)  Pred: (28.000000000000142, 117.29999999999839)  Error: 1324km
+    Sensor elev: 543.3035888671875m  VLM elev: [528, 558]
+    Sensor score: 0.80  N elements: 13  N samples: 1
+    Causes: [no specific cause identified ¡ª likely GeoKB coverage gap in this region]
+
+======================================================================
+  GOOD RESULTS (¡Ü20km): 138/500
+======================================================================
+  1311385625933611.jpg: 0km  True=(34.29,108.89)  Pred=(34.295,108.88999999999999)
+  2904802136465795.jpg: 0km  True=(39.99,116.38)  Pred=(39.99500000000021,116.38499999999986)
+  466053834486126.jpg: 0km  True=(40.00,116.40)  Pred=(40.00000000000021,116.39999999999986)
+  1225948946156531.jpg: 0km  True=(29.60,106.49)  Pred=(29.595000000000166,106.484999999999)
+  745885688580056.jpg: 0km  True=(29.59,106.49)  Pred=(29.590000000000163,106.484999999999)
+  2069341757164613.jpg: 0km  True=(29.60,106.49)  Pred=(29.595000000000166,106.484999999999)
+  2574272892873994.jpg: 1km  True=(29.62,106.48)  Pred=(29.615000000000165,106.484999999999)
+  298340651825437.jpg: 1km  True=(29.62,106.48)  Pred=(29.615000000000165,106.484999999999)
+  3136786336496051.jpg: 1km  True=(30.09,118.18)  Pred=(30.09500000000001,118.19499999999996)
+  810615542065801.jpg: 1km  True=(29.53,106.49)  Pred=(29.515000000000164,106.484999999999)
+  24043096428629297.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  1028953722494285.jpg: 2km  True=(30.12,118.17)  Pred=(30.115000000000016,118.18499999999982)
+  1024343076292617.jpg: 2km  True=(30.12,118.17)  Pred=(30.115000000000016,118.18499999999982)
+  2187086105081689.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  300924394816872.jpg: 2km  True=(30.14,118.16)  Pred=(30.151476540784163,118.14784912537161)
+  297639571954612.jpg: 2km  True=(34.29,108.99)  Pred=(34.295000000000016,109.01499999999977)
+  239295257992175.jpg: 2km  True=(39.91,116.37)  Pred=(39.91500000000021,116.39499999999987)
+  144881684260694.jpg: 2km  True=(34.29,109.03)  Pred=(34.28500000000002,109.00999999999978)
+  1022033509429169.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  557093960347278.jpg: 2km  True=(30.10,118.17)  Pred=(30.11500000000001,118.18499999999996)
+
+©¤©¤ By Latitude Band ©¤©¤
+  >40N: n=63  mean=448km  median=363km  catastrophic=44
+  35-40N: n=129  mean=207km  median=28km  catastrophic=49
+  30-35N: n=127  mean=341km  median=165km  catastrophic=57
+  25-30N: n=96  mean=559km  median=261km  catastrophic=62
+  <25N: n=85  mean=516km  median=509km  catastrophic=46
+
+Failure analysis saved to D:/Geocomp/output/selected_500_failure_analysis_v4.txt
+Results saved to D:/Geocomp/output/selected_500_test_results_v4.json
+
+Test complete.

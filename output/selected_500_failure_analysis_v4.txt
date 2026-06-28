@@ -1,0 +1,192 @@
+======================================================================
+  500-Image Distillation Pool — Catastrophic Failure Analysis
+  Pipeline: version2.2 (Adaptive N=2 + competition mirrors + sensor weighting)
+======================================================================
+
+Total tested: 500
+Valid results: 500
+JSON parse failures: 1
+
+── Error Distribution ──
+  Mean:   392 km
+  Median: 208 km
+  Best:   0 km
+  Worst:  2088 km
+
+        0-20km:  138 (27.6%)
+       20-50km:   45 (9.0%)
+      50-100km:   18 (3.6%)
+     100-200km:   41 (8.2%)
+     200-500km:  108 (21.6%)
+    500-1000km:   67 (13.4%)
+   1000-2000km:   80 (16.0%)
+      >=2000km:    3 (0.6%)
+
+── Adaptive N=2 ──
+  2nd inference triggered: 240/500 (48.0%)
+  Avg sensor score (single): 0.80
+  Avg sensor score (double): 0.76
+
+── JSON Reliability ──
+  All 3 stages OK: 499/500
+  Needed retry: 1/500
+
+======================================================================
+  CATASTROPHIC FAILURES (>200km): 258/500
+======================================================================
+
+── Root Cause Categories ──
+  SENSOR_INCONSISTENCY: 7 occurrences
+
+── Top 20 Worst Failures ──
+
+  156844206683642.jpg
+    True: (25.04, 102.69)  Pred: (39.89924180609826, 116.39886270914738)  Error: 2088km
+    Sensor elev: 1900.0m  VLM elev: [1800, 1900]
+    Sensor score: 0.76  N elements: 16  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  574281253542294.jpg
+    True: (25.02, 102.72)  Pred: (39.2960000000001, 117.1)  Error: 2081km
+    Sensor elev: 1900.0m  VLM elev: [1850, 1950]
+    Sensor score: 0.76  N elements: 16  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  1554519154900926.jpg
+    True: (30.75, 104.06)  Pred: (41.50000000000012, 123.09999999999897)  Error: 2079km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 14  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  1250876858706473.jpg
+    True: (43.86, 88.10)  Pred: (28.587519191611626, 99.59251919161171)  Error: 1982km
+    Sensor elev: 2713.526123046875m  VLM elev: [2600, 2800]
+    Sensor score: 0.79  N elements: 14  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  408223943952545.jpg
+    True: (43.87, 88.10)  Pred: (28.65714344726387, 98.57164056134161)  Error: 1930km
+    Sensor elev: 2698.590087890625m  VLM elev: [2699, 2714]
+    Sensor score: 0.78  N elements: 15  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  1225076242212942.jpg
+    True: (30.74, 104.13)  Pred: (41.000000000000135, 120.09999999999732)  Error: 1831km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.81  N elements: 12  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  2280283145738303.jpg
+    True: (30.09, 118.18)  Pred: (26.000000000000043, 100.59999999999982)  Error: 1782km
+    Sensor elev: 1423.0174560546875m  VLM elev: [1408, 1438]
+    Sensor score: 0.75  N elements: 12  N samples: 3
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  2074122953420244.jpg
+    True: (30.13, 118.16)  Pred: (27.000000000000057, 100.59999999999982)  Error: 1748km
+    Sensor elev: 1614.86328125m  VLM elev: [1600, 1630]
+    Sensor score: 0.75  N elements: 12  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  393424889595518.jpg
+    True: (27.20, 100.04)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1742km
+    Sensor elev: 2425.500244140625m  VLM elev: [2426, 2481]
+    Sensor score: 0.79  N elements: 13  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  572239151250625.jpg
+    True: (27.20, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2500.8828125m  VLM elev: [2486, 2516]
+    Sensor score: 0.79  N elements: 12  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  159084056784756.jpg
+    True: (27.19, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2565.611328125m  VLM elev: [2566, 2621]
+    Sensor score: 0.77  N elements: 13  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  584374493235721.jpg
+    True: (27.19, 100.05)  Pred: (27.70000000000008, 117.69999999999922)  Error: 1741km
+    Sensor elev: 2575.79931640625m  VLM elev: [2576, 2601]
+    Sensor score: 0.76  N elements: 14  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  367305332269766.jpg
+    True: (27.19, 100.05)  Pred: (27.700000000000067, 117.69999999999996)  Error: 1741km
+    Sensor elev: 2586.4267578125m  VLM elev: [2586, 2611]
+    Sensor score: 0.77  N elements: 12  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  404725278874760.jpg
+    True: (22.66, 113.89)  Pred: (37.5, 116.69780951706049)  Error: 1672km
+    Sensor elev: 10.0m  VLM elev: [10, 10]
+    Sensor score: 0.74  N elements: 14  N samples: 2
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  323306839140221.jpg
+    True: (31.21, 121.34)  Pred: (23.0, 108.19999999999993)  Error: 1587km
+    Sensor elev: 5.000000476837158m  VLM elev: [5, 5]
+    Sensor score: 0.81  N elements: 13  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  1265356555460709.jpg
+    True: (29.61, 106.61)  Pred: (27.915000000000056, 120.4999999999996)  Error: 1366km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 12  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  1544047840144883.jpg
+    True: (29.65, 106.62)  Pred: (27.915000000000056, 120.4999999999996)  Error: 1366km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.80  N elements: 14  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  2995966310693637.jpg
+    True: (30.78, 104.00)  Pred: (36.21500000000007, 117.19999999999749)  Error: 1363km
+    Sensor elev: 435.1239318847656m  VLM elev: [420, 450]
+    Sensor score: 0.80  N elements: 15  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  884861042392983.jpg
+    True: (30.78, 104.11)  Pred: (36.210000000000065, 117.19999999999749)  Error: 1354km
+    Sensor elev: 420.0m  VLM elev: [405, 435]
+    Sensor score: 0.81  N elements: 14  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+  463694508735275.jpg
+    True: (30.61, 103.97)  Pred: (28.000000000000142, 117.29999999999839)  Error: 1324km
+    Sensor elev: 543.3035888671875m  VLM elev: [528, 558]
+    Sensor score: 0.80  N elements: 13  N samples: 1
+    Causes: [no specific cause identified — likely GeoKB coverage gap in this region]
+
+======================================================================
+  GOOD RESULTS (≤20km): 138/500
+======================================================================
+  1311385625933611.jpg: 0km  True=(34.29,108.89)  Pred=(34.295,108.88999999999999)
+  2904802136465795.jpg: 0km  True=(39.99,116.38)  Pred=(39.99500000000021,116.38499999999986)
+  466053834486126.jpg: 0km  True=(40.00,116.40)  Pred=(40.00000000000021,116.39999999999986)
+  1225948946156531.jpg: 0km  True=(29.60,106.49)  Pred=(29.595000000000166,106.484999999999)
+  745885688580056.jpg: 0km  True=(29.59,106.49)  Pred=(29.590000000000163,106.484999999999)
+  2069341757164613.jpg: 0km  True=(29.60,106.49)  Pred=(29.595000000000166,106.484999999999)
+  2574272892873994.jpg: 1km  True=(29.62,106.48)  Pred=(29.615000000000165,106.484999999999)
+  298340651825437.jpg: 1km  True=(29.62,106.48)  Pred=(29.615000000000165,106.484999999999)
+  3136786336496051.jpg: 1km  True=(30.09,118.18)  Pred=(30.09500000000001,118.19499999999996)
+  810615542065801.jpg: 1km  True=(29.53,106.49)  Pred=(29.515000000000164,106.484999999999)
+  24043096428629297.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  1028953722494285.jpg: 2km  True=(30.12,118.17)  Pred=(30.115000000000016,118.18499999999982)
+  1024343076292617.jpg: 2km  True=(30.12,118.17)  Pred=(30.115000000000016,118.18499999999982)
+  2187086105081689.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  300924394816872.jpg: 2km  True=(30.14,118.16)  Pred=(30.151476540784163,118.14784912537161)
+  297639571954612.jpg: 2km  True=(34.29,108.99)  Pred=(34.295000000000016,109.01499999999977)
+  239295257992175.jpg: 2km  True=(39.91,116.37)  Pred=(39.91500000000021,116.39499999999987)
+  144881684260694.jpg: 2km  True=(34.29,109.03)  Pred=(34.28500000000002,109.00999999999978)
+  1022033509429169.jpg: 2km  True=(30.13,118.18)  Pred=(30.115000000000016,118.18499999999982)
+  557093960347278.jpg: 2km  True=(30.10,118.17)  Pred=(30.11500000000001,118.18499999999996)
+
+── By Latitude Band ──
+  >40N: n=63  mean=448km  median=363km  catastrophic=44
+  35-40N: n=129  mean=207km  median=28km  catastrophic=49
+  30-35N: n=127  mean=341km  median=165km  catastrophic=57
+  25-30N: n=96  mean=559km  median=261km  catastrophic=62
+  <25N: n=85  mean=516km  median=509km  catastrophic=46
